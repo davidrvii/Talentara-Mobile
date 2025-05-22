@@ -16,7 +16,7 @@
             android:name=".view.ui.authentication.AuthenticationActivity"
             android:exported="false" />
         <activity
-            android:name=".view.ui.history.HistoryActivity"
+            android:name=".view.ui.history.HistoryFragment"
             android:exported="false" />
         <activity
             android:name=".view.ui.portfolio.detail.PortfolioDetailActivity"
@@ -54,7 +54,7 @@
         <activity
             android:name=".view.ui.main.MainActivity"
             android:exported="true"
-            android:label="@string/app_name">
+            android:theme="@style/Theme.Talentara.Splashscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

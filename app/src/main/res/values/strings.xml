@@ -4,6 +4,17 @@
     <string name="title_history">History</string>
     <string name="title_notification">Notification</string>
     <string name="title_profile">Profile</string>
-<!-- Remove or change this placeholder text -->
+    <!-- Remove or change this placeholder text -->
     <string name="hello_blank_fragment">History</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="sign_in_heading">Let’s get started!</string>
+    <string name="sign_in_subheading">Explore talents and projects</string>
+    <string name="sign_in_footer">Already have account?</string>
+    <string name="sign_up_heading">Welcome back!</string>
+    <string name="sign_up_subheading">Good to see you again</string>
+    <string name="sign_up_footer">Don’t have account?</string>
 </resources>

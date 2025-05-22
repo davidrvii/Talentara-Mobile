@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Talentara"
+        tools:targetApi="31">
+        <activity
+            android:name=".view.ui.authentication.AuthenticationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.history.HistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.portfolio.detail.PortfolioDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.portfolio.add.NewPortfolioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.profile.edit.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.project.add.NewProjectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.project.detail.ProjectDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.project.finalize.ProjectFinalizeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.project.offer.ProjectOfferActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.talent.detail.TalentDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.talent.apply.TalentApplyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.timeline.TimelineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.waiting.WaitingPageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ui.main.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

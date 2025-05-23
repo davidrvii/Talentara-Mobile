@@ -9,20 +9,20 @@
         android:id="@+id/nav_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.TopRoundedOnly"
-        app:cardElevation="16dp"
-        app:strokeColor="@color/light_gray"
         app:cardBackgroundColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:cardElevation="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.TopRoundedOnly"
+        app:strokeColor="@color/light_gray">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/nav_view"
             android:layout_width="match_parent"
             android:layout_height="68dp"
+            android:background="@color/white"
             app:itemIconSize="24dp"
             app:itemIconTint="@color/bnv_item_color"
             app:itemTextColor="@color/bnv_item_color"
-            android:background="@color/white"
             app:menu="@menu/bottom_nav_menu" />
 
     </com.google.android.material.card.MaterialCardView>

@@ -23,11 +23,13 @@
     <string name="home_heading2">Current Project</string>
     <string name="client_name">Client Name</string>
     <string name="project_name">Project Name</string>
-    <string name="project_product">%s ● %s</string>
+    <string name="project_product">%s • %s</string>
     <string name="remaining_days">Remaining : %d days</string>
     <string name="project_status">Status</string>
     <string name="project_phase">Project Phase</string>
     <string name="phase_deadline">Plan : %s</string>
     <string name="phase_complete">Complete in %d days</string>
     <string name="phase_evidance">Evidance : %s</string>
+    <string name="history">History</string>
+    <string name="ongoing">Ongoing</string>
 </resources>

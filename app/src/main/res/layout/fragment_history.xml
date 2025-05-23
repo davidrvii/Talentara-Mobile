@@ -13,11 +13,11 @@
         android:layout_height="wrap_content"
         android:elevation="16dp"
         app:cardBackgroundColor="@color/blue"
-        app:strokeColor="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.BottomRoundedOnly">
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.BottomRoundedOnly"
+        app:strokeColor="@color/blue">
 
         <TextView
             android:id="@+id/tvHistory"
@@ -37,8 +37,8 @@
         style="@style/TextAppearance.Material3.BodyMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/ongoing"
         android:textColor="@color/black"
         android:textSize="20sp"

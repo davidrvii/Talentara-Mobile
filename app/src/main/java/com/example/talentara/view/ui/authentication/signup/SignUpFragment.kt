@@ -29,6 +29,7 @@ class SignUpFragment : Fragment() {
         binding.tvFooterAction.setOnClickListener {
             (requireActivity() as AuthenticationActivity).switchPage(0)
         }
+
         binding.btnSignUp.setOnClickListener {
             val intent = Intent(requireContext(), MainActivity::class.java)
             startActivity(intent)

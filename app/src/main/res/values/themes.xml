@@ -3,6 +3,7 @@
     <style name="Theme.Talentara" parent="Theme.Material3.Light.NoActionBar">
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/blue</item>
+        <item name="colorSecondaryContainer">@color/white</item>
     </style>
 
     <style name="Theme.Talentara.Splashscreen" parent="Theme.SplashScreen">

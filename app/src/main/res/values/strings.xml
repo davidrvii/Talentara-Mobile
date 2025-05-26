@@ -9,6 +9,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="username">Username</string>
+
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
     <string name="sign_in_heading">Let’s get started!</string>
@@ -17,6 +18,7 @@
     <string name="sign_up_heading">Welcome back!</string>
     <string name="sign_up_subheading">Good to see you again</string>
     <string name="sign_up_footer">Don’t have account?</string>
+
     <string name="home_heading">Hi, %s</string>
     <string name="home_subheading">Let’s build something great together</string>
     <string name="btn_new_project_desc">Add New Project</string>
@@ -30,9 +32,40 @@
     <string name="phase_deadline">Plan : %s</string>
     <string name="phase_complete">Complete in %d days</string>
     <string name="phase_evidance">Evidance : %s</string>
+
     <string name="history">History</string>
     <string name="ongoing">Ongoing</string>
     <string name="notification">Notification</string>
     <string name="notification_title">Notification Title</string>
     <string name="time">12 Apr</string>
+
+    <string name="edit_profile_desc">Edit Profile</string>
+    <string name="user_linkedin">User LinkedIn</string>
+    <string name="user_github">User Github</string>
+    <string name="user_gmail">User Gmail</string>
+
+    <string name="user_profile">User</string>
+    <string name="talent_profile">Talent</string>
+    <string name="personal_detail">Personal Detail</string>
+    <string name="profile">Profile</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="security">Security</string>
+    <string name="application_settings">Application Settings</string>
+    <string name="about_us">About Us</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="terms_and_conditions">Terms and Conditions</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="logout">Logout</string>
+    <string name="availibility_true">Ready to join a project!</string>
+    <string name="project_count">12</string>
+    <string name="talent_rating">4.9</string>
+    <string name="projects">Projects</string>
+    <string name="experiences">Experiences</string>
+    <string name="role">Role</string>
+    <string name="product_type">Product Type</string>
+    <string name="platform">Platform</string>
+    <string name="language">Language</string>
+    <string name="tools">Tools</string>
+    <string name="portfolio">Portfolio</string>
+
 </resources>

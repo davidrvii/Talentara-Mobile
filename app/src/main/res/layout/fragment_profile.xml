@@ -1,22 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue"
+    android:fillViewport="true"
+    android:clipToPadding="false"
+    android:paddingBottom="92dp"
     tools:context=".view.ui.profile.ProfileFragment">
 
-    <TextView
-        android:id="@+id/text_dashboard"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivUserImage"
+                android:layout_width="68dp"
+                android:layout_height="68dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:src="@drawable/blank_avatar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="@style/CircleImage" />
+
+            <TextView
+                android:id="@+id/tvUsername"
+                style="@style/TextAppearance.Material3.HeadlineSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/username"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/ivUserImage"
+                app:layout_constraintTop_toTopOf="@id/ivUserImage" />
+
+            <ImageView
+                android:id="@+id/ivEditProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/ic_edit"
+                android:contentDescription="@string/edit_profile_desc"
+                app:layout_constraintBottom_toBottomOf="@id/tvUsername"
+                app:layout_constraintStart_toEndOf="@id/tvUsername"
+                app:layout_constraintTop_toTopOf="@id/tvUsername" />
+
+            <ImageView
+                android:id="@+id/btnTalentApply"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/ic_talent_apply"
+                android:contentDescription="@string/edit_profile_desc"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvUsername"
+                tools:ignore="ImageContrastCheck" />
+
+            <ImageView
+                android:id="@+id/ivLinkedin"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_linkedin"
+                app:layout_constraintStart_toStartOf="@id/tvUsername"
+                app:layout_constraintTop_toBottomOf="@id/tvUsername"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvLinkedin"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@string/user_linkedin"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/ivLinkedin"
+                app:layout_constraintStart_toEndOf="@id/ivLinkedin"
+                app:layout_constraintTop_toTopOf="@id/ivLinkedin" />
+
+            <ImageView
+                android:id="@+id/ivGithub"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_github"
+                app:layout_constraintStart_toStartOf="@id/ivLinkedin"
+                app:layout_constraintTop_toBottomOf="@id/ivLinkedin"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvGithub"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@string/user_github"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/ivGithub"
+                app:layout_constraintStart_toEndOf="@id/ivGithub"
+                app:layout_constraintTop_toTopOf="@id/ivGithub" />
+
+            <ImageView
+                android:id="@+id/ivGmail"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_gmail"
+                app:layout_constraintStart_toStartOf="@id/ivGithub"
+                app:layout_constraintTop_toBottomOf="@id/ivGithub"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvGmail"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@string/user_gmail"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/ivGmail"
+                app:layout_constraintStart_toEndOf="@id/ivGmail"
+                app:layout_constraintTop_toTopOf="@id/ivGmail" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="@color/dark_blue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivGmail"
+                app:tabGravity="fill"
+                app:tabIndicator="@drawable/ic_tab_triangle"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorGravity="bottom"
+                app:tabIndicatorHeight="0dp"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/white"
+                app:tabTextColor="@color/white"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+
+
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_blue"
+    android:paddingHorizontal="12dp"
+    tools:context=".view.ui.profile.user.UserProfileFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvProfileDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:id="@+id/tvPersonalDetail"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/personal_detail"
+                    android:textColor="@color/blue"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvProfile"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/profile"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/tvPersonalDetail"
+                    app:layout_constraintTop_toBottomOf="@id/tvPersonalDetail" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/dividerPersonalDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tvProfile"
+                    app:layout_constraintStart_toStartOf="@id/tvProfile"
+                    app:layout_constraintTop_toBottomOf="@id/tvProfile" />
+
+                <TextView
+                    android:id="@+id/tvProfile1"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/profile"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/dividerPersonalDetail"
+                    app:layout_constraintTop_toBottomOf="@id/dividerPersonalDetail" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/dividerPersonalDetail1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tvProfile1"
+                    app:layout_constraintStart_toStartOf="@id/tvProfile1"
+                    app:layout_constraintTop_toBottomOf="@id/tvProfile1" />
+
+                <TextView
+                    android:id="@+id/tvProfile2"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/profile"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/dividerPersonalDetail1"
+                    app:layout_constraintTop_toBottomOf="@id/dividerPersonalDetail1" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvAccountSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintEnd_toEndOf="@id/cvProfileDetail"
+            app:layout_constraintStart_toStartOf="@id/cvProfileDetail"
+            app:layout_constraintTop_toBottomOf="@id/cvProfileDetail">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:id="@+id/tvAccountSetting"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/account_settings"
+                    android:textColor="@color/blue"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSetting"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/account_settings"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/tvAccountSetting"
+                    app:layout_constraintTop_toBottomOf="@id/tvAccountSetting" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/dividerAccountSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tvSetting"
+                    app:layout_constraintStart_toStartOf="@id/tvSetting"
+                    app:layout_constraintTop_toBottomOf="@id/tvSetting" />
+
+                <TextView
+                    android:id="@+id/tvSetting1"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/account_settings"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/dividerAccountSettings"
+                    app:layout_constraintTop_toBottomOf="@id/dividerAccountSettings" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/dividerAccountSettings1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tvSetting1"
+                    app:layout_constraintStart_toStartOf="@id/tvSetting1"
+                    app:layout_constraintTop_toBottomOf="@id/tvSetting1" />
+
+                <TextView
+                    android:id="@+id/tvAccountSetting2"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/account_settings"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/dividerAccountSettings1"
+                    app:layout_constraintTop_toBottomOf="@id/dividerAccountSettings1" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvSecurity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintEnd_toEndOf="@id/cvAccountSettings"
+            app:layout_constraintStart_toStartOf="@id/cvAccountSettings"
+            app:layout_constraintTop_toBottomOf="@id/cvAccountSettings">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:id="@+id/tvSecurity"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/security"
+                    android:textColor="@color/blue"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvChangePassword"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/security"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/tvSecurity"
+                    app:layout_constraintTop_toBottomOf="@id/tvSecurity" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/dividerSecurity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tvChangePassword"
+                    app:layout_constraintStart_toStartOf="@id/tvChangePassword"
+                    app:layout_constraintTop_toBottomOf="@id/tvChangePassword" />
+
+                <TextView
+                    android:id="@+id/tvChangePassword1"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/security"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/dividerSecurity"
+                    app:layout_constraintTop_toBottomOf="@id/dividerSecurity" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/dividerSecurity1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tvChangePassword1"
+                    app:layout_constraintStart_toStartOf="@id/tvChangePassword1"
+                    app:layout_constraintTop_toBottomOf="@id/tvChangePassword1" />
+
+                <TextView
+                    android:id="@+id/tvChangePassword2"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/security"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/dividerSecurity1"
+                    app:layout_constraintTop_toBottomOf="@id/dividerSecurity1" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvApplicationSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintEnd_toEndOf="@id/cvSecurity"
+            app:layout_constraintStart_toStartOf="@id/cvSecurity"
+            app:layout_constraintTop_toBottomOf="@id/cvSecurity">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:id="@+id/tvApplicationSettings"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/application_settings"
+                    android:textColor="@color/blue"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvLanguage"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/application_settings"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/tvApplicationSettings"
+                    app:layout_constraintTop_toBottomOf="@id/tvApplicationSettings" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/dividerApplicationSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tvLanguage"
+                    app:layout_constraintStart_toStartOf="@id/tvLanguage"
+                    app:layout_constraintTop_toBottomOf="@id/tvLanguage" />
+
+                <TextView
+                    android:id="@+id/tvLanguage1"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/application_settings"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/dividerApplicationSettings"
+                    app:layout_constraintTop_toBottomOf="@id/dividerApplicationSettings" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/dividerApplicationSettings1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tvLanguage1"
+                    app:layout_constraintStart_toStartOf="@id/tvLanguage1"
+                    app:layout_constraintTop_toBottomOf="@id/tvLanguage1" />
+
+                <TextView
+                    android:id="@+id/tvLanguage2"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/application_settings"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/dividerApplicationSettings1"
+                    app:layout_constraintTop_toBottomOf="@id/dividerApplicationSettings1" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvAboutUs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintEnd_toEndOf="@id/cvSecurity"
+            app:layout_constraintStart_toStartOf="@id/cvSecurity"
+            app:layout_constraintTop_toBottomOf="@id/cvSecurity">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:id="@+id/tvAboutUs"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/about_us"
+                    android:textColor="@color/blue"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvContactUs"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/contact_us"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/tvAboutUs"
+                    app:layout_constraintTop_toBottomOf="@id/tvAboutUs" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/dividerAboutUs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tvContactUs"
+                    app:layout_constraintStart_toStartOf="@id/tvContactUs"
+                    app:layout_constraintTop_toBottomOf="@id/tvContactUs" />
+
+                <TextView
+                    android:id="@+id/tvTermsCondition"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/terms_and_conditions"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/dividerAboutUs"
+                    app:layout_constraintTop_toBottomOf="@id/dividerAboutUs" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/dividerAboutUs1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="@id/tvTermsCondition"
+                    app:layout_constraintStart_toStartOf="@id/tvTermsCondition"
+                    app:layout_constraintTop_toBottomOf="@id/tvTermsCondition" />
+
+                <TextView
+                    android:id="@+id/tvPrivacyPolicy"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/privacy_policy"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="@id/dividerAboutUs1"
+                    app:layout_constraintTop_toBottomOf="@id/dividerAboutUs1" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvALogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintEnd_toEndOf="@id/cvAboutUs"
+            app:layout_constraintStart_toStartOf="@id/cvAboutUs"
+            app:layout_constraintTop_toBottomOf="@id/cvAboutUs">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/ivLogout"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginVertical="12dp"
+                    android:src="@drawable/ic_logout"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvLogout"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/logout"
+                    android:textColor="#FF0000"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivLogout"
+                    app:layout_constraintStart_toEndOf="@id/ivLogout"
+                    app:layout_constraintTop_toTopOf="@id/ivLogout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

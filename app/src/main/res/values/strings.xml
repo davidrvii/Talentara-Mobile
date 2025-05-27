@@ -89,5 +89,12 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="linkedin">LinkedIn</string>
     <string name="save_change">Save Change</string>
+    <string name="new_project">New Project</string>
+    <string name="client_name_hint">Your name, group or company</string>
+    <string name="project_name_hint">Your Project Name</string>
+    <string name="project_description_hint">Your Project Description</string>
+    <string name="project_description">Project Description</string>
+    <string name="btn_find_project_manager">Find Project Manager</string>
+    <string name="start_date">Start Date</string>
 
 </resources>

@@ -75,5 +75,7 @@
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
     <string name="phase_periode">Phase Periode</string>
+    <string name="waiting_page_text">Waiting Page Text</string>
+    <string name="back_to_home">Back To Home</string>
 
 </resources>

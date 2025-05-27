@@ -67,5 +67,7 @@
     <string name="language">Language</string>
     <string name="tools">Tools</string>
     <string name="portfolio">Portfolio</string>
+    <string name="talent_name">Talent Name</string>
+    <string name="complete_in_d_days">Complete In %d Days</string>
 
 </resources>

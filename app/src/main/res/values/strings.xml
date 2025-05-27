@@ -102,5 +102,8 @@
     <string name="project_feature">Project Feature</string>
     <string name="btn_add_feature">Add Feature +</string>
     <string name="remove">Remove</string>
+    <string name="new_portfolio">New Portfolio</string>
+    <string name="project_linkedin">Project LinkedIn</string>
+    <string name="btn_upload_portfolio">Upload Portfolio</string>
 
 </resources>

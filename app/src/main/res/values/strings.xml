@@ -59,7 +59,7 @@
     <string name="availibility_true">Ready to join a project!</string>
     <string name="project_count">12</string>
     <string name="talent_rating">4.9</string>
-    <string name="projects">Projects</string>
+    <string name="project">Project</string>
     <string name="experiences">Experiences</string>
     <string name="role">Role</string>
     <string name="product_type">Product Type</string>
@@ -77,5 +77,14 @@
     <string name="phase_periode">Phase Periode</string>
     <string name="waiting_page_text">Waiting Page Text</string>
     <string name="back_to_home">Back To Home</string>
+    <string name="description">Description</string>
+    <string name="project_periode">Project Periode</string>
+    <string name="meeting_link">Meeting Link</string>
+    <string name="github">Github</string>
+    <string name="feature">Feature</string>
+    <string name="project_offer">You Got New Project !</string>
+    <string name="accept">Accept</string>
+    <string name="decline_d">Decline | %d</string>
+    <string name="offer_desc">You have 24 hours to accept or will automatically declined</string>
 
 </resources>

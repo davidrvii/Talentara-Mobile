@@ -20,7 +20,7 @@
         app:strokeColor="@color/blue">
 
         <TextView
-            android:id="@+id/tvHistory"
+            android:id="@+id/tvNotification"
             style="@style/TextAppearance.Material3.HeadlineSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -86,5 +86,8 @@
     <string name="accept">Accept</string>
     <string name="decline_d">Decline | %d</string>
     <string name="offer_desc">You have 24 hours to accept or will automatically declined</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="linkedin">LinkedIn</string>
+    <string name="save_change">Save Change</string>
 
 </resources>

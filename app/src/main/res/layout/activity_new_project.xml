@@ -95,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/client_name_hint"
-                android:inputType="textPersonName"
+                android:inputType="text"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -136,7 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/project_name_hint"
-                android:inputType="textPersonName"
+                android:inputType="text"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -168,6 +168,7 @@
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
             app:boxStrokeColor="@color/dark_gray"
+            app:prefixText="@string/project_desc_prefix"
             app:hintEnabled="false"
             app:hintTextColor="@color/dark_gray"
             app:layout_constraintStart_toStartOf="@id/tvProjectDescription"
@@ -177,7 +178,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/project_description_hint"
-                android:inputType="textPersonName"
+                android:inputType="textMultiLine"
+                android:lines="4"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -230,7 +232,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/start_date"
-                    android:inputType="textPersonName"
+                    android:inputType="date"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -261,7 +263,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/start_date"
-                    android:inputType="textPersonName"
+                    android:inputType="date"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>

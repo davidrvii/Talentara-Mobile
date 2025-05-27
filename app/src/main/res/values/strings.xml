@@ -69,5 +69,11 @@
     <string name="portfolio">Portfolio</string>
     <string name="talent_name">Talent Name</string>
     <string name="complete_in_d_days">Complete In %d Days</string>
+    <string name="approved_by">Approved by</string>
+    <string name="client">Client</string>
+    <string name="manager">Manager</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="phase_periode">Phase Periode</string>
 
 </resources>

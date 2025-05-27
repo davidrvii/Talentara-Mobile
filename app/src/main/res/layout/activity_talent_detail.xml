@@ -12,15 +12,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/btn_back"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="24dp"
-            android:src="@drawable/ic_back"
+            app:cardBackgroundColor="@color/blue"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="14dp"
+                android:layout_marginVertical="8dp"
+                android:src="@drawable/ic_back"
+                tools:ignore="ContentDescription" />
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tvTalentName"
@@ -31,10 +41,10 @@
             android:text="@string/talent_name"
             android:textColor="@color/white"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/btn_back"
+            app:layout_constraintBottom_toBottomOf="@id/cvBack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btn_back" />
+            app:layout_constraintTop_toTopOf="@id/cvBack" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivTalentImage"
@@ -43,8 +53,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
             android:src="@drawable/blank_avatar"
-            app:layout_constraintStart_toStartOf="@id/btn_back"
-            app:layout_constraintTop_toBottomOf="@id/btn_back"
+            app:layout_constraintStart_toStartOf="@id/cvBack"
+            app:layout_constraintTop_toBottomOf="@id/cvBack"
             app:shapeAppearance="@style/CircleImage" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -352,13 +362,13 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/cvExperiences"
             app:layout_constraintStart_toStartOf="@id/cvExperiences"
-            app:layout_constraintTop_toBottomOf="@id/cvExperiences"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="16dp">
+            app:layout_constraintTop_toBottomOf="@id/cvExperiences">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -387,7 +397,7 @@
                     android:layout_marginTop="8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvPortfolio"
-                    tools:listitem="@layout/portfolio_item"/>
+                    tools:listitem="@layout/portfolio_item" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

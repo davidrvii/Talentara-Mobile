@@ -105,5 +105,9 @@
     <string name="new_portfolio">New Portfolio</string>
     <string name="project_linkedin">Project LinkedIn</string>
     <string name="btn_upload_portfolio">Upload Portfolio</string>
+    <string name="talent_apply">Talent Apply</string>
+    <string name="github_profile">Github Profile</string>
+    <string name="linkedin_profile">LinkedIn Profile</string>
+    <string name="apply_talent">Apply Talent</string>
 
 </resources>

@@ -1,4 +1,7 @@
 package com.example.talentara.view.ui.main
 
-class MainViewModel {
+import androidx.lifecycle.ViewModel
+import com.example.talentara.data.repository.Repository
+
+class MainViewModel(private val repository: Repository) : ViewModel() {
 }

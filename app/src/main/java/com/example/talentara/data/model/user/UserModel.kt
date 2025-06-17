@@ -1,4 +1,8 @@
 package com.example.talentara.data.model.user
 
-class UserModel {
-}
+data class UserModel(
+    val email: String,
+    val username: String,
+    val token: String,
+    val isLogin: Boolean = false
+)

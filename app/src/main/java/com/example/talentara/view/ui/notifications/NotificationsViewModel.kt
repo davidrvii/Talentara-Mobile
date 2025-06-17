@@ -1,13 +1,7 @@
 package com.example.talentara.view.ui.notifications
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.talentara.data.repository.Repository
 
-class NotificationsViewModel : ViewModel() {
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
-    }
-    val text: LiveData<String> = _text
+class NotificationsViewModel(private val repository: Repository) : ViewModel() {
 }

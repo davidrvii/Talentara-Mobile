@@ -8,7 +8,7 @@ data class UserDetailResponse(
 	val success: Boolean? = null,
 
 	@field:SerializedName("userDetail")
-	val userDetail: List<UserDetailItem?>? = null,
+	val userDetail: UserDetailItem? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null,

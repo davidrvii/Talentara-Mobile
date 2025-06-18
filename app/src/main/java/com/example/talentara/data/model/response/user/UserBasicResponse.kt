@@ -11,7 +11,7 @@ data class UserBasicResponse(
 	val message: String? = null,
 
 	@field:SerializedName("usersBasic")
-	val usersBasic: List<UsersBasicItem?>? = null,
+	val usersBasic: UsersBasicItem? = null,
 
 	@field:SerializedName("statusCode")
 	val statusCode: Int? = null,

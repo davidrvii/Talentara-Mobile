@@ -1,15 +1,21 @@
 package com.example.talentara.data.remote
 
 import com.example.talentara.data.model.response.notification.NewNotificationResponse
-import com.example.talentara.data.model.response.notification.NotificationDeleteResponse
+import com.example.talentara.data.model.response.notification.DeleteNotificationResponse
 import com.example.talentara.data.model.response.notification.NotificationHistoryResponse
-import com.example.talentara.data.model.response.notification.NotificationUpdateResponse
+import com.example.talentara.data.model.response.notification.UpdateNotificationResponse
+import com.example.talentara.data.model.response.timeline.CurrentTimelineResponse
+import com.example.talentara.data.model.response.timeline.DeleteTimelineResponse
+import com.example.talentara.data.model.response.timeline.NewTimelineResponse
+import com.example.talentara.data.model.response.timeline.TimelineDetailResponse
+import com.example.talentara.data.model.response.timeline.TimelineProjectResponse
+import com.example.talentara.data.model.response.timeline.UpdateTimelineResponse
 import com.example.talentara.data.model.response.user.LoginResponse
 import com.example.talentara.data.model.response.user.RegisterResponse
 import com.example.talentara.data.model.response.user.UserBasicResponse
-import com.example.talentara.data.model.response.user.UserDeleteResponse
+import com.example.talentara.data.model.response.user.DeleteUserResponse
+import com.example.talentara.data.model.response.user.UpdateUserResponse
 import com.example.talentara.data.model.response.user.UserDetailResponse
-import com.example.talentara.data.model.response.user.UserUpdateResponse
 import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -63,13 +69,13 @@ interface ApiService {
         @Field("talent_access") talentAccess: Int,
         @Field("user_image") userImage: String,
         @Field("fcm_token") fcmToken: String,
-    ): UserUpdateResponse
+    ): UpdateUserResponse
 
     @DELETE("user/delete/{id}")
     suspend fun deleteUser(
         @Header("Authorization") token: String,
         @Path("id") id: Int
-    ): UserDeleteResponse
+    ): DeleteUserResponse
 
     //NOTIFICATION
     @FormUrlEncoded
@@ -91,11 +97,58 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("notification_id") notificationId: Int,
         @Field("status") status: String,
-    ): NotificationUpdateResponse
+    ): UpdateNotificationResponse
 
     @DELETE("notification/delete/{id}")
     suspend fun deleteNotification(
         @Header("Authorization") token: String,
         @Path("notification_id") notificationId: Int,
-    ): NotificationDeleteResponse
+    ): DeleteNotificationResponse
+
+    //TIMELINE
+    @FormUrlEncoded
+    @POST("timeline/add")
+    suspend fun addTimeline(
+        @Field("project_id") projectId: Int,
+        @Field("project_phase") projectPhase: String,
+        @Field("start_date") startDate: String,
+        @Field("end_date") endDate: String,
+    ): NewTimelineResponse
+
+    @GET("timeline/project/{id}")
+    suspend fun getProjectTimeline(
+        @Header("Authorization") token: String,
+        @Path("project_id") projectId: Int,
+    ): TimelineProjectResponse
+
+    @GET("timeline/current/{id}")
+    suspend fun getCurrentTimeline(
+        @Header("Authorization") token: String,
+        @Path("project_id") projectId: Int,
+    ): CurrentTimelineResponse
+
+    @GET("timeline/detail/{id}")
+    suspend fun getTimelineDetail(
+        @Header("Authorization") token: String,
+        @Path("timeline_id") timelineId: Int,
+    ): TimelineDetailResponse
+
+    @PATCH("timeline/update/{id}")
+    suspend fun updateTimeline(
+        @Header("Authorization") token: String,
+        @Path("timeline_id") timelineId: Int,
+        @Field("project_phase") projectPhase: String,
+        @Field("start_date") startDate: String,
+        @Field("end_date") endDate: String,
+        @Field("evidance") evidance: String,
+        @Field("client_approved") clientApproved: String,
+        @Field("leader_approved") leaderApproved: String,
+        @Field("completed_date") completedDate: String,
+    ): UpdateTimelineResponse
+
+    @DELETE("timeline/delete/{id}")
+    suspend fun deleteTimeline(
+        @Header("Authorization") token: String,
+        @Path("timeline_id") timelineId: Int,
+    ): DeleteTimelineResponse
 }

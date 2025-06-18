@@ -2,7 +2,7 @@ package com.example.talentara.data.model.response.user
 
 import com.google.gson.annotations.SerializedName
 
-data class UserUpdateResponse(
+data class UpdateUserResponse(
 
 	@field:SerializedName("success")
 	val success: Boolean? = null,
@@ -34,9 +34,6 @@ data class UpdatedUser(
 	@field:SerializedName("updated_at")
 	val updatedAt: String? = null,
 
-	@field:SerializedName("user_id")
-	val userId: Int? = null,
-
 	@field:SerializedName("user_image")
 	val userImage: Any? = null,
 
@@ -48,9 +45,6 @@ data class UpdatedUser(
 
 	@field:SerializedName("fcm_token")
 	val fcmToken: Any? = null,
-
-	@field:SerializedName("created_at")
-	val createdAt: String? = null,
 
 	@field:SerializedName("linkedin")
 	val linkedin: Any? = null,

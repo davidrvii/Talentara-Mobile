@@ -2,7 +2,7 @@ package com.example.talentara.data.model.response.notification
 
 import com.google.gson.annotations.SerializedName
 
-data class NotificationUpdateResponse(
+data class UpdateNotificationResponse(
 
 	@field:SerializedName("updatedNotification")
 	val updatedNotification: UpdatedNotification? = null,
@@ -25,20 +25,8 @@ data class UpdatedNotification(
 	@field:SerializedName("notification_desc")
 	val notificationDesc: String? = null,
 
-	@field:SerializedName("updated_at")
-	val updatedAt: String? = null,
-
-	@field:SerializedName("user_id")
-	val userId: Int? = null,
-
 	@field:SerializedName("notification_title")
 	val notificationTitle: String? = null,
-
-	@field:SerializedName("created_at")
-	val createdAt: String? = null,
-
-	@field:SerializedName("notification_id")
-	val notificationId: Int? = null,
 
 	@field:SerializedName("status")
 	val status: String? = null

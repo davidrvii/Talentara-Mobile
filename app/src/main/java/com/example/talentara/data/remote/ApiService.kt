@@ -1,5 +1,9 @@
 package com.example.talentara.data.remote
 
+import com.example.talentara.data.model.response.notification.NewNotificationResponse
+import com.example.talentara.data.model.response.notification.NotificationDeleteResponse
+import com.example.talentara.data.model.response.notification.NotificationHistoryResponse
+import com.example.talentara.data.model.response.notification.NotificationUpdateResponse
 import com.example.talentara.data.model.response.user.LoginResponse
 import com.example.talentara.data.model.response.user.RegisterResponse
 import com.example.talentara.data.model.response.user.UserBasicResponse
@@ -66,4 +70,32 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("id") id: Int
     ): UserDeleteResponse
+
+    //NOTIFICATION
+    @FormUrlEncoded
+    @POST("notification/add")
+    suspend fun addNotification(
+        @Field("user_id") userId: Int,
+        @Field("notification_title") title: String,
+        @Field("notification_desc") desc: String,
+    ): NewNotificationResponse
+
+    @GET("notification/history/{id}")
+    suspend fun getNotificationHistory(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: Int,
+    ): NotificationHistoryResponse
+
+    @PATCH("notification/update/{id}")
+    suspend fun updateNotification(
+        @Header("Authorization") token: String,
+        @Path("notification_id") notificationId: Int,
+        @Field("status") status: String,
+    ): NotificationUpdateResponse
+
+    @DELETE("notification/delete/{id}")
+    suspend fun deleteNotification(
+        @Header("Authorization") token: String,
+        @Path("notification_id") notificationId: Int,
+    ): NotificationDeleteResponse
 }

@@ -4,6 +4,10 @@ import com.example.talentara.data.model.response.notification.NewNotificationRes
 import com.example.talentara.data.model.response.notification.DeleteNotificationResponse
 import com.example.talentara.data.model.response.notification.NotificationHistoryResponse
 import com.example.talentara.data.model.response.notification.UpdateNotificationResponse
+import com.example.talentara.data.model.response.portfolio.NewPortfolioResponse
+import com.example.talentara.data.model.response.portfolio.PortfolioDetailResponse
+import com.example.talentara.data.model.response.portfolio.PortfolioTalentResponse
+import com.example.talentara.data.model.response.portfolio.UpdatePortfolioResponse
 import com.example.talentara.data.model.response.talent.NewTalentResponse
 import com.example.talentara.data.model.response.talent.TalentDetailResponse
 import com.example.talentara.data.model.response.talent.UpdateTalentResponse
@@ -221,6 +225,74 @@ interface ApiService {
         val availability: Int
     )
 
+    //PORTFOLIO
+    @FormUrlEncoded
+    @POST("portfolio/add")
+    suspend fun addPortfolio(
+        @Header("Authorization") token: String,
+        @Body request: AddPortfolioRequest
+    ): NewPortfolioResponse
 
+    data class AddPortfolioRequest(
+        @SerializedName("portfolio_name")
+        val portfolioName: String,
+        @SerializedName("portfolio_linkedin")
+        val portfolioLinkedin: String,
+        @SerializedName("portfolio_github")
+        val portfolioGithub: String,
+        @SerializedName("portfolio_desc")
+        val portfolioDesc: String,
+        @SerializedName("portfolio_label")
+        val portfolioLabel: String,
+        @SerializedName("start_date")
+        val startDate: String,
+        @SerializedName("end_date")
+        val endDate: String,
+        val platforms: List<String>,
+        val tools: List<String>,
+        val languages: List<String>,
+        val roles: List<String>,
+        @SerializedName("product_types")
+        val productTypes: List<String>
+    )
 
+    @GET("portfolio/talent/{id}")
+    suspend fun getTalentPortfolio(
+        @Header("Authorization") token: String,
+        @Path("talent_id") talentId: Int,
+    ): PortfolioTalentResponse
+
+    @GET("portfolio/detail/{id}")
+    suspend fun getPortfolioDetail(
+        @Header("Authorization") token: String,
+        @Path("portfolio_id") portfolioId: Int,
+    ): PortfolioDetailResponse
+
+    @PATCH("portfolio/update/{id}")
+    suspend fun updatePortfolio(
+        @Header("Authorization") token: String,
+        @Path("portfolio_id") portfolioId: Int,
+        @Body request: UpdatePortfolioRequest
+        ): UpdatePortfolioResponse
+
+    data class UpdatePortfolioRequest(
+        @SerializedName("portfolio_name")
+        val portfolioName: String,
+        @SerializedName("portfolio_linkedin")
+        val portfolioLinkedin: String,
+        @SerializedName("portfolio_github")
+        val portfolioGithub: String,
+        @SerializedName("portfolio_desc")
+        val portfolioDesc: String,
+        @SerializedName("start_date")
+        val startDate: String,
+        @SerializedName("end_date")
+        val endDate: String,
+        val platforms: List<String>,
+        val tools: List<String>,
+        val languages: List<String>,
+        val roles: List<String>,
+        @SerializedName("product_types")
+        val productTypes: List<String>
+    )
 }

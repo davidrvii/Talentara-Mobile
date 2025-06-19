@@ -4,6 +4,9 @@ import com.example.talentara.data.model.response.notification.NewNotificationRes
 import com.example.talentara.data.model.response.notification.DeleteNotificationResponse
 import com.example.talentara.data.model.response.notification.NotificationHistoryResponse
 import com.example.talentara.data.model.response.notification.UpdateNotificationResponse
+import com.example.talentara.data.model.response.talent.NewTalentResponse
+import com.example.talentara.data.model.response.talent.TalentDetailResponse
+import com.example.talentara.data.model.response.talent.UpdateTalentResponse
 import com.example.talentara.data.model.response.timeline.CurrentTimelineResponse
 import com.example.talentara.data.model.response.timeline.DeleteTimelineResponse
 import com.example.talentara.data.model.response.timeline.NewTimelineResponse
@@ -13,9 +16,10 @@ import com.example.talentara.data.model.response.timeline.UpdateTimelineResponse
 import com.example.talentara.data.model.response.user.LoginResponse
 import com.example.talentara.data.model.response.user.RegisterResponse
 import com.example.talentara.data.model.response.user.UserBasicResponse
-import com.example.talentara.data.model.response.user.DeleteUserResponse
 import com.example.talentara.data.model.response.user.UpdateUserResponse
 import com.example.talentara.data.model.response.user.UserDetailResponse
+import com.google.gson.annotations.SerializedName
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -54,7 +58,7 @@ interface ApiService {
         @Path("user_id") id: Int,
     ): UserDetailResponse
 
-    //Seperate or Create Multiple updateUser based on Function Needs
+    //Separate or Create Multiple updateUser based on Function Needs
     @FormUrlEncoded
     @PATCH("user/update/{id}")
     suspend fun updateUser(
@@ -70,12 +74,6 @@ interface ApiService {
         @Field("user_image") userImage: String,
         @Field("fcm_token") fcmToken: String,
     ): UpdateUserResponse
-
-    @DELETE("user/delete/{id}")
-    suspend fun deleteUser(
-        @Header("Authorization") token: String,
-        @Path("id") id: Int
-    ): DeleteUserResponse
 
     //NOTIFICATION
     @FormUrlEncoded
@@ -151,4 +149,78 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
     ): DeleteTimelineResponse
+
+    //TALENT
+    @FormUrlEncoded
+    @POST("talent/add")
+    suspend fun addTalent(
+        @Header("Authorization") token: String,
+        @Body request: AddTalentRequest
+    ): NewTalentResponse
+
+    data class AddTalentRequest(
+        val roles: List<String>,
+        val tools: List<String>,
+        val platforms: List<String>,
+        @SerializedName("product_types")
+        val productTypes: List<String>,
+        val languages: List<String>,
+        val portfolio: List<PortfolioItem>
+    )
+
+    data class PortfolioItem(
+        @SerializedName("portfolio_name")
+        val name: String,
+        @SerializedName("portfolio_linkedin")
+        val linkedin: String,
+        @SerializedName("portfolio_github")
+        val github: String,
+        @SerializedName("portfolio_desc")
+        val description: String,
+        @SerializedName("start_date")
+        val startDate: String,
+        @SerializedName("end_date")
+        val endDate: String,
+        val platforms: List<String>,
+        val tools: List<String>,
+        val languages: List<String>,
+        val roles: List<String>,
+        @SerializedName("product_types")
+        val productTypes: List<String>
+    )
+
+    @GET("talent/detail/{id}")
+    suspend fun getTalentDetail(
+        @Header("Authorization") token: String,
+        @Path("talent_id") talentId: Int,
+    ): TalentDetailResponse
+
+    //Separate or Create Multiple updateUser based on Function Needs
+    @PATCH("talent/update/{id}")
+    suspend fun updateTalent(
+        @Header("Authorization") token: String,
+        @Path("talent_id") talentId: Int,
+        @Body request: UpdateTalentRequest
+    ): UpdateTalentResponse
+
+    data class UpdateTalentRequest(
+        val roles: List<String>,
+        val languages: List<String>,
+        val tools: List<String>,
+        @SerializedName("product_types")
+        val productTypes: List<String>,
+        val platforms: List<String>,
+        @SerializedName("is_project_manager")
+        val isProjectManager: Int,
+        @SerializedName("project_done")
+        val projectDone: Int,
+        @SerializedName("is_on_project")
+        val isOnProject: Int,
+        @SerializedName("talent_avg_rating")
+        val talentAvgRating: Double,
+        val availability: Int
+    )
+
+
+
 }

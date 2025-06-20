@@ -1,13 +1,18 @@
 package com.example.talentara.data.remote
 
-import com.example.talentara.data.model.response.notification.NewNotificationResponse
 import com.example.talentara.data.model.response.notification.DeleteNotificationResponse
+import com.example.talentara.data.model.response.notification.NewNotificationResponse
 import com.example.talentara.data.model.response.notification.NotificationHistoryResponse
 import com.example.talentara.data.model.response.notification.UpdateNotificationResponse
 import com.example.talentara.data.model.response.portfolio.NewPortfolioResponse
 import com.example.talentara.data.model.response.portfolio.PortfolioDetailResponse
 import com.example.talentara.data.model.response.portfolio.PortfolioTalentResponse
 import com.example.talentara.data.model.response.portfolio.UpdatePortfolioResponse
+import com.example.talentara.data.model.response.project.NewProjectResponse
+import com.example.talentara.data.model.response.project.ProjectDetailResponse
+import com.example.talentara.data.model.response.project.ProjectHistoryResponse
+import com.example.talentara.data.model.response.project.ProjectOfferResponse
+import com.example.talentara.data.model.response.project.UpdateProjectResponse
 import com.example.talentara.data.model.response.talent.NewTalentResponse
 import com.example.talentara.data.model.response.talent.TalentDetailResponse
 import com.example.talentara.data.model.response.talent.UpdateTalentResponse
@@ -19,8 +24,8 @@ import com.example.talentara.data.model.response.timeline.TimelineProjectRespons
 import com.example.talentara.data.model.response.timeline.UpdateTimelineResponse
 import com.example.talentara.data.model.response.user.LoginResponse
 import com.example.talentara.data.model.response.user.RegisterResponse
-import com.example.talentara.data.model.response.user.UserBasicResponse
 import com.example.talentara.data.model.response.user.UpdateUserResponse
+import com.example.talentara.data.model.response.user.UserBasicResponse
 import com.example.talentara.data.model.response.user.UserDetailResponse
 import com.google.gson.annotations.SerializedName
 import retrofit2.http.Body
@@ -159,7 +164,7 @@ interface ApiService {
     @POST("talent/add")
     suspend fun addTalent(
         @Header("Authorization") token: String,
-        @Body request: AddTalentRequest
+        @Body request: AddTalentRequest,
     ): NewTalentResponse
 
     data class AddTalentRequest(
@@ -169,7 +174,7 @@ interface ApiService {
         @SerializedName("product_types")
         val productTypes: List<String>,
         val languages: List<String>,
-        val portfolio: List<PortfolioItem>
+        val portfolio: List<PortfolioItem>,
     )
 
     data class PortfolioItem(
@@ -190,7 +195,7 @@ interface ApiService {
         val languages: List<String>,
         val roles: List<String>,
         @SerializedName("product_types")
-        val productTypes: List<String>
+        val productTypes: List<String>,
     )
 
     @GET("talent/detail/{id}")
@@ -204,7 +209,7 @@ interface ApiService {
     suspend fun updateTalent(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
-        @Body request: UpdateTalentRequest
+        @Body request: UpdateTalentRequest,
     ): UpdateTalentResponse
 
     data class UpdateTalentRequest(
@@ -222,7 +227,7 @@ interface ApiService {
         val isOnProject: Int,
         @SerializedName("talent_avg_rating")
         val talentAvgRating: Double,
-        val availability: Int
+        val availability: Int,
     )
 
     //PORTFOLIO
@@ -230,7 +235,7 @@ interface ApiService {
     @POST("portfolio/add")
     suspend fun addPortfolio(
         @Header("Authorization") token: String,
-        @Body request: AddPortfolioRequest
+        @Body request: AddPortfolioRequest,
     ): NewPortfolioResponse
 
     data class AddPortfolioRequest(
@@ -253,7 +258,7 @@ interface ApiService {
         val languages: List<String>,
         val roles: List<String>,
         @SerializedName("product_types")
-        val productTypes: List<String>
+        val productTypes: List<String>,
     )
 
     @GET("portfolio/talent/{id}")
@@ -272,8 +277,8 @@ interface ApiService {
     suspend fun updatePortfolio(
         @Header("Authorization") token: String,
         @Path("portfolio_id") portfolioId: Int,
-        @Body request: UpdatePortfolioRequest
-        ): UpdatePortfolioResponse
+        @Body request: UpdatePortfolioRequest,
+    ): UpdatePortfolioResponse
 
     data class UpdatePortfolioRequest(
         @SerializedName("portfolio_name")
@@ -293,6 +298,77 @@ interface ApiService {
         val languages: List<String>,
         val roles: List<String>,
         @SerializedName("product_types")
-        val productTypes: List<String>
+        val productTypes: List<String>,
     )
+
+    //PROJECT
+    @FormUrlEncoded
+    @POST("project/add")
+    suspend fun addProject(
+        @Header("Authorization") token: String,
+        @Field("status_id") statusId: Int,
+        @Field("client_name") clientName: String,
+        @Field("project_name") projectName: String,
+        @Field("project_desc") projectDesc: String,
+        @Field("start_date") startDate: String,
+        @Field("end_date") endDate: String,
+    ): NewProjectResponse
+
+    @GET("project/detail/{id}")
+    suspend fun getProjectDetail(
+        @Header("Authorization") token: String,
+        @Path("project_id") projectId: Int,
+    ): ProjectDetailResponse
+
+    @GET("project/history/{id}")
+    suspend fun getProjectHistory(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: Int,
+    ): ProjectHistoryResponse
+
+    //Need to complete
+    @PATCH("project/update/{id}")
+    suspend fun updateProject(
+        @Header("Authorization") token: String,
+        @Path("project_id") projectId: Int,
+        @Body request: UpdateProjectRequest,
+    ): UpdateProjectResponse
+
+    data class UpdateProjectRequest(
+        @SerializedName("status_id")
+        val statusId: Int,
+        @SerializedName("client_name")
+        val clientName: String,
+        @SerializedName("project_name")
+        val projectName: String,
+        @SerializedName("project_desc")
+        val projectDesc: String,
+        @SerializedName("start_date")
+        val startDate: String,
+        @SerializedName("end_date")
+        val endDate: String,
+        val platform: List<String>,
+        @SerializedName("product_type")
+        val productType: List<String>,
+        val role: List<ProjectRole>,
+        val language: List<String>,
+        val tools: List<String>,
+        val feature: List<String>,
+    )
+    data class ProjectRole(
+        @SerializedName("role_name")
+        val roleName: String,
+        val amount: Int,
+    )
+
+    @PATCH("project/offer")
+    suspend fun offerProject(
+        @Header("Authorization") token: String,
+        @Field("project_id") projectId: Int,
+        @Field("talent_id") userId: Int,
+        @Field("role_name") roleName: Int,
+        @Field("accept") accept: String,
+    ): ProjectOfferResponse
+
+    //PROJECT ORDER
 }

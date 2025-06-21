@@ -317,14 +317,14 @@ class Repository private constructor(
         }
     }
 
-    fun updateTimelineEvidance(
+    fun updateTimelineEvidence(
         token: String,
         timelineId: Int,
-        evidance: String,
+        evidence: String,
     ): LiveData<Results<UpdateTimelineResponse>> = liveData {
         emit(Results.Loading)
         try {
-            val response = apiService.updateTimelineEvidance("Bearer $token", timelineId, evidance)
+            val response = apiService.updateTimelineEvidence("Bearer $token", timelineId, evidence)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))

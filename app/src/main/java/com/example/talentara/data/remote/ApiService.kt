@@ -177,10 +177,10 @@ interface ApiService {
     ): UpdateTimelineResponse
 
     @PATCH("timeline/update/{id}")
-    suspend fun updateTimelineEvidance(
+    suspend fun updateTimelineEvidence(
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
-        @Field("evidance") evidance: String,
+        @Field("evidance") evidence: String,
     ): UpdateTimelineResponse
 
     @DELETE("timeline/delete/{id}")

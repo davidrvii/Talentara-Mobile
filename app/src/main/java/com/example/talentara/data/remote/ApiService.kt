@@ -19,7 +19,6 @@ import com.example.talentara.data.model.response.talent.UpdateTalentResponse
 import com.example.talentara.data.model.response.timeline.CurrentTimelineResponse
 import com.example.talentara.data.model.response.timeline.DeleteTimelineResponse
 import com.example.talentara.data.model.response.timeline.NewTimelineResponse
-import com.example.talentara.data.model.response.timeline.TimelineDetailResponse
 import com.example.talentara.data.model.response.timeline.TimelineProjectResponse
 import com.example.talentara.data.model.response.timeline.UpdateTimelineResponse
 import com.example.talentara.data.model.response.user.LoginResponse
@@ -67,7 +66,6 @@ interface ApiService {
         @Path("user_id") id: Int,
     ): UserDetailResponse
 
-    //Separate or Create Multiple updateUser based on Function Needs
     @FormUrlEncoded
     @PATCH("user/update/{id}")
     suspend fun updateUser(
@@ -78,10 +76,24 @@ interface ApiService {
         @Field("user_password") password: String,
         @Field("github") github: String,
         @Field("linkedin") linkedin: String,
-        @Field("is_on_project") isOnProject: Int,
-        @Field("talent_access") talentAccess: Int,
         @Field("user_image") userImage: String,
         @Field("fcm_token") fcmToken: String,
+    ): UpdateUserResponse
+
+    @FormUrlEncoded
+    @PATCH("user/update/{id}")
+    suspend fun updateUserIsOnProject(
+        @Header("Authorization") token: String,
+        @Path("user_id") id: Int,
+        @Field("is_on_project") isOnProject: Boolean,
+    ): UpdateUserResponse
+
+    @FormUrlEncoded
+    @PATCH("user/update/{id}")
+    suspend fun updateUserTalentAccess(
+        @Header("Authorization") token: String,
+        @Path("user_id") id: Int,
+        @Field("talent_access") talentAccess: Boolean,
     ): UpdateUserResponse
 
     //NOTIFICATION
@@ -134,12 +146,6 @@ interface ApiService {
         @Path("project_id") projectId: Int,
     ): CurrentTimelineResponse
 
-    @GET("timeline/detail/{id}")
-    suspend fun getTimelineDetail(
-        @Header("Authorization") token: String,
-        @Path("timeline_id") timelineId: Int,
-    ): TimelineDetailResponse
-
     @PATCH("timeline/update/{id}")
     suspend fun updateTimeline(
         @Header("Authorization") token: String,
@@ -147,10 +153,34 @@ interface ApiService {
         @Field("project_phase") projectPhase: String,
         @Field("start_date") startDate: String,
         @Field("end_date") endDate: String,
-        @Field("evidance") evidance: String,
+    ): UpdateTimelineResponse
+
+    @PATCH("timeline/update/{id}")
+    suspend fun updateTimelineClientApprove(
+        @Header("Authorization") token: String,
+        @Path("timeline_id") timelineId: Int,
         @Field("client_approved") clientApproved: String,
+    ): UpdateTimelineResponse
+
+    @PATCH("timeline/update/{id}")
+    suspend fun updateTimelineLeaderApprove(
+        @Header("Authorization") token: String,
+        @Path("timeline_id") timelineId: Int,
         @Field("leader_approved") leaderApproved: String,
+    ): UpdateTimelineResponse
+
+    @PATCH("timeline/update/{id}")
+    suspend fun updateTimelineCompletedDate(
+        @Header("Authorization") token: String,
+        @Path("timeline_id") timelineId: Int,
         @Field("completed_date") completedDate: String,
+    ): UpdateTimelineResponse
+
+    @PATCH("timeline/update/{id}")
+    suspend fun updateTimelineEvidance(
+        @Header("Authorization") token: String,
+        @Path("timeline_id") timelineId: Int,
+        @Field("evidance") evidance: String,
     ): UpdateTimelineResponse
 
     @DELETE("timeline/delete/{id}")
@@ -204,8 +234,7 @@ interface ApiService {
         @Path("talent_id") talentId: Int,
     ): TalentDetailResponse
 
-    //Separate or Create Multiple updateUser based on Function Needs
-    @PATCH("talent/update/{id}")
+        @PATCH("talent/update/{id}")
     suspend fun updateTalent(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
@@ -219,16 +248,42 @@ interface ApiService {
         @SerializedName("product_types")
         val productTypes: List<String>,
         val platforms: List<String>,
-        @SerializedName("is_project_manager")
-        val isProjectManager: Int,
-        @SerializedName("project_done")
-        val projectDone: Int,
-        @SerializedName("is_on_project")
-        val isOnProject: Int,
-        @SerializedName("talent_avg_rating")
-        val talentAvgRating: Double,
-        val availability: Int,
     )
+
+    @PATCH("talent/update/{id}")
+    suspend fun updateTalentIsOnProject(
+        @Header("Authorization") token: String,
+        @Path("talent_id") talentId: Int,
+        @Field("is_on_project") isOnProject: Boolean,
+    ): UpdateTalentResponse
+
+    @PATCH("talent/update/{id}")
+    suspend fun updateTalentIsProjectManager(
+        @Header("Authorization") token: String,
+        @Path("talent_id") talentId: Int,
+        @Field("is_project_manager") isProjectManager: Boolean,
+    ): UpdateTalentResponse
+
+    @PATCH("talent/update/{id}")
+    suspend fun updateTalentProjectDone(
+        @Header("Authorization") token: String,
+        @Path("talent_id") talentId: Int,
+        @Field("project_done") isProjectManager: Int,
+    ): UpdateTalentResponse
+
+    @PATCH("talent/update/{id}")
+    suspend fun updateTalentAvailability(
+        @Header("Authorization") token: String,
+        @Path("talent_id") talentId: Int,
+        @Field("availability") availability: Int,
+    ): UpdateTalentResponse
+
+    @PATCH("talent/update/{id}")
+    suspend fun updateTalentAvgRating(
+        @Header("Authorization") token: String,
+        @Path("talent_id") talentId: Int,
+        @Field("talent_avg_rating") talentAvgRating: Int,
+    ): UpdateTalentResponse
 
     //PORTFOLIO
     @FormUrlEncoded
@@ -326,7 +381,6 @@ interface ApiService {
         @Path("user_id") userId: Int,
     ): ProjectHistoryResponse
 
-    //Need to complete
     @PATCH("project/update/{id}")
     suspend fun updateProject(
         @Header("Authorization") token: String,
@@ -355,6 +409,7 @@ interface ApiService {
         val tools: List<String>,
         val feature: List<String>,
     )
+
     data class ProjectRole(
         @SerializedName("role_name")
         val roleName: String,
@@ -362,11 +417,11 @@ interface ApiService {
     )
 
     @PATCH("project/offer")
-    suspend fun offerProject(
+    suspend fun projectOffer(
         @Header("Authorization") token: String,
         @Field("project_id") projectId: Int,
-        @Field("talent_id") userId: Int,
-        @Field("role_name") roleName: Int,
+        @Field("talent_id") talentId: Int,
+        @Field("role_name") roleName: String,
         @Field("accept") accept: String,
     ): ProjectOfferResponse
 

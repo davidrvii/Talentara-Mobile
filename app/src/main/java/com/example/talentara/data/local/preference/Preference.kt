@@ -1,6 +1,7 @@
 package com.example.talentara.data.local.preference
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import com.example.talentara.data.model.user.UserModel
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +15,7 @@ import androidx.datastore.preferences.preferencesDataStore
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class UserPreference private constructor(private val dataStore: DataStore<Preferences>) {
-    fun getUser(): Flow<UserModel> {
+    fun getSession(): Flow<UserModel> {
         return dataStore.data.map { preferences ->
             UserModel(
                 preferences[EMAIL_KEY] ?: "",
@@ -25,12 +26,16 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         }
     }
 
-    suspend fun saveToken(token: String?) {
-        if (token != null) {
+    suspend fun saveUser(token: String?, email: String?, username: String?) {
+        if (token != null && email != null && username != null) {
             dataStore.edit { preferences ->
                 preferences[TOKEN_KEY] = token
+                preferences[EMAIL_KEY] = email
+                preferences[USERNAME_KEY] = username
                 preferences[IS_LOGIN_KEY] = true
             }
+        } else {
+            Log.e("UserPreference", "Token, email, or username is null")
         }
     }
 

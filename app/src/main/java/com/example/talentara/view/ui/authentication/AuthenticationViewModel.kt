@@ -1,10 +1,23 @@
 package com.example.talentara.view.ui.authentication
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import com.example.talentara.data.model.response.user.LoginResponse
 import com.example.talentara.data.model.response.user.RegisterResponse
+import com.example.talentara.data.model.result.Results
+import com.example.talentara.data.model.user.UserModel
 import com.example.talentara.data.repository.Repository
 
 class AuthenticationViewModel(private val repository: Repository) : ViewModel() {
+
+    fun getSession(): LiveData<UserModel> {
+        return repository.getSession().asLiveData()
+    }
+
+    private val _register = MediatorLiveData<Results<RegisterResponse>>()
+    val register: LiveData<Results<RegisterResponse>> = _register
 
     suspend fun register(
         username: String,
@@ -13,6 +26,9 @@ class AuthenticationViewModel(private val repository: Repository) : ViewModel() 
     ): RegisterResponse {
         return repository.register(username, email, password)
     }
+
+    private val _login = MediatorLiveData<Results<LoginResponse>>()
+    val login: LiveData<Results<LoginResponse>> = _login
 
     suspend fun login(
         email: String,

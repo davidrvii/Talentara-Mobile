@@ -109,5 +109,8 @@
     <string name="github_profile">Github Profile</string>
     <string name="linkedin_profile">LinkedIn Profile</string>
     <string name="apply_talent">Apply Talent</string>
+    <string name="login_failed">Login Failed, Please try Again</string>
+    <string name="register_failed">Register Failed, Please try again</string>
+    <string name="register_success">Register Success, Please Login</string>
 
 </resources>

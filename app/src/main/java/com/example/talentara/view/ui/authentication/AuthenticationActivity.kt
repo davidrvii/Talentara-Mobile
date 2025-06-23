@@ -1,6 +1,8 @@
 package com.example.talentara.view.ui.authentication
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -9,15 +11,33 @@ import com.example.talentara.R
 import com.example.talentara.databinding.ActivityAuthenticationBinding
 import com.example.talentara.view.ui.authentication.signin.SignInFragment
 import com.example.talentara.view.ui.authentication.signup.SignUpFragment
+import com.example.talentara.view.ui.main.MainActivity
+import com.example.talentara.view.utils.FactoryViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 class AuthenticationActivity : AppCompatActivity() {
 
+    private val authViewModel: AuthenticationViewModel by viewModels {
+        FactoryViewModel.getInstance(this)
+    }
     private lateinit var binding: ActivityAuthenticationBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        authViewModel.getSession().observe(this) { user ->
+            if (user.isLogin) {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            } else {
+                setupUI()
+            }
+        }
+
+        setupViewPagerWithTabs()
+    }
+
+    private fun setupUI() {
         binding = ActivityAuthenticationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -26,8 +46,6 @@ class AuthenticationActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        setupViewPagerWithTabs()
     }
 
     fun switchPage(toPosition: Int) {

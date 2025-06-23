@@ -11,6 +11,7 @@ import com.example.talentara.data.model.response.portfolio.NewPortfolioResponse
 import com.example.talentara.data.model.response.portfolio.PortfolioDetailResponse
 import com.example.talentara.data.model.response.portfolio.PortfolioTalentResponse
 import com.example.talentara.data.model.response.portfolio.UpdatePortfolioResponse
+import com.example.talentara.data.model.response.project.CurrentProjectResponse
 import com.example.talentara.data.model.response.project.NewProjectResponse
 import com.example.talentara.data.model.response.project.ProjectDetailResponse
 import com.example.talentara.data.model.response.project.ProjectHistoryResponse
@@ -57,11 +58,12 @@ class Repository private constructor(
         val response = apiService.login(email, password)
 
         if (response.loginResult != null) {
+            val userId = response.loginResult.userId
             val userToken = response.loginResult.token
             val userEmail = response.loginResult.userEmail
             val userName = response.loginResult.userName
 
-            userPreference.saveUser(userToken, userEmail, userName)
+            userPreference.saveUser(userId, userToken, userEmail, userName)
         }
     }
 
@@ -100,7 +102,6 @@ class Repository private constructor(
         id: Int,
         username: String,
         email: String,
-        password: String,
         github: String,
         linkedin: String,
         userImage: String,
@@ -113,7 +114,6 @@ class Repository private constructor(
                 id,
                 username,
                 email,
-                password,
                 github,
                 linkedin,
                 userImage,
@@ -129,12 +129,12 @@ class Repository private constructor(
 
     fun updateUserIsOnProject(
         token: String,
-        id: Int,
+        userId: Int,
         isOnProject: Boolean,
     ): LiveData<Results<UpdateUserResponse>> = liveData {
         emit(Results.Loading)
         try {
-            val response = apiService.updateUserIsOnProject("Bearer $token", id, isOnProject)
+            val response = apiService.updateUserIsOnProject("Bearer $token", userId, isOnProject)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
@@ -143,12 +143,12 @@ class Repository private constructor(
 
     fun updateUserTalentAccess(
         token: String,
-        id: Int,
+        userId: Int,
         talentAccess: Boolean,
     ): LiveData<Results<UpdateUserResponse>> = liveData {
         emit(Results.Loading)
         try {
-            val response = apiService.updateUserTalentAccess("Bearer $token", id, talentAccess)
+            val response = apiService.updateUserTalentAccess("Bearer $token", userId, talentAccess)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
@@ -156,13 +156,14 @@ class Repository private constructor(
     }
 
     fun addNotification(
+        token: String,
         userId: Int,
         title: String,
         desc: String,
     ): LiveData<Results<NewNotificationResponse>> = liveData {
         emit(Results.Loading)
         try {
-            val response = apiService.addNotification(userId, title, desc)
+            val response = apiService.addNotification(token, userId, title, desc)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
@@ -210,6 +211,7 @@ class Repository private constructor(
     }
 
     fun addTimeline(
+        token: String,
         projectId: Int,
         projectPhase: String,
         startDate: String,
@@ -217,7 +219,7 @@ class Repository private constructor(
     ): LiveData<Results<NewTimelineResponse>> = liveData {
         emit(Results.Loading)
         try {
-            val response = apiService.addTimeline(projectId, projectPhase, startDate, endDate)
+            val response = apiService.addTimeline(token, projectId, projectPhase, startDate, endDate)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
@@ -275,7 +277,7 @@ class Repository private constructor(
     fun updateTimelineClientApprove(
         token: String,
         timelineId: Int,
-        clientApproved: String,
+        clientApproved: Boolean,
     ): LiveData<Results<UpdateTimelineResponse>> = liveData {
         emit(Results.Loading)
         try {
@@ -290,7 +292,7 @@ class Repository private constructor(
     fun updateTimelineLeaderApprove(
         token: String,
         timelineId: Int,
-        leaderApproved: String,
+        leaderApproved: Boolean,
     ): LiveData<Results<UpdateTimelineResponse>> = liveData {
         emit(Results.Loading)
         try {
@@ -447,7 +449,7 @@ class Repository private constructor(
     fun updateTalentAvailability(
         token: String,
         talentId: Int,
-        availability: Int,
+        availability: Boolean,
     ): LiveData<Results<UpdateTalentResponse>> = liveData {
         emit(Results.Loading)
         try {
@@ -564,6 +566,19 @@ class Repository private constructor(
         }
     }
 
+    fun getCurrentProject(
+        token: String,
+        userId: Int,
+    ): LiveData<Results<CurrentProjectResponse>> = liveData {
+        emit(Results.Loading)
+        try {
+            val response = apiService.getCurrentProject("Bearer $token", userId)
+            emit(Results.Success(response))
+        } catch (e: Exception) {
+            emit(Results.Error(e.message.toString()))
+        }
+    }
+
     fun updateProject(
         token: String,
         projectId: Int,
@@ -583,7 +598,7 @@ class Repository private constructor(
         projectId: Int,
         talentId: Int,
         roleName: String,
-        accept: String,
+        accept: Boolean,
     ): LiveData<Results<ProjectOfferResponse>> = liveData {
         emit(Results.Loading)
         try {

@@ -8,6 +8,7 @@ import com.example.talentara.data.model.response.portfolio.NewPortfolioResponse
 import com.example.talentara.data.model.response.portfolio.PortfolioDetailResponse
 import com.example.talentara.data.model.response.portfolio.PortfolioTalentResponse
 import com.example.talentara.data.model.response.portfolio.UpdatePortfolioResponse
+import com.example.talentara.data.model.response.project.CurrentProjectResponse
 import com.example.talentara.data.model.response.project.NewProjectResponse
 import com.example.talentara.data.model.response.project.ProjectDetailResponse
 import com.example.talentara.data.model.response.project.ProjectHistoryResponse
@@ -73,7 +74,6 @@ interface ApiService {
         @Path("user_id") id: Int,
         @Field("user_name") username: String,
         @Field("user_email") email: String,
-        @Field("user_password") password: String,
         @Field("github") github: String,
         @Field("linkedin") linkedin: String,
         @Field("user_image") userImage: String,
@@ -100,6 +100,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("notification/add")
     suspend fun addNotification(
+        @Header("Authorization") token: String,
         @Field("user_id") userId: Int,
         @Field("notification_title") title: String,
         @Field("notification_desc") desc: String,
@@ -128,6 +129,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("timeline/add")
     suspend fun addTimeline(
+        @Header("Authorization") token: String,
         @Field("project_id") projectId: Int,
         @Field("project_phase") projectPhase: String,
         @Field("start_date") startDate: String,
@@ -159,14 +161,14 @@ interface ApiService {
     suspend fun updateTimelineClientApprove(
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
-        @Field("client_approved") clientApproved: String,
+        @Field("client_approved") clientApproved: Boolean,
     ): UpdateTimelineResponse
 
     @PATCH("timeline/update/{id}")
     suspend fun updateTimelineLeaderApprove(
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
-        @Field("leader_approved") leaderApproved: String,
+        @Field("leader_approved") leaderApproved: Boolean,
     ): UpdateTimelineResponse
 
     @PATCH("timeline/update/{id}")
@@ -275,7 +277,7 @@ interface ApiService {
     suspend fun updateTalentAvailability(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
-        @Field("availability") availability: Int,
+        @Field("availability") availability: Boolean,
     ): UpdateTalentResponse
 
     @PATCH("talent/update/{id}")
@@ -381,6 +383,12 @@ interface ApiService {
         @Path("user_id") userId: Int,
     ): ProjectHistoryResponse
 
+    @GET("project/current/{id}")
+    suspend fun getCurrentProject(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: Int,
+    ): CurrentProjectResponse
+
     @PATCH("project/update/{id}")
     suspend fun updateProject(
         @Header("Authorization") token: String,
@@ -422,7 +430,7 @@ interface ApiService {
         @Field("project_id") projectId: Int,
         @Field("talent_id") talentId: Int,
         @Field("role_name") roleName: String,
-        @Field("accept") accept: String,
+        @Field("accept") accept: Boolean,
     ): ProjectOfferResponse
 
     //PROJECT ORDER

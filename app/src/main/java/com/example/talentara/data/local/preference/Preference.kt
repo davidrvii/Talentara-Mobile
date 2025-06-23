@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.map
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 
@@ -18,6 +19,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
     fun getSession(): Flow<UserModel> {
         return dataStore.data.map { preferences ->
             UserModel(
+                preferences[USER_ID] ?: 0,
                 preferences[EMAIL_KEY] ?: "",
                 preferences[USERNAME_KEY] ?: "",
                 preferences[TOKEN_KEY] ?: "",
@@ -26,9 +28,10 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         }
     }
 
-    suspend fun saveUser(token: String?, email: String?, username: String?) {
-        if (token != null && email != null && username != null) {
+    suspend fun saveUser(userId: Int?, token: String?, email: String?, username: String?) {
+        if (userId != null && token != null && email != null && username != null) {
             dataStore.edit { preferences ->
+                preferences[USER_ID] =  userId
                 preferences[TOKEN_KEY] = token
                 preferences[EMAIL_KEY] = email
                 preferences[USERNAME_KEY] = username
@@ -49,6 +52,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         @Volatile
         private var INSTANCE: UserPreference? = null
 
+        private val USER_ID = intPreferencesKey("userId")
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val USERNAME_KEY = stringPreferencesKey("username")
         private val TOKEN_KEY = stringPreferencesKey("token")

@@ -8,9 +8,6 @@
     android:backgroundTint="@color/white"
     android:elevation="12dp"
     app:cardCornerRadius="24dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/tvOngoing"
     app:strokeColor="@color/light_gray">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/complete_in_d_days"
+            android:text="@string/completed_in_d_days"
             android:textColor="@color/blue"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/tvProduct"

@@ -15,7 +15,7 @@ class PortfolioDetailViewModel(private val repository: Repository) : ViewModel()
     private val _portfolioDetail = MediatorLiveData<Results<PortfolioDetailResponse>>()
     val portfolioDetail: LiveData<Results<PortfolioDetailResponse>> = _portfolioDetail
 
-    suspend fun getPortfolioDetail(
+    fun getPortfolioDetail(
         portfolioId: Int,
     ) {
         viewModelScope.launch {

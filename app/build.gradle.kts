@@ -65,4 +65,5 @@ dependencies {
     implementation(libs.threetenabp)
     implementation(libs.glide)
     ksp (libs.glide.compiler)
+    implementation(libs.flexbox)
 }

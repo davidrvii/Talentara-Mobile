@@ -22,6 +22,9 @@ data class PortfolioDetailResponse(
 
 data class PortfolioDetailItem(
 
+	@field:SerializedName("client_name")
+	val clientName: String? = null,
+
 	@field:SerializedName("end_date")
 	val endDate: String? = null,
 
@@ -53,7 +56,7 @@ data class PortfolioDetailItem(
 	val platforms: String? = null,
 
 	@field:SerializedName("features")
-	val features: Any? = null,
+	val features: String? = null,
 
 	@field:SerializedName("portfolio_github")
 	val portfolioGithub: String? = null,

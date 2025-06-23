@@ -120,5 +120,8 @@
     <string name="are_you_sure_you_want_to_remove_this_notification">Are you sure you want to remove this notification?</string>
     <string name="yes">Yes</string>
     <string name="failed_to_delete_notification">Failed to delete notification</string>
+    <string name="failed_to_get_portfolio_detail">Failed to get Portfolio Detail</string>
+    <string name="periode">%s - %s</string>
+    <string name="item_name">Item Name</string>
 
 </resources>

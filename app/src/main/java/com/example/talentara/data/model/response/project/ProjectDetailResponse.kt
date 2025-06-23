@@ -61,6 +61,9 @@ data class ProjectDetailItem(
 	@field:SerializedName("status_id")
 	val statusId: Int? = null,
 
+	@field:SerializedName("status_name")
+	val statusName: Int? = null,
+
 	@field:SerializedName("updated_at")
 	val updatedAt: String? = null,
 

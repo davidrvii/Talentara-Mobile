@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.talentara.data.model.response.project.UpdateProjectResponse
 import com.example.talentara.data.model.response.talent.UpdateTalentResponse
 import com.example.talentara.data.model.response.timeline.DeleteTimelineResponse
 import com.example.talentara.data.model.response.timeline.NewTimelineResponse
@@ -258,6 +259,35 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
                 }
             } catch (e: Exception) {
                 _updateTalentProjectDone.value = Results.Error(e.message.toString())
+            }
+        }
+    }
+
+    private val _updateProjectCompleted = MediatorLiveData<Results<UpdateProjectResponse>>()
+    val updateProjectCompleted: LiveData<Results<UpdateProjectResponse>> = _updateProjectCompleted
+
+    suspend fun updateProjectCompleted(
+        projectId: Int,
+        projectCompleted: String,
+    ) {
+        viewModelScope.launch {
+            _updateProjectCompleted.value = Results.Loading
+            try {
+                val token = repository.getSession().first().token
+                val statusId = 4
+
+                _updateProjectCompleted.addSource(
+                    repository.updateProjectCompleted(
+                        token,
+                        projectId,
+                        statusId,
+                        projectCompleted
+                        )
+                ) { result ->
+                    _updateProjectCompleted.value = result
+                }
+            } catch (e: Exception) {
+                _updateProjectCompleted.value = Results.Error(e.message.toString())
             }
         }
     }

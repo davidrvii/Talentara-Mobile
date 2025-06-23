@@ -37,7 +37,7 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
     private val _getCurrentProject = MediatorLiveData<Results<CurrentProjectResponse>>()
     val getCurrentProject: LiveData<Results<CurrentProjectResponse>> = _getCurrentProject
 
-    suspend fun getCurrentProject() {
+    fun getCurrentProject() {
         viewModelScope.launch {
             _getCurrentProject.value = Results.Loading
             try {

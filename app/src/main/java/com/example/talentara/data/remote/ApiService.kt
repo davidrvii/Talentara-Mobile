@@ -424,6 +424,14 @@ interface ApiService {
         val amount: Int,
     )
 
+    @PATCH("project/update/{id}")
+    suspend fun updateProjectCompleted(
+        @Header("Authorization") token: String,
+        @Path("project_id") projectId: Int,
+        @Field("status_id") statusId: Int,
+        @Field("completed_date") completedDate: String,
+    ): UpdateProjectResponse
+
     @PATCH("project/offer")
     suspend fun projectOffer(
         @Header("Authorization") token: String,

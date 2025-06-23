@@ -18,4 +18,8 @@ class ProjectDetailActivity : AppCompatActivity() {
             insets
         }
     }
+
+    companion object {
+        const val PROJECT_ID = "project_id"
+    }
 }

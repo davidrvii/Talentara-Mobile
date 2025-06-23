@@ -1,60 +1,176 @@
 package com.example.talentara.view.ui.history
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.talentara.R
+import com.example.talentara.data.model.result.Results
+import com.example.talentara.databinding.FragmentHistoryBinding
+import com.example.talentara.view.ui.home.HomeViewModel
+import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
+import com.example.talentara.view.utils.FactoryViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import org.threeten.bp.LocalDate as LegacyLocalDate
+import org.threeten.bp.format.DateTimeFormatter as LegacyDateTimeFormatter
+import org.threeten.bp.temporal.ChronoUnit as LegacyChronosUnit
 
-// Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HistoryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HistoryFragment : Fragment() {
-    // Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private val homeViewModel: HomeViewModel by viewModels {
+        FactoryViewModel.getInstance(requireContext())
     }
+    private val historyViewModel: HistoryViewModel by viewModels {
+        FactoryViewModel.getInstance(requireContext())
+    }
+    private lateinit var projectHistoryAdapter: ProjectHistoryAdapter
+    private var _binding: FragmentHistoryBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history, container, false)
+    ): View {
+        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HistoryFragment.
-         */
-        // Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HistoryFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        getCurrentProject()
+        setupProjectHistoryList()
+    }
+
+    private fun getCurrentProject() {
+        homeViewModel.getCurrentProject()
+        homeViewModel.getCurrentProject.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+
+                    val currentProject = result.data.currentProject
+
+                    if (currentProject == null) {
+                        binding.tvOngoing.isVisible = false
+                        binding.cvOngoingProject.isVisible = false
+                        binding.historyDivider.isVisible = false
+                    } else {
+                        binding.tvOngoing.isVisible = true
+                        binding.cvOngoingProject.isVisible = true
+                        binding.historyDivider.isVisible = true
+
+                        //Get First Item of Product Type and Platform
+                        val firstProduct =
+                            currentProject.productTypes?.split("|")?.firstOrNull() ?: "-"
+                        val firstPlatform =
+                            currentProject.platforms?.split("|")?.firstOrNull() ?: "-"
+
+                        //Count Project Worked Days
+                        val daysRemaining: Int =
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                // API 26+
+                                val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                val today = LocalDate.now()
+                                val end = currentProject.endDate
+                                    ?.let { LocalDate.parse(it, fmt) }
+                                end?.let { ChronoUnit.DAYS.between(today, it).toInt() } ?: 0
+                            } else {
+                                // API <26
+                                val fmt = LegacyDateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                val today = LegacyLocalDate.now()
+                                val end = currentProject.endDate
+                                    ?.let { LegacyLocalDate.parse(it, fmt) }
+                                end?.let { LegacyChronosUnit.DAYS.between(today, it).toInt() } ?: 0
+                            }
+
+                        binding.apply {
+                            tvStatus.text = currentProject.statusName
+                            tvProject.text = currentProject.projectName
+                            tvClient.text = currentProject.clientName
+                            tvProduct.text =
+                                getString(R.string.project_product, firstProduct, firstPlatform)
+                            tvRemaining.text = getString(R.string.complete_in_d_days, daysRemaining)
+                        }
+
+                        binding.root.setOnClickListener {
+                            val intent = Intent(context, ProjectDetailActivity::class.java).apply {
+                                putExtra(ProjectDetailActivity.PROJECT_ID, currentProject.projectId)
+                            }
+                            startActivity(intent)
+                        }
+                    }
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.failed_to_get_current_project),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("HistoryFragment", "Error getting current project: ${result.error}")
                 }
             }
+        }
+    }
+
+    private fun setupProjectHistoryList() {
+        historyViewModel.getProjectHistory()
+        historyViewModel.getProjectHistory.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    projectHistoryAdapter.updateData(
+                        result.data.historyProject?.filterNotNull() ?: emptyList()
+                    )
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.failed_to_get_project_history),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("HistoryFragment", "Error getting project history: ${result.error}")
+                }
+            }
+        }
+        setupRecyclerView()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setupRecyclerView() {
+        Log.d("HistoryFragment", "Setup RecyclerView")
+        projectHistoryAdapter = ProjectHistoryAdapter(emptyList())
+        binding.rvHistory.apply {
+            adapter = projectHistoryAdapter
+            layoutManager = LinearLayoutManager(context)
+            isNestedScrollingEnabled = false
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

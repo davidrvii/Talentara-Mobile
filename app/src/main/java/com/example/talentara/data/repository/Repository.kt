@@ -593,6 +593,21 @@ class Repository private constructor(
         }
     }
 
+    fun updateProjectCompleted(
+        token: String,
+        projectId: Int,
+        statusId: Int,
+        completedDate: String,
+    ): LiveData<Results<UpdateProjectResponse>> = liveData {
+        emit(Results.Loading)
+        try {
+            val response = apiService.updateProjectCompleted("Bearer $token", projectId, statusId, completedDate)
+            emit(Results.Success(response))
+        } catch (e: Exception) {
+            emit(Results.Error(e.message.toString()))
+        }
+    }
+
     fun projectOffer(
         token: String,
         projectId: Int,

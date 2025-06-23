@@ -15,7 +15,7 @@ class HistoryViewModel(private val repository: Repository) : ViewModel() {
     private val _getProjectHistory = MediatorLiveData<Results<ProjectHistoryResponse>>()
     val getProjectHistory: LiveData<Results<ProjectHistoryResponse>> = _getProjectHistory
 
-    suspend fun getProjectHistory() {
+    fun getProjectHistory() {
         viewModelScope.launch {
             _getProjectHistory.value = Results.Loading
             try {

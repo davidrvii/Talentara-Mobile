@@ -23,7 +23,7 @@ data class UserBasicResponse(
 data class UsersBasicItem(
 
 	@field:SerializedName("user_image")
-	val userImage: Any? = null,
+	val userImage: String? = null,
 
 	@field:SerializedName("user_name")
 	val userName: String? = null

@@ -29,23 +29,23 @@ data class CurrentTimelineItem(
 	val projectId: Int? = null,
 
 	@field:SerializedName("leader_approved")
-	val leaderApproved: Any? = null,
+	val leaderApproved: Boolean? = null,
 
 	@field:SerializedName("project_phase")
 	val projectPhase: String? = null,
 
 	@field:SerializedName("evidance")
-	val evidance: Any? = null,
+	val evidance: String? = null,
 
 	@field:SerializedName("timeline_id")
 	val timelineId: Int? = null,
 
 	@field:SerializedName("client_approved")
-	val clientApproved: Any? = null,
+	val clientApproved: Boolean? = null,
 
 	@field:SerializedName("start_date")
 	val startDate: String? = null,
 
 	@field:SerializedName("completed_date")
-	val completedDate: Any? = null
+	val completedDate: String? = null
 )

@@ -17,7 +17,7 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
     private val _getUserBasic = MediatorLiveData<Results<UserBasicResponse>>()
     val getUserBasic: LiveData<Results<UserBasicResponse>> = _getUserBasic
 
-    suspend fun getUserBasic() {
+    fun getUserBasic() {
         viewModelScope.launch {
             _getUserBasic.value = Results.Loading
             try {
@@ -62,7 +62,7 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
     private val _getCurrentTimeline = MediatorLiveData<Results<CurrentTimelineResponse>>()
     val getCurrentTimeline: LiveData<Results<CurrentTimelineResponse>> = _getCurrentTimeline
 
-    suspend fun getCurrentTimeline(
+    fun getCurrentTimeline(
         projectId: Int,
     ) {
         viewModelScope.launch {

@@ -238,19 +238,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="@string/phase_complete"
+                        android:text="@string/completed_in_d_days"
                         android:textColor="@color/blue"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="@id/tvDeadline"
                         app:layout_constraintTop_toBottomOf="@id/tvDeadline" />
 
                     <TextView
-                        android:id="@+id/tvEvidance"
+                        android:id="@+id/tvEvidence"
                         style="@style/TextAppearance.Material3.BodySmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="@string/phase_evidance"
+                        android:text="@string/phase_evidence"
                         android:textColor="@color/blue"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="@id/tvComplete"
@@ -263,5 +263,20 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:elevation="8dp"
+        android:indeterminateTint="@color/blue"
+        android:indeterminateTintMode="src_in"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

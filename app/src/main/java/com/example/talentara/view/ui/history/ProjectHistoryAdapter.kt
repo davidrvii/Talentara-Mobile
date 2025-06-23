@@ -50,7 +50,7 @@ class ProjectHistoryAdapter(
                 tvClient.text = item.clientName
                 tvProduct.text = itemView.context.getString(R.string.project_product, firstProduct, firstPlatform)
                 if (item.statusName == "Completed"){
-                    tvCompleted.text = itemView.context.getString(R.string.complete_in_d_days, daysWorked)
+                    tvCompleted.text = itemView.context.getString(R.string.completed_in_d_days, daysWorked)
                 } else {
                     tvCompleted.text = itemView.context.getString(R.string.project_is_not_completed_yet)
                 }

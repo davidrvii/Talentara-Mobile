@@ -105,7 +105,7 @@ class HistoryFragment : Fragment() {
                             tvClient.text = currentProject.clientName
                             tvProduct.text =
                                 getString(R.string.project_product, firstProduct, firstPlatform)
-                            tvRemaining.text = getString(R.string.complete_in_d_days, daysRemaining)
+                            tvRemaining.text = getString(R.string.completed_in_d_days, daysRemaining)
                         }
 
                         binding.root.setOnClickListener {

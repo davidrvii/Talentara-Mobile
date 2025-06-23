@@ -18,7 +18,7 @@ class NotificationsViewModel(private val repository: Repository) : ViewModel() {
     private val _notificationHistory = MediatorLiveData<Results<NotificationHistoryResponse>>()
     val notificationHistory: LiveData<Results<NotificationHistoryResponse>> = _notificationHistory
 
-    suspend fun getNotificationHistory() {
+    fun getNotificationHistory() {
         viewModelScope.launch {
             _notificationHistory.value = Results.Loading
             try {
@@ -43,7 +43,7 @@ class NotificationsViewModel(private val repository: Repository) : ViewModel() {
     private val _addNotification = MediatorLiveData<Results<NewNotificationResponse>>()
     val addNotification: LiveData<Results<NewNotificationResponse>> = _addNotification
 
-    suspend fun addNotification(
+    fun addNotification(
         title: String,
         desc: String,
     ) {
@@ -72,7 +72,7 @@ class NotificationsViewModel(private val repository: Repository) : ViewModel() {
     private val _updateNotification = MediatorLiveData<Results<UpdateNotificationResponse>>()
     val updateNotification: LiveData<Results<UpdateNotificationResponse>> = _updateNotification
 
-    suspend fun updateNotification(
+    fun updateNotification(
         status: String,
         notificationId: Int
     ) {
@@ -93,7 +93,7 @@ class NotificationsViewModel(private val repository: Repository) : ViewModel() {
     private val _deleteNotification = MediatorLiveData<Results<DeleteNotificationResponse>>()
     val deleteNotification: LiveData<Results<DeleteNotificationResponse>> = _deleteNotification
 
-    suspend fun deleteNotification(
+    fun deleteNotification(
         notificationId: Int
     ) {
         viewModelScope.launch {

@@ -8,7 +8,7 @@ data class NotificationHistoryResponse(
 	val success: Boolean? = null,
 
 	@field:SerializedName("notificationDetail")
-	val notificationDetail: List<NotificationDetailItem?>? = null,
+	val notificationHistory: List<NotificationHistoryItem?>? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null,
@@ -20,7 +20,7 @@ data class NotificationHistoryResponse(
 	val timestamp: String? = null
 )
 
-data class NotificationDetailItem(
+data class NotificationHistoryItem(
 
 	@field:SerializedName("notification_desc")
 	val notificationDesc: String? = null,

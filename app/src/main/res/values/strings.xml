@@ -115,5 +115,10 @@
     <string name="failed_to_get_current_project">Failed to get current project</string>
     <string name="failed_to_get_project_history">Failed to get project history</string>
     <string name="project_is_on_progress">Project is on progress</string>
+    <string name="failed_to_get_notification">Failed to get notification</string>
+    <string name="remove_notification">Remove Notification</string>
+    <string name="are_you_sure_you_want_to_remove_this_notification">Are you sure you want to remove this notification?</string>
+    <string name="yes">Yes</string>
+    <string name="failed_to_delete_notification">Failed to delete notification</string>
 
 </resources>

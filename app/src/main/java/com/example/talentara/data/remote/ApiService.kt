@@ -1,5 +1,6 @@
 package com.example.talentara.data.remote
 
+import com.example.talentara.data.model.response.categories.GetAllCategoriesResponse
 import com.example.talentara.data.model.response.notification.DeleteNotificationResponse
 import com.example.talentara.data.model.response.notification.NewNotificationResponse
 import com.example.talentara.data.model.response.notification.NotificationHistoryResponse
@@ -296,6 +297,8 @@ interface ApiService {
     ): NewPortfolioResponse
 
     data class AddPortfolioRequest(
+        @SerializedName("client_name")
+        val clientName: String,
         @SerializedName("portfolio_name")
         val portfolioName: String,
         @SerializedName("portfolio_linkedin")
@@ -316,6 +319,7 @@ interface ApiService {
         val roles: List<String>,
         @SerializedName("product_types")
         val productTypes: List<String>,
+        val feature: List<String>,
     )
 
     @GET("portfolio/talent/{id}")
@@ -442,4 +446,9 @@ interface ApiService {
     ): ProjectOfferResponse
 
     //PROJECT ORDER
+
+    @GET("categories/all")
+    suspend fun getAllCategories(
+        @Header("Authorization") token: String,
+    ): GetAllCategoriesResponse
 }

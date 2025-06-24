@@ -123,5 +123,6 @@
     <string name="failed_to_get_portfolio_detail">Failed to get Portfolio Detail</string>
     <string name="periode">%s - %s</string>
     <string name="item_name">Item Name</string>
+    <string name="client_name_portfolio_hint">Your Client Name or Individual Project</string>
 
 </resources>

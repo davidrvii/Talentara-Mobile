@@ -3,6 +3,7 @@ package com.example.talentara.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.talentara.data.local.preference.UserPreference
+import com.example.talentara.data.model.response.categories.GetAllCategoriesResponse
 import com.example.talentara.data.model.response.notification.DeleteNotificationResponse
 import com.example.talentara.data.model.response.notification.NewNotificationResponse
 import com.example.talentara.data.model.response.notification.NotificationHistoryResponse
@@ -626,6 +627,18 @@ class Repository private constructor(
     }
 
     //Project Order
+
+    fun getAllCategories(
+        token: String,
+    ): LiveData<Results<GetAllCategoriesResponse>> = liveData {
+        emit(Results.Loading)
+        try {
+            val response = apiService.getAllCategories("Bearer $token")
+            emit(Results.Success(response))
+        } catch (e: Exception) {
+            emit(Results.Error(e.message.toString()))
+        }
+    }
 
     companion object {
         @Volatile

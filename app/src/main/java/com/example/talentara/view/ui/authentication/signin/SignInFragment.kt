@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +59,9 @@ class SignInFragment : Fragment() {
                     authViewModel.login(email, pass)
                     loginObserver()
                 } catch (e: Exception) {
+                    Toast.makeText(requireContext(),
+                        getString(R.string.login_failed), Toast.LENGTH_SHORT).show()
+                    Log.e("SignInFragment", "Error: ${e.message}")
                     loginFailed()
                 }
             }
@@ -86,6 +90,7 @@ class SignInFragment : Fragment() {
                     Toast.makeText(requireContext(),
                         getString(R.string.login_failed), Toast.LENGTH_SHORT).show()
                     showLoading(false)
+                    Log.e("SignInFragment", "Error: ${loginResponseResult.error}")
                     loginFailed()
                 }
             }

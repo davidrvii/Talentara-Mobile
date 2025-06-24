@@ -130,5 +130,6 @@
     <string name="failed_to_get_user_information">Failed to get user information</string>
     <string name="nothing_to_change">Nothing to change</string>
     <string name="failed_tp_get_talent_information">Failed tp get talent information</string>
+    <string name="failed_to_get_talent_information">Failed to get talent information</string>
 
 </resources>

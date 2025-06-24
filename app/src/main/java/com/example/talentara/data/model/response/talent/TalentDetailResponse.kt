@@ -26,7 +26,7 @@ data class TalentDetailItem(
 	val userEmail: String? = null,
 
 	@field:SerializedName("github")
-	val github: Any? = null,
+	val github: String? = null,
 
 	@field:SerializedName("languages")
 	val languages: String? = null,
@@ -35,7 +35,7 @@ data class TalentDetailItem(
 	val productTypes: String? = null,
 
 	@field:SerializedName("user_image")
-	val userImage: Any? = null,
+	val userImage: String? = null,
 
 	@field:SerializedName("is_on_project")
 	val isOnProject: Int? = null,
@@ -56,7 +56,7 @@ data class TalentDetailItem(
 	val availability: Int? = null,
 
 	@field:SerializedName("linkedin")
-	val linkedin: Any? = null,
+	val linkedin: String? = null,
 
 	@field:SerializedName("tools")
 	val tools: String? = null,

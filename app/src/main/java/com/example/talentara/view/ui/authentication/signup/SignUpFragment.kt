@@ -3,6 +3,7 @@ package com.example.talentara.view.ui.authentication.signup
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,6 +53,11 @@ class SignUpFragment : Fragment() {
                     authViewModel.register(username, email, pass)
                     registerObserver()
                 } catch (e: Exception) {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.register_failed), Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d("Register", e.message.toString())
                     registerFailed()
                 }
             }
@@ -110,8 +116,8 @@ class SignUpFragment : Fragment() {
     }
 
     private fun buttonSet() {
-        val email = binding.tilEmail.editText.toString()
-        val password = binding.tilPassword.editText.toString()
+        val email = binding.tilEmail.editText!!.text
+        val password = binding.tilPassword.editText!!.text
 
         val isFieldFilled = email.isNotEmpty() && password.isNotEmpty()
 

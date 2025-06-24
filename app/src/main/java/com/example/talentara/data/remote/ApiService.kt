@@ -29,6 +29,8 @@ import com.example.talentara.data.model.response.user.UpdateUserResponse
 import com.example.talentara.data.model.response.user.UserBasicResponse
 import com.example.talentara.data.model.response.user.UserDetailResponse
 import com.google.gson.annotations.SerializedName
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
@@ -37,6 +39,8 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.PartMap
 import retrofit2.http.Path
 
 interface ApiService {
@@ -73,12 +77,9 @@ interface ApiService {
     suspend fun updateUser(
         @Header("Authorization") token: String,
         @Path("user_id") id: Int,
-        @Field("user_name") username: String,
-        @Field("user_email") email: String,
-        @Field("github") github: String,
-        @Field("linkedin") linkedin: String,
-        @Field("user_image") userImage: String,
-        @Field("fcm_token") fcmToken: String,
+        @PartMap fields: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part userImage: MultipartBody.Part? = null
+        //@Field("fcm_token") fcmToken: String,
     ): UpdateUserResponse
 
     @FormUrlEncoded

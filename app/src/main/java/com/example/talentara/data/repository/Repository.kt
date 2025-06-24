@@ -34,6 +34,8 @@ import com.example.talentara.data.model.result.Results
 import com.example.talentara.data.model.user.UserModel
 import com.example.talentara.data.remote.ApiService
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 class Repository private constructor(
     private val userPreference: UserPreference,
@@ -101,24 +103,18 @@ class Repository private constructor(
     fun updateUser(
         token: String,
         id: Int,
-        username: String,
-        email: String,
-        github: String,
-        linkedin: String,
-        userImage: String,
-        fcmToken: String,
+        fields: Map<String, RequestBody>,
+        userImage: MultipartBody.Part?,
+        //fcmToken: String,
     ): LiveData<Results<UpdateUserResponse>> = liveData {
         emit(Results.Loading)
         try {
             val response = apiService.updateUser(
                 "Bearer $token",
                 id,
-                username,
-                email,
-                github,
-                linkedin,
+                fields,
                 userImage,
-                fcmToken
+                //fcmToken
             )
             emit(Results.Success(response))
         } catch (e: Exception) {

@@ -11,20 +11,41 @@ import com.example.talentara.data.remote.ApiService
 import com.example.talentara.data.repository.Repository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class EditProfileViewModel(private val repository: Repository) : ViewModel() {
 
     private val _updateUser = MediatorLiveData<Results<UpdateUserResponse>>()
     val updateUser: LiveData<Results<UpdateUserResponse>> = _updateUser
 
-    suspend fun updateUser(
-        username: String,
-        email: String,
-        github: String,
-        linkedin: String,
-        userImage: String,
-        fcmToken: String,
+    fun updateUser(
+        username: String?,
+        email: String?,
+        github: String?,
+        linkedin: String?,
+        userImage: MultipartBody.Part?,
+        //fcmToken: String,
     ) {
+
+        if (listOf(username, email, github, linkedin, userImage).all { it == null }) return
+
+        val map = mutableMapOf<String, RequestBody>()
+        username?.takeIf { it.isNotBlank() }?.let {
+            map["user_name"] = it.toRequestBody("text/plain".toMediaTypeOrNull())
+        }
+        email?.takeIf { it.isNotBlank() }?.let {
+            map["user_email"] = it.toRequestBody("text/plain".toMediaTypeOrNull())
+        }
+        github?.takeIf { it.isNotBlank() }?.let {
+            map["github"] = it.toRequestBody("text/plain".toMediaTypeOrNull())
+        }
+        linkedin?.takeIf { it.isNotBlank() }?.let {
+            map["linkedin"] = it.toRequestBody("text/plain".toMediaTypeOrNull())
+        }
+
         viewModelScope.launch {
             _updateUser.value = Results.Loading
             try {
@@ -34,12 +55,9 @@ class EditProfileViewModel(private val repository: Repository) : ViewModel() {
                     repository.updateUser(
                         token,
                         userId,
-                        username,
-                        email,
-                        github,
-                        linkedin,
+                        map,
                         userImage,
-                        fcmToken
+                        //fcmToken
                     )
                 ) { result ->
                     _updateUser.value = result
@@ -53,7 +71,7 @@ class EditProfileViewModel(private val repository: Repository) : ViewModel() {
     private val _updateTalent = MediatorLiveData<Results<UpdateTalentResponse>>()
     val updateTalent: LiveData<Results<UpdateTalentResponse>> = _updateTalent
 
-    suspend fun updateTalent(
+    fun updateTalent(
         request: ApiService.UpdateTalentRequest
     ) {
         viewModelScope.launch {

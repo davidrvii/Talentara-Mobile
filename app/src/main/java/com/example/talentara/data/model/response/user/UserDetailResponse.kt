@@ -29,7 +29,7 @@ data class UserDetailItem(
 	val userPassword: String? = null,
 
 	@field:SerializedName("github")
-	val github: Any? = null,
+	val github: String? = null,
 
 	@field:SerializedName("updated_at")
 	val updatedAt: String? = null,
@@ -38,7 +38,7 @@ data class UserDetailItem(
 	val userId: Int? = null,
 
 	@field:SerializedName("user_image")
-	val userImage: Any? = null,
+	val userImage: String? = null,
 
 	@field:SerializedName("user_name")
 	val userName: String? = null,
@@ -53,7 +53,7 @@ data class UserDetailItem(
 	val createdAt: String? = null,
 
 	@field:SerializedName("linkedin")
-	val linkedin: Any? = null,
+	val linkedin: String? = null,
 
 	@field:SerializedName("talent_access")
 	val talentAccess: Int? = null

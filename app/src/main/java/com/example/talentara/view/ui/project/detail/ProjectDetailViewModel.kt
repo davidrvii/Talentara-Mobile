@@ -15,7 +15,7 @@ class ProjectDetailViewModel(private val repository: Repository) : ViewModel() {
     private val _getProjectDetail = MediatorLiveData<Results<ProjectDetailResponse>>()
     val getProjectDetail: LiveData<Results<ProjectDetailResponse>> = _getProjectDetail
 
-    suspend fun getProjectDetail(
+    fun getProjectDetail(
         projectId: Int,
     ) {
         viewModelScope.launch {

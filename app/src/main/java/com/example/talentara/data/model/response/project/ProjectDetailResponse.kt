@@ -11,7 +11,7 @@ data class ProjectDetailResponse(
 	val message: String? = null,
 
 	@field:SerializedName("projectDetail")
-	val projectDetail: List<ProjectDetailItem?>? = null,
+	val projectDetail: ProjectDetailItem? = null,
 
 	@field:SerializedName("statusCode")
 	val statusCode: Int? = null,
@@ -62,7 +62,7 @@ data class ProjectDetailItem(
 	val statusId: Int? = null,
 
 	@field:SerializedName("status_name")
-	val statusName: Int? = null,
+	val statusName: String? = null,
 
 	@field:SerializedName("updated_at")
 	val updatedAt: String? = null,

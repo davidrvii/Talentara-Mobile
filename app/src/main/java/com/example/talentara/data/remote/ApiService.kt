@@ -78,7 +78,7 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("user_id") id: Int,
         @PartMap fields: Map<String, @JvmSuppressWildcards RequestBody>,
-        @Part userImage: MultipartBody.Part? = null
+        @Part userImage: MultipartBody.Part? = null,
         //@Field("fcm_token") fcmToken: String,
     ): UpdateUserResponse
 
@@ -238,7 +238,7 @@ interface ApiService {
         @Path("talent_id") talentId: Int,
     ): TalentDetailResponse
 
-        @PATCH("talent/update/{id}")
+    @PATCH("talent/update/{id}")
     suspend fun updateTalent(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,

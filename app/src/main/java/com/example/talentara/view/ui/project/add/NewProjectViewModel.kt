@@ -16,7 +16,7 @@ class NewProjectViewModel(private val repository: Repository) : ViewModel() {
     private val _addProject = MediatorLiveData<Results<NewProjectResponse>>()
     val addProject: LiveData<Results<NewProjectResponse>> = _addProject
 
-    suspend fun addProject(
+    fun addProject(
         clientName: String,
         projectName: String,
         projectDesc: String,
@@ -51,7 +51,7 @@ class NewProjectViewModel(private val repository: Repository) : ViewModel() {
     private val _updateUserIsOnProject = MediatorLiveData<Results<UpdateUserResponse>>()
     val updateUserIsOnProject: LiveData<Results<UpdateUserResponse>> = _updateUserIsOnProject
 
-    suspend fun updateUserIsOnProject(
+    fun updateUserIsOnProject(
         isOnProject: Boolean,
     ) {
         viewModelScope.launch {

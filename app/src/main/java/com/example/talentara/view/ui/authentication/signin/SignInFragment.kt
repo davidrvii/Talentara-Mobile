@@ -51,12 +51,12 @@ class SignInFragment : Fragment() {
 
         binding.btnSignIn.setOnClickListener {
             textFieldWatcher()
-            val email = binding.tilEmail.editText.toString().trim()
-            val pass  = binding.tilPassword.editText.toString().trim()
+            val email = binding.tilEmail.editText!!.text.toString().trim()
+            val password  = binding.tilPassword.editText!!.text.toString().trim()
 
             lifecycleScope.launch {
                 try {
-                    authViewModel.login(email, pass)
+                    authViewModel.login(email, password)
                     loginObserver()
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(),
@@ -123,8 +123,8 @@ class SignInFragment : Fragment() {
     }
 
     private fun buttonSet() {
-        val email = binding.tilEmail.editText.toString()
-        val password = binding.tilPassword.editText.toString()
+        val email = binding.tilEmail.editText!!.text.toString().trim()
+        val password  = binding.tilPassword.editText!!.text.toString().trim()
 
         val isFieldFilled = email.isNotEmpty() && password.isNotEmpty()
 

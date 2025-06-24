@@ -23,31 +23,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cvHome"
+    <!-- Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnHome"
+        style="@style/ThemeOverlay.Material3.Button.ElevatedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginBottom="24dp"
+        android:backgroundTint="#FF7D0B"
         android:elevation="12dp"
-        app:cardBackgroundColor="#FF7D0B"
-        app:cardCornerRadius="16dp"
+        android:padding="16dp"
+        android:text="@string/btn_find_project_manager"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/tvBackHome"
-            style="@style/TextAppearance.Material3.HeadlineLarge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="12dp"
-            android:text="@string/back_to_home"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

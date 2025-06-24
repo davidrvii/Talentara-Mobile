@@ -16,7 +16,7 @@ class TalentDetailViewModel(private val repository: Repository) : ViewModel() {
     private val _getTalentDetail = MediatorLiveData<Results<TalentDetailResponse>>()
     val getTalentDetail: LiveData<Results<TalentDetailResponse>> = _getTalentDetail
 
-    suspend fun getTalentDetail(
+    fun getTalentDetail(
         talentId: Int,
     ) {
         viewModelScope.launch {
@@ -36,8 +36,8 @@ class TalentDetailViewModel(private val repository: Repository) : ViewModel() {
     private val _getTalentPortfolio = MediatorLiveData<Results<PortfolioTalentResponse>>()
     val getTalentPortfolio: LiveData<Results<PortfolioTalentResponse>> = _getTalentPortfolio
 
-    suspend fun getTalentPortfolio(
-        talentId: Int
+    fun getTalentPortfolio(
+        talentId: Int,
     ) {
         viewModelScope.launch {
             _getTalentPortfolio.value = Results.Loading
@@ -57,5 +57,4 @@ class TalentDetailViewModel(private val repository: Repository) : ViewModel() {
             }
         }
     }
-
 }

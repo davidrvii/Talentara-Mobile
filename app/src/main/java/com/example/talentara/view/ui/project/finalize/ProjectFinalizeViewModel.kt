@@ -16,7 +16,7 @@ class ProjectFinalizeViewModel(private val repository: Repository) : ViewModel()
     private val _updateProject = MediatorLiveData<Results<UpdateProjectResponse>>()
     val updateProject: LiveData<Results<UpdateProjectResponse>> = _updateProject
 
-    suspend fun updateProject(
+    fun updateProject(
         projectId: Int,
         request: ApiService.UpdateProjectRequest,
     ) {

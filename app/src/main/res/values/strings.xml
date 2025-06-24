@@ -144,5 +144,9 @@
     <string name="key_feature_hint">Item data entry, stock level monitoring,\ninventory reporting</string>
     <string name="additional_hint">Tell us more! describe your project in more detail or share references to similar apps or systems</string>
     <string name="finding_project_manager">Finding the best project manager for your project</string>
+    <string name="find_project_team">Find Project Team</string>
+    <string name="failed_to_update_talent_availability">Failed to update talent availability</string>
+    <string name="failed_to_load_portfolio">Failed to load portfolio</string>
+    <string name="rating">Rating</string>
 
 </resources>

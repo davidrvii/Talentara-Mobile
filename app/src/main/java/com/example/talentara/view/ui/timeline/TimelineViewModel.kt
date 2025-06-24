@@ -20,7 +20,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
     private val _getProjectTimeline = MediatorLiveData<Results<TimelineProjectResponse>>()
     val getProjectTimeline: LiveData<Results<TimelineProjectResponse>> = _getProjectTimeline
 
-    suspend fun getProjectTimeline(
+    fun getProjectTimeline(
         projectId: Int,
     ) {
         viewModelScope.launch {
@@ -45,7 +45,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
     private val _updateTimeline = MediatorLiveData<Results<UpdateTimelineResponse>>()
     val updateTimeline: LiveData<Results<UpdateTimelineResponse>> = _updateTimeline
 
-    suspend fun updateTimeline(
+    fun updateTimeline(
         timelineId: Int,
         projectPhase: String,
         startDate: String,
@@ -76,7 +76,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
     private val _addTimeline = MediatorLiveData<Results<NewTimelineResponse>>()
     val addTimeline: LiveData<Results<NewTimelineResponse>> = _addTimeline
 
-    suspend fun addTimeline(
+    fun addTimeline(
         projectId: Int,
         projectPhase: String,
         startDate: String,
@@ -108,7 +108,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
     val updateTimelineClientApprove: LiveData<Results<UpdateTimelineResponse>> =
         _updateTimelineClientApprove
 
-    suspend fun updateTimelineClientApprove(
+    fun updateTimelineClientApprove(
         timelineId: Int,
         clientApproved: Boolean,
     ) {
@@ -136,7 +136,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
     val updateTimelineLeaderApprove: LiveData<Results<UpdateTimelineResponse>> =
         _updateTimelineLeaderApprove
 
-    suspend fun updateTimelineLeaderApprove(
+    fun updateTimelineLeaderApprove(
         timelineId: Int,
         leaderApproved: Boolean,
     ) {
@@ -164,7 +164,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
     val updateTimelineCompletedDate: LiveData<Results<UpdateTimelineResponse>> =
         _updateTimelineCompletedDate
 
-    suspend fun updateTimelineCompletedDate(
+    fun updateTimelineCompletedDate(
         timelineId: Int,
         completedDate: String,
     ) {
@@ -192,7 +192,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
     val updateTimelineEvidence: LiveData<Results<UpdateTimelineResponse>> =
         _updateTimelineEvidence
 
-    suspend fun updateTimelineEvidence(
+    fun updateTimelineEvidence(
         timelineId: Int,
         evidence: String,
     ) {
@@ -219,7 +219,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
     private val _deleteTimeline = MediatorLiveData<Results<DeleteTimelineResponse>>()
     val deleteTimeline: LiveData<Results<DeleteTimelineResponse>> = _deleteTimeline
 
-    suspend fun deleteTimeline(
+    fun deleteTimeline(
         timelineId: Int,
     ) {
         viewModelScope.launch {
@@ -239,7 +239,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
     private val _updateTalentProjectDone = MediatorLiveData<Results<UpdateTalentResponse>>()
     val updateTalentProjectDone: LiveData<Results<UpdateTalentResponse>> = _updateTalentProjectDone
 
-    suspend fun updateTalentProjectDone(
+    fun updateTalentProjectDone(
         projectDone: Int,
     ) {
         viewModelScope.launch {
@@ -266,7 +266,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
     private val _updateProjectCompleted = MediatorLiveData<Results<UpdateProjectResponse>>()
     val updateProjectCompleted: LiveData<Results<UpdateProjectResponse>> = _updateProjectCompleted
 
-    suspend fun updateProjectCompleted(
+    fun updateProjectCompleted(
         projectId: Int,
         projectCompleted: String,
     ) {

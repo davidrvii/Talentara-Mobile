@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.talentara.R
 import com.example.talentara.data.model.response.talent.TalentDetailItem
@@ -34,6 +35,7 @@ class TalentProfileFragment : Fragment() {
     private val toolsAdapter       = ItemsAdapter(emptyList())
     private val productTypeAdapter = ItemsAdapter(emptyList())
     private val languageAdapter    = ItemsAdapter(emptyList())
+    private val portfolioAdapter = PortfolioAdapter(emptyList())
 
     private var talentAvailability: Int? = 0
 
@@ -55,6 +57,26 @@ class TalentProfileFragment : Fragment() {
         initRecyclerViews()
         getTalentDetail()
         setupActionButton()
+        getTalentPortfolio()
+    }
+
+    private fun getTalentPortfolio() {
+        talentProfileViewModel.getTalentPortfolio()
+        talentProfileViewModel.getTalentPortfolio.observe(viewLifecycleOwner) { res ->
+            when (res) {
+                is Results.Loading -> { }
+                is Results.Success -> {
+                    val items = res.data.talentPortfolio
+                        .orEmpty()
+                        .mapNotNull { it }
+                    portfolioAdapter.updateData(items)
+                }
+                is Results.Error   -> {
+                    Toast.makeText(requireContext(),
+                        getString(R.string.failed_to_load_portfolio), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun getTalentDetail() {
@@ -73,7 +95,6 @@ class TalentProfileFragment : Fragment() {
                     binding.tvProjectCount.text = talent?.projectDone.toString()
                     binding.tvRatingCount.text = talent?.talentAvgRating.toString()
                     bindProfile(talent!!)
-
                 }
 
                 is Results.Error -> {
@@ -144,6 +165,12 @@ class TalentProfileFragment : Fragment() {
         binding.rvTools.setupFlex(toolsAdapter)
         binding.rvProductType.setupFlex(productTypeAdapter)
         binding.rvLanguage.setupFlex(languageAdapter)
+        binding.rvPortfolio.apply {
+            layoutManager = LinearLayoutManager(requireContext(),
+                RecyclerView.VERTICAL,
+                false)
+            adapter = portfolioAdapter
+        }
     }
 
     private fun setupActionButton() {
@@ -154,6 +181,27 @@ class TalentProfileFragment : Fragment() {
             } else {
                 talentAvailability = 1
                 talentProfileViewModel.updateTalentAvailability(true)
+            }
+        }
+
+        talentProfileViewModel.updateTalentAvailability.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.failed_to_update_talent_availability), Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("TalentProfileFragment", "Error: ${result.error}")
+                }
             }
         }
     }

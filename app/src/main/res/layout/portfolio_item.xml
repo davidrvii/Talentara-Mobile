@@ -1,5 +1,6 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cvOngoingProject"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -56,12 +57,12 @@
             app:layout_constraintTop_toBottomOf="@id/tvClient" />
 
         <TextView
-            android:id="@+id/tvRemaining"
+            android:id="@+id/tvCompleted"
             style="@style/TextAppearance.Material3.BodySmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/complete_in_d_days"
+            android:text="@string/completed_in_d_days"
             android:textColor="@color/blue"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/tvProduct"
@@ -73,7 +74,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_portfolio_inside"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="ContentDescription" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

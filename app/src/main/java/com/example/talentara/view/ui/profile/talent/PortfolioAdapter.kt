@@ -29,6 +29,10 @@ class PortfolioAdapter(
         fun bind(item: TalentPortfolioItem) {
 
             binding.root.setOnClickListener {
+                //Get First Item of Product Type and Platform
+                val firstProduct = item.productTypes?.split("|")?.firstOrNull() ?: "-"
+                val firstPlatform = item.platforms?.split("|")?.firstOrNull() ?: "-"
+
                 //Count Project Worked Days
                 val daysWorked: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     // API 26+
@@ -46,7 +50,7 @@ class PortfolioAdapter(
 
                 binding.tvProject.text = item.portfolioName.orEmpty()
                 binding.tvClient.text = item.portfolioLinkedin.orEmpty()
-                binding.tvProduct.text = item.portfolioGithub.orEmpty()
+                binding.tvProduct.text = itemView.context.getString(R.string.project_product, firstProduct, firstPlatform)
                 binding.tvCompleted.text = itemView.context.getString(R.string.completed_in_d_days, daysWorked)
                 if (item.portfolioLabel == "Portfolio") {
                     Glide.with(binding.root.context)

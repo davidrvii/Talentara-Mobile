@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,495 +8,526 @@
     tools:context=".view.ui.talent.apply.TalentApplyActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_rounded_rectangle"
+        android:backgroundTint="@color/blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/topBar"
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvBack"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bottom_rounded_rectangle"
-            android:backgroundTint="@color/blue"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="16dp"
+            app:cardBackgroundColor="@color/blue"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cvBack"
+            <ImageView
+                android:id="@+id/btn_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:cardBackgroundColor="@color/blue"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/btn_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="14dp"
-                    android:layout_marginVertical="8dp"
-                    android:src="@drawable/ic_back"
-                    tools:ignore="ContentDescription" />
-
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/tvTalentApply"
-                style="@style/TextAppearance.Material3.HeadlineSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="24dp"
-                android:text="@string/talent_apply"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/cvBack"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/cvBack" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/tvGithubProfile"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/github_profile"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/topBar" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilGithubProfile"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusBottomEnd="20dp"
-            app:boxCornerRadiusBottomStart="20dp"
-            app:boxCornerRadiusTopEnd="20dp"
-            app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/dark_gray"
-            app:hintEnabled="false"
-            app:hintTextColor="@color/dark_gray"
-            app:layout_constraintStart_toStartOf="@id/tvGithubProfile"
-            app:layout_constraintTop_toBottomOf="@id/tvGithubProfile">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/github_profile"
-                android:inputType="text"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvLinkedInProfile"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/linkedin_profile"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilGithubProfile" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilProjectLinkedIn"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusBottomEnd="20dp"
-            app:boxCornerRadiusBottomStart="20dp"
-            app:boxCornerRadiusTopEnd="20dp"
-            app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/dark_gray"
-            app:hintEnabled="false"
-            app:hintTextColor="@color/dark_gray"
-            app:layout_constraintStart_toStartOf="@id/tvLinkedInProfile"
-            app:layout_constraintTop_toBottomOf="@id/tvLinkedInProfile">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/linkedin_profile"
-                android:inputType="text"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvPlatform"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/platform"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilProjectLinkedIn" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupPlatform"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            app:chipSpacing="8dp"
-            app:chipSpacingHorizontal="8dp"
-            app:chipSpacingVertical="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvPlatform"
-            app:singleLine="false" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilPlatform"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusBottomEnd="20dp"
-            app:boxCornerRadiusBottomStart="20dp"
-            app:boxCornerRadiusTopEnd="20dp"
-            app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/dark_gray"
-            app:hintEnabled="false"
-            app:hintTextColor="@color/dark_gray"
-            app:layout_constraintStart_toStartOf="@id/chipGroupPlatform"
-            app:layout_constraintTop_toBottomOf="@id/chipGroupPlatform">
-
-            <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:completionThreshold="1"
-                android:hint="@string/platform"
-                android:inputType="text"
-                android:paddingHorizontal="18dp"
-                android:paddingVertical="18dp"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvProductType"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/product_type"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilPlatform" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupProductType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            app:chipSpacing="8dp"
-            app:chipSpacingHorizontal="8dp"
-            app:chipSpacingVertical="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvProductType"
-            app:singleLine="false" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilProductType"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusBottomEnd="20dp"
-            app:boxCornerRadiusBottomStart="20dp"
-            app:boxCornerRadiusTopEnd="20dp"
-            app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/dark_gray"
-            app:hintEnabled="false"
-            app:hintTextColor="@color/dark_gray"
-            app:layout_constraintStart_toStartOf="@id/chipGroupProductType"
-            app:layout_constraintTop_toBottomOf="@id/chipGroupProductType">
-
-            <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:completionThreshold="1"
-                android:hint="@string/product_type"
-                android:inputType="text"
-                android:paddingHorizontal="18dp"
-                android:paddingVertical="18dp"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvLanguage"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/language"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilProductType" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupLanguage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            app:chipSpacing="8dp"
-            app:chipSpacingHorizontal="8dp"
-            app:chipSpacingVertical="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvLanguage"
-            app:singleLine="false" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilLanguage"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusBottomEnd="20dp"
-            app:boxCornerRadiusBottomStart="20dp"
-            app:boxCornerRadiusTopEnd="20dp"
-            app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/dark_gray"
-            app:hintEnabled="false"
-            app:hintTextColor="@color/dark_gray"
-            app:layout_constraintStart_toStartOf="@id/chipGroupLanguage"
-            app:layout_constraintTop_toBottomOf="@id/chipGroupLanguage">
-
-            <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:completionThreshold="1"
-                android:hint="@string/language"
-                android:inputType="text"
-                android:paddingHorizontal="18dp"
-                android:paddingVertical="18dp"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvTools"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/tools"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilLanguage" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupTools"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            app:chipSpacing="8dp"
-            app:chipSpacingHorizontal="8dp"
-            app:chipSpacingVertical="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTools"
-            app:singleLine="false" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilTools"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusBottomEnd="20dp"
-            app:boxCornerRadiusBottomStart="20dp"
-            app:boxCornerRadiusTopEnd="20dp"
-            app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/dark_gray"
-            app:hintEnabled="false"
-            app:hintTextColor="@color/dark_gray"
-            app:layout_constraintStart_toStartOf="@id/chipGroupTools"
-            app:layout_constraintTop_toBottomOf="@id/chipGroupTools">
-
-            <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:completionThreshold="1"
-                android:hint="@string/tools"
-                android:inputType="text"
-                android:paddingHorizontal="18dp"
-                android:paddingVertical="18dp"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvRole"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/role"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilTools" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupRole"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            app:chipSpacing="8dp"
-            app:chipSpacingHorizontal="8dp"
-            app:chipSpacingVertical="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvRole"
-            app:singleLine="false" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilRole"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusBottomEnd="20dp"
-            app:boxCornerRadiusBottomStart="20dp"
-            app:boxCornerRadiusTopEnd="20dp"
-            app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/dark_gray"
-            app:hintEnabled="false"
-            app:hintTextColor="@color/dark_gray"
-            app:layout_constraintStart_toStartOf="@id/chipGroupRole"
-            app:layout_constraintTop_toBottomOf="@id/chipGroupRole">
-
-            <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:completionThreshold="1"
-                android:hint="@string/role"
-                android:inputType="text"
-                android:paddingHorizontal="18dp"
-                android:paddingVertical="18dp"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvPortfolio"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/portfolio"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilRole" />
-
-        <LinearLayout
-            android:id="@+id/portfolioContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvPortfolio" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAddPortfolio"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/btn_add_feature"
-            android:textColor="@color/blue"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/portfolioContainer"
-            app:strokeColor="@color/blue" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvApplyTalent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="24dp"
-            android:elevation="12dp"
-            app:cardBackgroundColor="@color/blue"
-            app:cardCornerRadius="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnAddPortfolio">
-
-            <TextView
-                android:id="@+id/tvApplyTalent"
-                style="@style/TextAppearance.Material3.BodyMedium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:text="@string/apply_talent"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginHorizontal="14dp"
+                android:layout_marginVertical="8dp"
+                android:src="@drawable/ic_back"
+                tools:ignore="ContentDescription" />
 
         </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:id="@+id/tvTalentApply"
+            style="@style/TextAppearance.Material3.HeadlineSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:text="@string/talent_apply"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/cvBack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cvBack" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="80dp"
+            android:paddingTop="76dp">
+
+            <TextView
+                android:id="@+id/tvGithubProfile"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/github_profile"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilGithubProfile"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxStrokeColor="@color/dark_gray"
+                app:hintEnabled="false"
+                app:hintTextColor="@color/dark_gray"
+                app:layout_constraintStart_toStartOf="@id/tvGithubProfile"
+                app:layout_constraintTop_toBottomOf="@id/tvGithubProfile">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/github_profile"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvLinkedInProfile"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/linkedin_profile"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilGithubProfile" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilLinkedInProfile"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxStrokeColor="@color/dark_gray"
+                app:hintEnabled="false"
+                app:hintTextColor="@color/dark_gray"
+                app:layout_constraintStart_toStartOf="@id/tvLinkedInProfile"
+                app:layout_constraintTop_toBottomOf="@id/tvLinkedInProfile">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/linkedin_profile"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvPlatform"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/platform"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilLinkedInProfile" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupPlatform"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:chipSpacing="8dp"
+                app:chipSpacingHorizontal="8dp"
+                app:chipSpacingVertical="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPlatform"
+                app:singleLine="false" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPlatform"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxStrokeColor="@color/dark_gray"
+                app:hintEnabled="false"
+                app:hintTextColor="@color/dark_gray"
+                app:layout_constraintStart_toStartOf="@id/chipGroupPlatform"
+                app:layout_constraintTop_toBottomOf="@id/chipGroupPlatform">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:hint="@string/platform"
+                    android:inputType="text"
+                    android:paddingHorizontal="18dp"
+                    android:paddingVertical="18dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvProductType"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/product_type"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilPlatform" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupProductType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:chipSpacing="8dp"
+                app:chipSpacingHorizontal="8dp"
+                app:chipSpacingVertical="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvProductType"
+                app:singleLine="false" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilProductType"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxStrokeColor="@color/dark_gray"
+                app:hintEnabled="false"
+                app:hintTextColor="@color/dark_gray"
+                app:layout_constraintStart_toStartOf="@id/chipGroupProductType"
+                app:layout_constraintTop_toBottomOf="@id/chipGroupProductType">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:hint="@string/product_type"
+                    android:inputType="text"
+                    android:paddingHorizontal="18dp"
+                    android:paddingVertical="18dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvLanguage"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/language"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilProductType" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:chipSpacing="8dp"
+                app:chipSpacingHorizontal="8dp"
+                app:chipSpacingVertical="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvLanguage"
+                app:singleLine="false" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilLanguage"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxStrokeColor="@color/dark_gray"
+                app:hintEnabled="false"
+                app:hintTextColor="@color/dark_gray"
+                app:layout_constraintStart_toStartOf="@id/chipGroupLanguage"
+                app:layout_constraintTop_toBottomOf="@id/chipGroupLanguage">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:hint="@string/language"
+                    android:inputType="text"
+                    android:paddingHorizontal="18dp"
+                    android:paddingVertical="18dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvTools"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/tools"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilLanguage" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupTools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:chipSpacing="8dp"
+                app:chipSpacingHorizontal="8dp"
+                app:chipSpacingVertical="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTools"
+                app:singleLine="false" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilTools"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxStrokeColor="@color/dark_gray"
+                app:hintEnabled="false"
+                app:hintTextColor="@color/dark_gray"
+                app:layout_constraintStart_toStartOf="@id/chipGroupTools"
+                app:layout_constraintTop_toBottomOf="@id/chipGroupTools">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:hint="@string/tools"
+                    android:inputType="text"
+                    android:paddingHorizontal="18dp"
+                    android:paddingVertical="18dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvRole"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/role"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilTools" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupRole"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:chipSpacing="8dp"
+                app:chipSpacingHorizontal="8dp"
+                app:chipSpacingVertical="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvRole"
+                app:singleLine="false" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilRole"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxStrokeColor="@color/dark_gray"
+                app:hintEnabled="false"
+                app:hintTextColor="@color/dark_gray"
+                app:layout_constraintStart_toStartOf="@id/chipGroupRole"
+                app:layout_constraintTop_toBottomOf="@id/chipGroupRole">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="1"
+                    android:hint="@string/role"
+                    android:inputType="text"
+                    android:paddingHorizontal="18dp"
+                    android:paddingVertical="18dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvPortfolio"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/portfolio"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilRole" />
+
+            <LinearLayout
+                android:id="@+id/portfolioContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPortfolio" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddPortfolio"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/btn_add_feature"
+                android:textColor="@color/blue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/portfolioContainer"
+                app:strokeColor="@color/blue" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/findProjectManager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingVertical="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnTalentApply"
+            style="@style/ThemeOverlay.Material3.Button.ElevatedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/button_background_color"
+            android:elevation="12dp"
+            android:enabled="false"
+            android:padding="12dp"
+            android:text="@string/talent_apply"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:cornerRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="8dp"
+        android:indeterminateTint="@color/blue"
+        android:indeterminateTintMode="src_in"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.talentara.view.ui.portfolio.add
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
@@ -205,22 +206,63 @@ class NewPortfolioActivity : AppCompatActivity() {
                 finish()
             }
             btnUploadPortfolio.setOnClickListener {
-                profileViewModel.getTalentDetail()
-                profileViewModel.getTalentDetail.observe(this@NewPortfolioActivity) { result ->
-                    when (result) {
-                        is Results.Loading -> {
-                            showLoading(true)
+                val state = intent.getStringExtra(STATE)
+                when (state) {
+                    "NewPortfolio" -> {
+                        profileViewModel.getTalentDetail()
+                        profileViewModel.getTalentDetail.observe(this@NewPortfolioActivity) { result ->
+                            when (result) {
+                                is Results.Loading -> {
+                                    showLoading(true)
+                                }
+
+                                is Results.Success -> {
+                                    mergeAndUpdateTalent(result.data)
+                                    showLoading(false)
+                                }
+
+                                is Results.Error -> {
+                                    showLoading(false)
+                                    Log.e("NewPortfolioActivity", "Error: ${result.error}")
+                                }
+                            }
+                        }
+                    }
+                    "TalentApply" -> {
+                        textFieldWatcher()
+                        setupDateField(binding.tilStartDate) { selected ->
+                            binding.tilStartDate.editText?.setText(selected)
                         }
 
-                        is Results.Success -> {
-                            mergeAndUpdateTalent(result.data)
-                            showLoading(false)
+                        setupDateField(binding.tilEndDate) { selected ->
+                            binding.tilEndDate.editText?.setText(selected)
                         }
-
-                        is Results.Error -> {
-                            showLoading(false)
-                            Log.e("NewPortfolioActivity", "Error: ${result.error}")
+                        val clientName = binding.tilClientName.editText!!.text.toString().trim()
+                        val portfolioName = binding.tilProjectName.editText!!.text.toString().trim()
+                        val portfolioDesc = binding.tilProjectDescription.editText!!.text.toString().trim()
+                        val portfolioLabel = "Portfolio"
+                        val github = binding.tilProjectGithub.editText!!.text.toString().trim()
+                        val linkedIn = binding.tilProjectLinkedIn.editText!!.text.toString().trim()
+                        val startDate = binding.tilStartDate.editText!!.text.toString().trim()
+                        val endDate = binding.tilEndDate.editText!!.text.toString().trim()
+                        val resultIntent = Intent().apply {
+                            putExtra("client_name", clientName)
+                            putExtra("portfolio_name", portfolioName)
+                            putExtra("portfolio_linkedin", linkedIn)
+                            putExtra("portfolio_github", github)
+                            putExtra("portfolio_desc", portfolioDesc)
+                            putExtra("portfolio_label", portfolioLabel)
+                            putExtra("start_date", startDate)
+                            putExtra("end_date", endDate)
+                            putStringArrayListExtra("platforms", ArrayList(selectedPlatforms))
+                            putStringArrayListExtra("tools", ArrayList(selectedTools))
+                            putStringArrayListExtra("languages", ArrayList(selectedLanguages))
+                            putStringArrayListExtra("roles", ArrayList(selectedRoles))
+                            putStringArrayListExtra("productTypes", ArrayList(selectedProductTypes))
+                            putStringArrayListExtra("features", ArrayList(selectedFeatures))
                         }
+                        setResult(RESULT_OK, resultIntent)
+                        finish()
                     }
                 }
             }
@@ -402,5 +444,9 @@ class NewPortfolioActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    companion object {
+        const val STATE = "state"
     }
 }

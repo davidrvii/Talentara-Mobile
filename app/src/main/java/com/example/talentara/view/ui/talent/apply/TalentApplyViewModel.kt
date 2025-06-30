@@ -34,7 +34,7 @@ class TalentApplyViewModel(private val repository: Repository) : ViewModel() {
     private val _updateUserTalentAccess = MediatorLiveData<Results<UpdateUserResponse>>()
     val updateUserTalentAccess: LiveData<Results<UpdateUserResponse>> = _updateUserTalentAccess
 
-    suspend fun updateUserTalentAccess(
+    fun updateUserTalentAccess(
         talentAccess: Boolean,
     ) {
         viewModelScope.launch {

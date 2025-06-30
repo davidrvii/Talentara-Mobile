@@ -202,6 +202,8 @@ interface ApiService {
     ): NewTalentResponse
 
     data class AddTalentRequest(
+        val github: String,
+        val linkedIn: String,
         val roles: List<String>,
         val tools: List<String>,
         val platforms: List<String>,
@@ -212,14 +214,18 @@ interface ApiService {
     )
 
     data class PortfolioItem(
+        @SerializedName("client_name")
+        val clientName: String,
         @SerializedName("portfolio_name")
-        val name: String,
+        val portfolioName: String,
         @SerializedName("portfolio_linkedin")
         val linkedin: String,
         @SerializedName("portfolio_github")
         val github: String,
         @SerializedName("portfolio_desc")
         val description: String,
+        @SerializedName("portfolio_label")
+        val portfolioLabel: String,
         @SerializedName("start_date")
         val startDate: String,
         @SerializedName("end_date")
@@ -230,6 +236,7 @@ interface ApiService {
         val roles: List<String>,
         @SerializedName("product_types")
         val productTypes: List<String>,
+        val features: List<String>,
     )
 
     @GET("talent/detail/{id}")

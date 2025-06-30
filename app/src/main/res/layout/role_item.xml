@@ -46,7 +46,7 @@
                 android:id="@+id/etProjectFeature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/project_feature"
+                android:hint="@string/amount"
                 android:inputType="text"
                 android:textColor="@color/black"
                 android:textSize="16sp" />

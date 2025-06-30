@@ -148,5 +148,7 @@
     <string name="failed_to_update_talent_availability">Failed to update talent availability</string>
     <string name="failed_to_load_portfolio">Failed to load portfolio</string>
     <string name="rating">Rating</string>
+    <string name="amount">Amount</string>
+    <string name="insert_amount_more_than_0">Insert amount more than 0</string>
 
 </resources>

@@ -8,6 +8,7 @@ import com.example.talentara.data.model.response.project.UpdateProjectResponse
 import com.example.talentara.data.model.response.talent.UpdateTalentResponse
 import com.example.talentara.data.model.response.timeline.DeleteTimelineResponse
 import com.example.talentara.data.model.response.timeline.NewTimelineResponse
+import com.example.talentara.data.model.response.timeline.TimelineDetailResponse
 import com.example.talentara.data.model.response.timeline.TimelineProjectResponse
 import com.example.talentara.data.model.response.timeline.UpdateTimelineResponse
 import com.example.talentara.data.model.result.Results
@@ -42,6 +43,31 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+    private val _getTimelineDetail = MediatorLiveData<Results<TimelineDetailResponse>>()
+    val getTimelineDetail: LiveData<Results<TimelineDetailResponse>> = _getTimelineDetail
+
+    fun getTimelineDetail(
+        timelineId: Int,
+    ) {
+        viewModelScope.launch {
+            _getTimelineDetail.value = Results.Loading
+            try {
+                val token = repository.getSession().first().token
+
+                _getTimelineDetail.addSource(
+                    repository.getTimelineDetail(
+                        token,
+                        timelineId
+                        )
+                ) { result ->
+                    _getTimelineDetail.value = result
+                }
+            } catch (e: Exception) {
+                _getTimelineDetail.value = Results.Error(e.message.toString())
+            }
+        }
+    }
+
     private val _updateTimeline = MediatorLiveData<Results<UpdateTimelineResponse>>()
     val updateTimeline: LiveData<Results<UpdateTimelineResponse>> = _updateTimeline
 
@@ -50,6 +76,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
         projectPhase: String,
         startDate: String,
         endDate: String,
+        evidence: String
     ) {
         viewModelScope.launch {
             _updateTimeline.value = Results.Loading
@@ -62,7 +89,8 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
                         timelineId,
                         projectPhase,
                         startDate,
-                        endDate
+                        endDate,
+                        evidence
                     )
                 ) { result ->
                     _updateTimeline.value = result
@@ -184,34 +212,6 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
                 }
             } catch (e: Exception) {
                 _updateTimelineCompletedDate.value = Results.Error(e.message.toString())
-            }
-        }
-    }
-
-    private val _updateTimelineEvidence = MediatorLiveData<Results<UpdateTimelineResponse>>()
-    val updateTimelineEvidence: LiveData<Results<UpdateTimelineResponse>> =
-        _updateTimelineEvidence
-
-    fun updateTimelineEvidence(
-        timelineId: Int,
-        evidence: String,
-    ) {
-        viewModelScope.launch {
-            _updateTimelineEvidence.value = Results.Loading
-            try {
-                val token = repository.getSession().first().token
-
-                _updateTimeline.addSource(
-                    repository.updateTimelineEvidence(
-                        token,
-                        timelineId,
-                        evidence
-                    )
-                ) { result ->
-                    _updateTimelineEvidence.value = result
-                }
-            } catch (e: Exception) {
-                _updateTimelineEvidence.value = Results.Error(e.message.toString())
             }
         }
     }

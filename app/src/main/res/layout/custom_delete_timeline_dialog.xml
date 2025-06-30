@@ -7,75 +7,74 @@
     android:background="@color/white"
     android:elevation="12dp"
     app:cardCornerRadius="24dp"
-    android:id="@+id/AddCard">
+    android:id="@+id/DeleteCard">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cvLogout"
+        android:id="@+id/cvDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:padding="32dp">
 
         <TextView
-            android:id="@+id/tvPhasePeriode"
+            android:id="@+id/tvDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/phase_periode"
-            android:textColor="@color/blue"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:textSize="12sp"
-            android:layout_marginTop="16dp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etProjectPhase"/>
-
-        <EditText
-            android:id="@+id/etProjectPhase"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:background="@drawable/rounded_rectangle"
-            android:hint="@string/project_phase"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:padding="12dp"
+            android:text="@string/delete_this_timeline"
             android:textColor="@color/black"
-            android:textColorHint="#7CA8D2"
-            app:strokeColor="@color/blue"
-            android:textSize="16sp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvDeleteDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/timeline_will_be_deleted_permanently"
+            android:textAlignment="center"
+            android:textColor="#757575"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="@id/tvDelete"
+            app:layout_constraintStart_toStartOf="@id/tvDelete"
+            app:layout_constraintTop_toBottomOf="@id/tvDelete" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/btChoose"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvPhasePeriode">
+            app:layout_constraintTop_toBottomOf="@id/tvDeleteDesc">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btCancelAdd"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:id="@+id/btCancelDelete"
+                style="@style/Widget.Material3.Button.IconButton.Outlined"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/cancel"
                 android:text="@string/cancel"
                 android:textAlignment="center"
-                android:textColor="@color/blue"
+                android:textColor="#E22F2F"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.475"
-                app:strokeColor="@color/blue" />
+                app:strokeColor="#E22F2F" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btYesAdd"
+                android:id="@+id/btYesDelete"
                 style="@style/Widget.Material3.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/blue"
-                android:text="@string/create"
+                android:backgroundTint="#E22F2F"
+                android:contentDescription="@string/delete"
+                android:text="@string/delete"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="16sp"

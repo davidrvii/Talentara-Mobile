@@ -23,12 +23,12 @@ class PortfolioDetailActivity : AppCompatActivity() {
     }
     private lateinit var binding: ActivityPortfolioDetailBinding
 
-    private val featureAdapter     = ItemsAdapter(emptyList())
-    private val platformAdapter    = ItemsAdapter(emptyList())
-    private val roleAdapter        = ItemsAdapter(emptyList())
-    private val toolsAdapter       = ItemsAdapter(emptyList())
+    private val featureAdapter = ItemsAdapter(emptyList())
+    private val platformAdapter = ItemsAdapter(emptyList())
+    private val roleAdapter = ItemsAdapter(emptyList())
+    private val toolsAdapter = ItemsAdapter(emptyList())
     private val productTypeAdapter = ItemsAdapter(emptyList())
-    private val languageAdapter    = ItemsAdapter(emptyList())
+    private val languageAdapter = ItemsAdapter(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,15 +41,58 @@ class PortfolioDetailActivity : AppCompatActivity() {
             insets
         }
 
+        setupActionButton()
         initRecyclerViews()
         getPortfolioDetail()
+    }
+
+    private fun setupActionButton() {
+        with(binding) {
+            btnBack.setOnClickListener {
+                finish()
+            }
+            btnDeletePortfolio.setOnClickListener {
+                portfolioDetailViewModel.deletePortfolio(intent.getIntExtra(PORTFOLIO_ID, 0))
+                portfolioDetailViewModel.portfolioDelete.observe(this@PortfolioDetailActivity) { result ->
+                    when (result) {
+                        is Results.Loading -> {
+                            showLoading(true)
+                        }
+
+                        is Results.Success -> {
+                            showLoading(false)
+                            Toast.makeText(
+                                this@PortfolioDetailActivity,
+                                "Portfolio Deleted Successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            finish()
+                        }
+
+                        is Results.Error -> {
+                            showLoading(false)
+                            Toast.makeText(
+                                this@PortfolioDetailActivity,
+                                getString(R.string.failed_to_delete_portfolio),
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            Log.e(
+                                "PortfolioDetailActivity",
+                                "Error deleting portfolio: ${result.error}"
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun initRecyclerViews() {
         fun RecyclerView.setupFlex(adapter: ItemsAdapter) {
             layoutManager = FlexboxLayoutManager(this@PortfolioDetailActivity).apply {
                 flexDirection = FlexDirection.ROW
-                flexWrap      = FlexWrap.WRAP
+                flexWrap = FlexWrap.WRAP
                 justifyContent = JustifyContent.FLEX_START
             }
             this.adapter = adapter

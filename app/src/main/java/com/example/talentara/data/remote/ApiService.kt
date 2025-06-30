@@ -6,6 +6,7 @@ import com.example.talentara.data.model.response.notification.NewNotificationRes
 import com.example.talentara.data.model.response.notification.NotificationHistoryResponse
 import com.example.talentara.data.model.response.notification.UpdateNotificationResponse
 import com.example.talentara.data.model.response.portfolio.NewPortfolioResponse
+import com.example.talentara.data.model.response.portfolio.PortfolioDeleteResponse
 import com.example.talentara.data.model.response.portfolio.PortfolioDetailResponse
 import com.example.talentara.data.model.response.portfolio.PortfolioTalentResponse
 import com.example.talentara.data.model.response.portfolio.UpdatePortfolioResponse
@@ -21,6 +22,7 @@ import com.example.talentara.data.model.response.talent.UpdateTalentResponse
 import com.example.talentara.data.model.response.timeline.CurrentTimelineResponse
 import com.example.talentara.data.model.response.timeline.DeleteTimelineResponse
 import com.example.talentara.data.model.response.timeline.NewTimelineResponse
+import com.example.talentara.data.model.response.timeline.TimelineDetailResponse
 import com.example.talentara.data.model.response.timeline.TimelineProjectResponse
 import com.example.talentara.data.model.response.timeline.UpdateTimelineResponse
 import com.example.talentara.data.model.response.user.LoginResponse
@@ -144,6 +146,12 @@ interface ApiService {
         @Path("project_id") projectId: Int,
     ): TimelineProjectResponse
 
+    @GET("timeline/detail/{id}")
+    suspend fun getTimelineDetail(
+        @Header("Authorization") token: String,
+        @Path("timeline_id") timelineId: Int,
+    ): TimelineDetailResponse
+
     @GET("timeline/current/{id}")
     suspend fun getCurrentTimeline(
         @Header("Authorization") token: String,
@@ -157,6 +165,7 @@ interface ApiService {
         @Field("project_phase") projectPhase: String,
         @Field("start_date") startDate: String,
         @Field("end_date") endDate: String,
+        @Field("evidance") evidence: String,
     ): UpdateTimelineResponse
 
     @PATCH("timeline/update/{id}")
@@ -178,13 +187,6 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
         @Field("completed_date") completedDate: String,
-    ): UpdateTimelineResponse
-
-    @PATCH("timeline/update/{id}")
-    suspend fun updateTimelineEvidence(
-        @Header("Authorization") token: String,
-        @Path("timeline_id") timelineId: Int,
-        @Field("evidance") evidence: String,
     ): UpdateTimelineResponse
 
     @DELETE("timeline/delete/{id}")
@@ -369,6 +371,12 @@ interface ApiService {
         @SerializedName("product_types")
         val productTypes: List<String>,
     )
+
+    @DELETE("portfolio/delete/{id}")
+    suspend fun deletePortfolio(
+        @Header("Authorization") token: String,
+        @Path("portfolio_id") portfolioId: Int,
+    ): PortfolioDeleteResponse
 
     //PROJECT
     @FormUrlEncoded

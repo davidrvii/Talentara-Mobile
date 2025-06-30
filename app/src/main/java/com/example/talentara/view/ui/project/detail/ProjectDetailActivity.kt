@@ -17,11 +17,13 @@ import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.ActivityProjectDetailBinding
 import com.example.talentara.view.ui.portfolio.detail.ItemsAdapter
 import com.example.talentara.view.ui.talent.detail.TalentDetailActivity
+import com.example.talentara.view.ui.timeline.TimelineActivity
 import com.example.talentara.view.utils.FactoryViewModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import kotlin.jvm.java
 
 class ProjectDetailActivity : AppCompatActivity() {
 
@@ -48,8 +50,23 @@ class ProjectDetailActivity : AppCompatActivity() {
             insets
         }
 
+        setupButtonAction()
         initRecyclerViews()
         getProjectDetail()
+    }
+
+    private fun setupButtonAction() {
+        with(binding) {
+            btnBack.setOnClickListener {
+                finish()
+            }
+            btnProjectTimeline.setOnClickListener {
+                val intent = Intent(this@ProjectDetailActivity, TimelineActivity::class.java).apply {
+                    putExtra(TimelineActivity.PROJECT_ID, intent.getIntExtra(PROJECT_ID, 0))
+                }
+                startActivity(intent)
+            }
+        }
     }
 
     private fun initRecyclerViews() {

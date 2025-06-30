@@ -54,6 +54,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/cvBack" />
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvProjectTimeline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/btnProjectTimeline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/calendar"
+                android:padding="4dp"
+                app:tint="@color/blue"
+                tools:ignore="ContentDescription" />
+
+        </androidx.cardview.widget.CardView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView

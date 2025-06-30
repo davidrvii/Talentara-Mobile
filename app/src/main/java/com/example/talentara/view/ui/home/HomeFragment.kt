@@ -16,6 +16,7 @@ import com.example.talentara.R
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.FragmentHomeBinding
 import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
+import com.example.talentara.view.ui.timeline.TimelineActivity
 import com.example.talentara.view.utils.FactoryViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -190,6 +191,13 @@ class HomeFragment : Fragment() {
                         binding.tvComplete.text = getString(R.string.completed_in_d_days, daysWorked)
                     } else {
                         binding.tvComplete.text = getString(R.string.project_is_on_progress)
+                    }
+
+                    binding.cvCurrentTimeline.setOnClickListener {
+                        val intent = Intent(context, TimelineActivity::class.java).apply {
+                            putExtra(TimelineActivity.PROJECT_ID, projectId)
+                        }
+                        startActivity(intent)
                     }
                 }
 

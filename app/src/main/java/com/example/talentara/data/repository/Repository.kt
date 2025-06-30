@@ -9,6 +9,7 @@ import com.example.talentara.data.model.response.notification.NewNotificationRes
 import com.example.talentara.data.model.response.notification.NotificationHistoryResponse
 import com.example.talentara.data.model.response.notification.UpdateNotificationResponse
 import com.example.talentara.data.model.response.portfolio.NewPortfolioResponse
+import com.example.talentara.data.model.response.portfolio.PortfolioDeleteResponse
 import com.example.talentara.data.model.response.portfolio.PortfolioDetailResponse
 import com.example.talentara.data.model.response.portfolio.PortfolioTalentResponse
 import com.example.talentara.data.model.response.portfolio.UpdatePortfolioResponse
@@ -24,6 +25,7 @@ import com.example.talentara.data.model.response.talent.UpdateTalentResponse
 import com.example.talentara.data.model.response.timeline.CurrentTimelineResponse
 import com.example.talentara.data.model.response.timeline.DeleteTimelineResponse
 import com.example.talentara.data.model.response.timeline.NewTimelineResponse
+import com.example.talentara.data.model.response.timeline.TimelineDetailResponse
 import com.example.talentara.data.model.response.timeline.TimelineProjectResponse
 import com.example.talentara.data.model.response.timeline.UpdateTimelineResponse
 import com.example.talentara.data.model.response.user.RegisterResponse
@@ -216,7 +218,8 @@ class Repository private constructor(
     ): LiveData<Results<NewTimelineResponse>> = liveData {
         emit(Results.Loading)
         try {
-            val response = apiService.addTimeline(token, projectId, projectPhase, startDate, endDate)
+            val response =
+                apiService.addTimeline(token, projectId, projectPhase, startDate, endDate)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
@@ -230,6 +233,19 @@ class Repository private constructor(
         emit(Results.Loading)
         try {
             val response = apiService.getProjectTimeline("Bearer $token", projectId)
+            emit(Results.Success(response))
+        } catch (e: Exception) {
+            emit(Results.Error(e.message.toString()))
+        }
+    }
+
+    fun getTimelineDetail(
+        token: String,
+        timelineId: Int,
+    ): LiveData<Results<TimelineDetailResponse>> = liveData {
+        emit(Results.Loading)
+        try {
+            val response = apiService.getTimelineDetail("Bearer $token", timelineId)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
@@ -255,6 +271,7 @@ class Repository private constructor(
         projectPhase: String,
         startDate: String,
         endDate: String,
+        evidence: String,
     ): LiveData<Results<UpdateTimelineResponse>> = liveData {
         emit(Results.Loading)
         try {
@@ -263,7 +280,8 @@ class Repository private constructor(
                 timelineId,
                 projectPhase,
                 startDate,
-                endDate
+                endDate,
+                evidence
             )
             emit(Results.Success(response))
         } catch (e: Exception) {
@@ -310,20 +328,6 @@ class Repository private constructor(
         try {
             val response =
                 apiService.updateTimelineCompletedDate("Bearer $token", timelineId, completedDate)
-            emit(Results.Success(response))
-        } catch (e: Exception) {
-            emit(Results.Error(e.message.toString()))
-        }
-    }
-
-    fun updateTimelineEvidence(
-        token: String,
-        timelineId: Int,
-        evidence: String,
-    ): LiveData<Results<UpdateTimelineResponse>> = liveData {
-        emit(Results.Loading)
-        try {
-            val response = apiService.updateTimelineEvidence("Bearer $token", timelineId, evidence)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
@@ -511,6 +515,19 @@ class Repository private constructor(
         }
     }
 
+    fun deletePortfolio(
+        token: String,
+        portfolioId: Int,
+    ): LiveData<Results<PortfolioDeleteResponse>> = liveData {
+        emit(Results.Loading)
+        try {
+            val response = apiService.deletePortfolio("Bearer $token", portfolioId)
+            emit(Results.Success(response))
+        } catch (e: Exception) {
+            emit(Results.Error(e.message.toString()))
+        }
+    }
+
     fun addProject(
         token: String,
         statusId: Int,
@@ -598,7 +615,12 @@ class Repository private constructor(
     ): LiveData<Results<UpdateProjectResponse>> = liveData {
         emit(Results.Loading)
         try {
-            val response = apiService.updateProjectCompleted("Bearer $token", projectId, statusId, completedDate)
+            val response = apiService.updateProjectCompleted(
+                "Bearer $token",
+                projectId,
+                statusId,
+                completedDate
+            )
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))

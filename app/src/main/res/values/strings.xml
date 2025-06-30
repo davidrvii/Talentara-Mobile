@@ -150,5 +150,16 @@
     <string name="rating">Rating</string>
     <string name="amount">Amount</string>
     <string name="insert_amount_more_than_0">Insert amount more than 0</string>
+    <string name="create_timeline">Create Timeline</string>
+    <string name="delete">Delete</string>
+    <string name="timeline_will_be_deleted_permanently">Timeline will be deleted permanently</string>
+    <string name="delete_this_timeline">Delete this timeline?</string>
+    <string name="evidence">Evidence</string>
+    <string name="evidence_link">Evidence Link</string>
+    <string name="update">Update</string>
+    <string name="update_timeline">Update Timeline</string>
+    <string name="completed_s">Completed : %s</string>
+    <string name="evidence_s">Evidence : %s</string>
+    <string name="failed_to_delete_portfolio">Failed to delete portfolio</string>
 
 </resources>

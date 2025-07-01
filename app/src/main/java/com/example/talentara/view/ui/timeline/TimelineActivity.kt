@@ -21,11 +21,16 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.talentara.R
+import com.example.talentara.data.model.response.project.ProjectDetailItem
 import com.example.talentara.data.model.result.Results
+import com.example.talentara.data.remote.ApiService
 import com.example.talentara.databinding.ActivityTimelineBinding
 import com.example.talentara.databinding.CustomCreateTimelineDialogBinding
 import com.example.talentara.databinding.CustomDeleteTimelineDialogBinding
 import com.example.talentara.databinding.CustomUpdateTimelineDialogBinding
+import com.example.talentara.view.ui.portfolio.add.NewPortfolioViewModel
+import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
+import com.example.talentara.view.ui.project.detail.ProjectDetailViewModel
 import com.example.talentara.view.utils.FactoryViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -33,7 +38,12 @@ import java.util.Locale
 
 class TimelineActivity : AppCompatActivity() {
 
-
+    private val projectDetailViewModel: ProjectDetailViewModel by viewModels {
+        FactoryViewModel.getInstance(this)
+    }
+    private val newPortfolioViewModel: NewPortfolioViewModel by viewModels {
+        FactoryViewModel.getInstance(this)
+    }
     private val timelineViewModel: TimelineViewModel by viewModels {
         FactoryViewModel.getInstance(this)
     }
@@ -457,11 +467,11 @@ class TimelineActivity : AppCompatActivity() {
                                 .format(Date())
                             val projectId = intent.getIntExtra(PROJECT_ID, 0)
 
-                            timelineViewModel.updateTalentProjectDone(1)
-                            updateTalentProjectDoneObserver()
-
                             timelineViewModel.updateProjectCompleted(projectId, completedDate)
                             updateProjectCompletedObserver()
+
+                            timelineViewModel.updateTalentProjectDone(1)
+                            updateTalentProjectDoneObserver()
                         }
                     }
                 }
@@ -508,6 +518,7 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     Toast.makeText(this, "Talent project done updated", Toast.LENGTH_SHORT).show()
+                    getProjectDetail()
                 }
 
                 is Results.Error -> {
@@ -515,6 +526,111 @@ class TimelineActivity : AppCompatActivity() {
                     Toast.makeText(this, "Failed to update talent project done", Toast.LENGTH_SHORT)
                         .show()
                     Log.e("TimelineActivity", "Error: ${result.error}")
+                }
+            }
+        }
+    }
+
+    private fun getProjectDetail() {
+        val projectId = intent.getIntExtra(ProjectDetailActivity.Companion.PROJECT_ID, 0)
+        projectDetailViewModel.getProjectDetail(projectId)
+        projectDetailViewModel.getProjectDetail.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    val project = result.data.projectDetail
+                    addPortfolio(project!!)
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        this,
+                        getString(R.string.failed_to_get_portfolio_detail),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e(
+                        "ProjectDetailActivity",
+                        "Error getting project detail: ${result.error}"
+                    )
+                }
+            }
+        }
+    }
+
+    private fun addPortfolio(project: ProjectDetailItem) {
+        val rawFeatures = project.features ?: ""
+        val featuresList = rawFeatures
+            .split("|")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+
+        val rawPlatforms = project.platforms ?: ""
+        val platformsList = rawPlatforms
+            .split("|")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+
+        val rawTools = project.tools ?: ""
+        val toolsList = rawTools
+            .split("|")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+
+        val rawProductTypes = project.productTypes ?: ""
+        val productTypesList = rawProductTypes
+            .split("|")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+
+        val rawLanguages = project.languages ?: ""
+        val languagesList = rawLanguages
+            .split("|")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+
+        val request = ApiService.AddPortfolioRequest(
+            clientName = project.clientName!!,
+            portfolioName = project.projectName!!,
+            portfolioLinkedin = "Empty",
+            portfolioGithub = project.projectGithub!!,
+            portfolioDesc = project.projectDesc!!,
+            portfolioLabel = "Talentara",
+            startDate = project.startDate.toString(),
+            endDate = project.endDate.toString(),
+            platforms = platformsList.toList(),
+            tools = toolsList.toList(),
+            languages = languagesList.toList(),
+            roles = listOf(projectAccess),
+            productTypes = productTypesList.toList(),
+            feature = featuresList.toList()
+        )
+
+        newPortfolioViewModel.addPortfolio(request)
+        addPortfolioViewModelObserver()
+    }
+
+    private fun addPortfolioViewModelObserver() {
+        newPortfolioViewModel.addPortfolio.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Portfolio Successfully Added", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Error Adding Portfolio", Toast.LENGTH_SHORT).show()
+                    Log.e("NewPortfolioActivity", "Error: ${result.error}")
                 }
             }
         }

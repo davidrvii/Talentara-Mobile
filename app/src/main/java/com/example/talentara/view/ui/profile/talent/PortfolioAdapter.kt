@@ -56,7 +56,7 @@ class PortfolioAdapter(
                     Glide.with(binding.root.context)
                         .load(R.drawable.ic_portfolio_outside)
                         .into(binding.ivPortfolioBadge)
-                } else {
+                } else if (item.portfolioLabel == "Talentara"){
                     Glide.with(binding.root.context)
                         .load(R.drawable.ic_portfolio_inside)
                         .into(binding.ivPortfolioBadge)

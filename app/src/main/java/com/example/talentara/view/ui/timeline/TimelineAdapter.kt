@@ -14,6 +14,22 @@ class TimelineAdapter(
     private var listTimeline: List<TimelineProjectItem>
 ): RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
 
+    private var accessLevel: String = "NoAccess"
+    private var onClientApproveClick: ((TimelineProjectItem) -> Unit)? = null
+    private var onManagerApproveClick: ((TimelineProjectItem) -> Unit)? = null
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setAccessLevel(access: String) {
+        this.accessLevel = access
+        notifyDataSetChanged()
+    }
+    fun setOnClientApproveClick(cb: (TimelineProjectItem) -> Unit) {
+        this.onClientApproveClick = cb
+    }
+    fun setOnManagerApproveClick(cb: (TimelineProjectItem) -> Unit) {
+        this.onManagerApproveClick = cb
+    }
+
     fun getItemAt(position: Int): TimelineProjectItem =
         listTimeline[position]
 
@@ -23,7 +39,7 @@ class TimelineAdapter(
         this.onItemClick = callback
     }
 
-    class ViewHolder(private val binding: TimelineItemBinding)
+    inner class ViewHolder(private val binding: TimelineItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
             fun bind(item: TimelineProjectItem) {
@@ -35,14 +51,45 @@ class TimelineAdapter(
                     tvPhase.text = item.projectPhase
                     tvDeadline.text = itemView.context.getString(R.string.phase_deadline, deadline)
                     tvEvidance.text = itemView.context.getString(R.string.evidence_s, item.evidance)
+                    if (item.clientApproved == true && item.leaderApproved == true) {
+                        cvCompleted.visibility = ViewGroup.VISIBLE
+                    }
+                }
+
+                val isManager = accessLevel == "Project Manager"
+                val isClient  = accessLevel == "Client"
+
+                binding.cvManagerApproved.apply {
                     when (item.clientApproved) {
-                        true -> cvClientApproved.setCardBackgroundColor(itemView.context.getColor(R.color.blue))
-                        false -> cvClientApproved.setCardBackgroundColor(itemView.context.getColor(R.color.dark_gray))
+                        true -> {
+                            binding.cvClientApproved.setCardBackgroundColor(itemView.context.getColor(R.color.blue))
+                            binding.cvClientApproved.isEnabled = true
+                        }
+                        false -> {
+                            binding.cvClientApproved.setCardBackgroundColor(itemView.context.getColor(R.color.dark_gray))
+                            isClickable = isManager
+                            alpha = if (isManager) 1f else 0.5f
+                            setOnClickListener {
+                                if (isManager) onManagerApproveClick?.invoke(item)
+                            }
+                        }
                         else -> {}
                     }
+                }
+                binding.cvClientApproved.apply {
                     when (item.leaderApproved) {
-                        true -> cvManagerApproved.setCardBackgroundColor(itemView.context.getColor(R.color.blue))
-                        false -> cvManagerApproved.setCardBackgroundColor(itemView.context.getColor(R.color.dark_gray))
+                        true -> {
+                            binding.cvManagerApproved.setCardBackgroundColor(itemView.context.getColor(R.color.blue))
+                            binding.cvClientApproved.isEnabled = true
+                        }
+                        false -> {
+                            binding.cvManagerApproved.setCardBackgroundColor(itemView.context.getColor(R.color.dark_gray))
+                            isClickable = isClient
+                            alpha = if (isClient) 1f else 0.5f
+                            setOnClickListener {
+                                if (isClient) onClientApproveClick?.invoke(item)
+                            }
+                        }
                         else -> {}
                     }
                 }

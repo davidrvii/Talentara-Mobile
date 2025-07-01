@@ -15,6 +15,7 @@ import com.example.talentara.data.model.response.portfolio.PortfolioTalentRespon
 import com.example.talentara.data.model.response.portfolio.UpdatePortfolioResponse
 import com.example.talentara.data.model.response.project.CurrentProjectResponse
 import com.example.talentara.data.model.response.project.NewProjectResponse
+import com.example.talentara.data.model.response.project.ProjectAccessResponse
 import com.example.talentara.data.model.response.project.ProjectDetailResponse
 import com.example.talentara.data.model.response.project.ProjectHistoryResponse
 import com.example.talentara.data.model.response.project.ProjectOfferResponse
@@ -25,6 +26,7 @@ import com.example.talentara.data.model.response.talent.UpdateTalentResponse
 import com.example.talentara.data.model.response.timeline.CurrentTimelineResponse
 import com.example.talentara.data.model.response.timeline.DeleteTimelineResponse
 import com.example.talentara.data.model.response.timeline.NewTimelineResponse
+import com.example.talentara.data.model.response.timeline.TimelineApprovementResponse
 import com.example.talentara.data.model.response.timeline.TimelineDetailResponse
 import com.example.talentara.data.model.response.timeline.TimelineProjectResponse
 import com.example.talentara.data.model.response.timeline.UpdateTimelineResponse
@@ -259,6 +261,19 @@ class Repository private constructor(
         emit(Results.Loading)
         try {
             val response = apiService.getCurrentTimeline("Bearer $token", projectId)
+            emit(Results.Success(response))
+        } catch (e: Exception) {
+            emit(Results.Error(e.message.toString()))
+        }
+    }
+
+    fun getTimelineApprove(
+        token: String,
+        projectId: Int,
+    ): LiveData<Results<TimelineApprovementResponse>> = liveData {
+        emit(Results.Loading)
+        try {
+            val response = apiService.getTimelineApprove("Bearer $token", projectId)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
@@ -587,6 +602,19 @@ class Repository private constructor(
         emit(Results.Loading)
         try {
             val response = apiService.getCurrentProject("Bearer $token", userId)
+            emit(Results.Success(response))
+        } catch (e: Exception) {
+            emit(Results.Error(e.message.toString()))
+        }
+    }
+
+    fun getProjectAccess(
+        token: String,
+        projectId: Int,
+    ): LiveData<Results<ProjectAccessResponse>> = liveData {
+        emit(Results.Loading)
+        try {
+            val response = apiService.getProjectAccess("Bearer $token", projectId)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))

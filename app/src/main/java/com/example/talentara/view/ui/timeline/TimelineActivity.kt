@@ -12,10 +12,8 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -29,6 +27,9 @@ import com.example.talentara.databinding.CustomCreateTimelineDialogBinding
 import com.example.talentara.databinding.CustomDeleteTimelineDialogBinding
 import com.example.talentara.databinding.CustomUpdateTimelineDialogBinding
 import com.example.talentara.view.utils.FactoryViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class TimelineActivity : AppCompatActivity() {
 
@@ -41,6 +42,8 @@ class TimelineActivity : AppCompatActivity() {
     private lateinit var bindingDialog: CustomCreateTimelineDialogBinding
     private lateinit var bindingDeleteDialog: CustomDeleteTimelineDialogBinding
     private lateinit var bindingUpdateDialog: CustomUpdateTimelineDialogBinding
+
+    private lateinit var projectAccess: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +60,47 @@ class TimelineActivity : AppCompatActivity() {
         setupButtonAction()
         deleteTimeline()
         updateTimeline()
+        getProjectAccess()
+    }
+
+    private fun getProjectAccess() {
+        timelineViewModel.getProjectAccess(intent.getIntExtra(PROJECT_ID, 0))
+        timelineViewModel.getProjectAccess.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    projectAccess = result.data.access ?: "NoAccess"
+                    timelineAdapter.setAccessLevel(projectAccess)
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        this,
+                        "Failed to get Project Access",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("TimelineActivity", "Error getting project access: ${result.error}")
+                }
+            }
+        }
     }
 
     private fun updateTimeline() {
         timelineAdapter.setOnItemClickListener { item ->
+            if (projectAccess == "Project Manger") {
                 setupUpdateTimelineDialog(timelineId = item.timelineId ?: 0)
+            } else {
+                Toast.makeText(
+                    this,
+                    "$projectAccess are not authorized to update this timeline",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -170,7 +209,13 @@ class TimelineActivity : AppCompatActivity() {
             val endDate = bindingUpdateDialog.tilEndDate.editText?.text.toString()
             val evidence = bindingUpdateDialog.tilProjectEvidence.editText?.text.toString()
             if (projectPhase.isNotEmpty() && startDate.isNotEmpty() && endDate.isNotEmpty()) {
-                timelineViewModel.updateTimeline(timelineId, projectPhase, startDate, endDate, evidence)
+                timelineViewModel.updateTimeline(
+                    timelineId,
+                    projectPhase,
+                    startDate,
+                    endDate,
+                    evidence
+                )
             } else {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             }
@@ -264,6 +309,215 @@ class TimelineActivity : AppCompatActivity() {
             adapter = timelineAdapter
             layoutManager = LinearLayoutManager(context)
         }
+
+        timelineAdapter.setOnManagerApproveClick { item ->
+            val id = item.timelineId ?: return@setOnManagerApproveClick
+            timelineViewModel.updateTimelineLeaderApprove(id, (item.leaderApproved == true))
+            updateTimelineLeaderApproveObserver(item.timelineId)
+        }
+        timelineAdapter.setOnClientApproveClick { item ->
+            val id = item.timelineId ?: return@setOnClientApproveClick
+            timelineViewModel.updateTimelineClientApprove(id, (item.clientApproved == true))
+            updateTimelineClientApproveObserver(item.timelineId)
+        }
+    }
+
+    private fun updateTimelineLeaderApproveObserver(timelineId: Int) {
+        timelineViewModel.updateTimelineLeaderApprove.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        this,
+                        "Timeline Approved",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    getTimelineApprove(timelineId)
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        this,
+                        "Failed to approve timeline",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("TimelineActivity", "Error Leader Approve timeline: ${result.error}")
+                }
+            }
+        }
+    }
+
+    private fun updateTimelineClientApproveObserver(timelineId: Int) {
+        timelineViewModel.updateTimelineClientApprove.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        this,
+                        "Timeline Approved",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    getTimelineApprove(timelineId)
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        this,
+                        "Failed to approve timeline",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("TimelineActivity", "Error Client Approve timeline: ${result.error}")
+                }
+            }
+        }
+    }
+
+    private fun getTimelineApprove(timelineId: Int) {
+        timelineViewModel.getTimelineApprove(timelineId)
+        timelineViewModel.getTimelineApprove.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    timelineViewModel.getProjectTimeline(intent.getIntExtra(PROJECT_ID, 0))
+                    val approvement = result.data.approvement
+                    if (approvement?.leaderApproved == 1 && approvement.clientApproved == 1) {
+                        val completedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                            .format(Date())
+                        timelineViewModel.updateTimelineCompletedDate(timelineId, completedDate)
+                        updateTimelineCompletedDateObserver()
+                    }
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        this,
+                        "Failed to get Project Approve",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("TimelineActivity", "Error getting project approve: ${result.error}")
+                }
+            }
+        }
+    }
+
+    private fun updateTimelineCompletedDateObserver() {
+        timelineViewModel.updateTimelineCompletedDate.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Timeline Completed", Toast.LENGTH_SHORT).show()
+                    timelineViewModel.getProjectTimeline(intent.getIntExtra(PROJECT_ID, 0))
+                    checkProjectCompleted()
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Failed Completed timeline", Toast.LENGTH_SHORT).show()
+                    Log.e("TimelineActivity", "Error Completed timeline: ${result.error}")
+                }
+            }
+        }
+    }
+
+    private fun checkProjectCompleted() {
+        timelineViewModel.getProjectTimeline.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    val items = result.data.timelineProject?.filterNotNull() ?: emptyList()
+
+                    if (items.isNotEmpty()) {
+                        val last = items.last()
+                        if (last.clientApproved == true && last.leaderApproved == true) {
+                            timelineViewModel.getProjectTimeline(intent.getIntExtra(PROJECT_ID, 0))
+                            val completedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                                .format(Date())
+                            val projectId = intent.getIntExtra(PROJECT_ID, 0)
+
+                            timelineViewModel.updateTalentProjectDone(1)
+                            updateTalentProjectDoneObserver()
+
+                            timelineViewModel.updateProjectCompleted(projectId, completedDate)
+                            updateProjectCompletedObserver()
+                        }
+                    }
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Failed to get Project Timeline", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.e("TimelineActivity", "Error: ${result.error}")
+                }
+            }
+        }
+    }
+
+    private fun updateProjectCompletedObserver() {
+        timelineViewModel.updateProjectCompleted.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Project Completed", Toast.LENGTH_SHORT).show()
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Failed to update project completed", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.e("TimelineActivity", "Error: ${result.error}")
+                }
+            }
+        }
+    }
+
+    private fun updateTalentProjectDoneObserver() {
+        timelineViewModel.updateTalentProjectDone.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Talent project done updated", Toast.LENGTH_SHORT).show()
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Failed to update talent project done", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.e("TimelineActivity", "Error: ${result.error}")
+                }
+            }
+        }
     }
 
     private fun deleteTimeline() {
@@ -278,43 +532,7 @@ class TimelineActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val pos = viewHolder.bindingAdapterPosition
                 val item = timelineAdapter.getItemAt(pos)
-
-                val builder = AlertDialog.Builder(this@TimelineActivity)
-                    .setTitle(getString(R.string.delete_this_timeline))
-                    .setMessage(getString(R.string.timeline_will_be_deleted_permanently))
-                    .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
-                        timelineViewModel.deleteTimeline(
-                            item.timelineId ?: return@setPositiveButton
-                        )
-                        deleteTimelineObserver()
-                        dialog.dismiss()
-                    }
-                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                        timelineAdapter.notifyItemChanged(pos)
-                        dialog.dismiss()
-                    }
-                    .setOnCancelListener {
-                        timelineAdapter.notifyItemChanged(pos)
-                    }
-
-                val dialog = builder.create()
-
-                dialog.setOnShowListener {
-                    dialog.window
-                        ?.setBackgroundDrawable(Color.WHITE.toDrawable())
-
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).apply {
-                        setBackgroundColor(ContextCompat.getColor(context, R.color.blue))
-                        setTextColor(ContextCompat.getColor(context, R.color.white))
-                    }
-
-                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).apply {
-                        setBackgroundColor(Color.WHITE)
-                        setTextColor(ContextCompat.getColor(context, R.color.blue))
-                    }
-                }
-
-                dialog.show()
+                showCustomDeleteDialog(item.timelineId ?: 0)
             }
 
             override fun onChildDraw(
@@ -352,6 +570,38 @@ class TimelineActivity : AppCompatActivity() {
             }
         }
         ItemTouchHelper(callback).attachToRecyclerView(binding.rvTimeline)
+    }
+
+    private fun showCustomDeleteDialog(timelineId: Int) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        bindingDeleteDialog = CustomDeleteTimelineDialogBinding.inflate(layoutInflater)
+
+        dialog.setContentView(bindingDeleteDialog.root)
+        dialog.setCancelable(true)
+
+        dialog.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val cardView = bindingDeleteDialog.root.findViewById<CardView>(R.id.DeleteCard)
+        val layoutParams = cardView.layoutParams as ViewGroup.MarginLayoutParams
+        val margin = (40 * resources.displayMetrics.density).toInt()
+        layoutParams.setMargins(margin, 0, margin, 0)
+        cardView.layoutParams = layoutParams
+
+        bindingDeleteDialog.btYesDelete.setOnClickListener {
+            dialog.dismiss()
+            timelineViewModel.deleteTimeline(timelineId)
+            deleteTimelineObserver()
+        }
+        bindingDeleteDialog.btCancelDelete.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun deleteTimelineObserver() {

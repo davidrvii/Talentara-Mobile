@@ -12,6 +12,7 @@ import com.example.talentara.data.model.response.portfolio.PortfolioTalentRespon
 import com.example.talentara.data.model.response.portfolio.UpdatePortfolioResponse
 import com.example.talentara.data.model.response.project.CurrentProjectResponse
 import com.example.talentara.data.model.response.project.NewProjectResponse
+import com.example.talentara.data.model.response.project.ProjectAccessResponse
 import com.example.talentara.data.model.response.project.ProjectDetailResponse
 import com.example.talentara.data.model.response.project.ProjectHistoryResponse
 import com.example.talentara.data.model.response.project.ProjectOfferResponse
@@ -22,6 +23,7 @@ import com.example.talentara.data.model.response.talent.UpdateTalentResponse
 import com.example.talentara.data.model.response.timeline.CurrentTimelineResponse
 import com.example.talentara.data.model.response.timeline.DeleteTimelineResponse
 import com.example.talentara.data.model.response.timeline.NewTimelineResponse
+import com.example.talentara.data.model.response.timeline.TimelineApprovementResponse
 import com.example.talentara.data.model.response.timeline.TimelineDetailResponse
 import com.example.talentara.data.model.response.timeline.TimelineProjectResponse
 import com.example.talentara.data.model.response.timeline.UpdateTimelineResponse
@@ -157,6 +159,12 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("project_id") projectId: Int,
     ): CurrentTimelineResponse
+
+    @GET("timeline/approve/{id}")
+    suspend fun getTimelineApprove(
+        @Header("Authorization") token: String,
+        @Path("project_id") projectId: Int,
+    ): TimelineApprovementResponse
 
     @PATCH("timeline/update/{id}")
     suspend fun updateTimeline(
@@ -408,6 +416,12 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("user_id") userId: Int,
     ): CurrentProjectResponse
+
+    @GET("project/access/{id}")
+    suspend fun getProjectAccess(
+        @Header("Authorization") token: String,
+        @Path("project_id") projectId: Int,
+    ): ProjectAccessResponse
 
     @PATCH("project/update/{id}")
     suspend fun updateProject(

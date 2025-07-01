@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.talentara.data.model.response.project.ProjectAccessResponse
 import com.example.talentara.data.model.response.project.UpdateProjectResponse
 import com.example.talentara.data.model.response.talent.UpdateTalentResponse
 import com.example.talentara.data.model.response.timeline.DeleteTimelineResponse
 import com.example.talentara.data.model.response.timeline.NewTimelineResponse
+import com.example.talentara.data.model.response.timeline.TimelineApprovementResponse
 import com.example.talentara.data.model.response.timeline.TimelineDetailResponse
 import com.example.talentara.data.model.response.timeline.TimelineProjectResponse
 import com.example.talentara.data.model.response.timeline.UpdateTimelineResponse
@@ -128,6 +130,56 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
                 }
             } catch (e: Exception) {
                 _addTimeline.value = Results.Error(e.message.toString())
+            }
+        }
+    }
+
+    private val _getProjectAccess = MediatorLiveData<Results<ProjectAccessResponse>>()
+    val getProjectAccess: LiveData<Results<ProjectAccessResponse>> = _getProjectAccess
+
+    fun getProjectAccess(
+        projectId: Int,
+    ) {
+        viewModelScope.launch {
+            _getProjectAccess.value = Results.Loading
+            try {
+                val token = repository.getSession().first().token
+
+                _getProjectAccess.addSource(
+                    repository.getProjectAccess(
+                        token,
+                        projectId
+                        )
+                ) { result ->
+                    _getProjectAccess.value = result
+                }
+            } catch (e: Exception) {
+                _getProjectAccess.value = Results.Error(e.message.toString())
+            }
+        }
+    }
+
+    private val _getTimelineApprove = MediatorLiveData<Results<TimelineApprovementResponse>>()
+    val getTimelineApprove: LiveData<Results<TimelineApprovementResponse>> = _getTimelineApprove
+
+    fun getTimelineApprove(
+        projectId: Int,
+    ) {
+        viewModelScope.launch {
+            _getTimelineApprove.value = Results.Loading
+            try {
+                val token = repository.getSession().first().token
+
+                _getTimelineApprove.addSource(
+                    repository.getTimelineApprove(
+                        token,
+                        projectId
+                    )
+                    ) { result ->
+                    _getTimelineApprove.value = result
+                }
+            } catch (e: Exception) {
+                _getTimelineApprove.value = Results.Error(e.message.toString())
             }
         }
     }

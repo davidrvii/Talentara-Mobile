@@ -161,5 +161,6 @@
     <string name="completed_s">Completed : %s</string>
     <string name="evidence_s">Evidence : %s</string>
     <string name="failed_to_delete_portfolio">Failed to delete portfolio</string>
+    <string name="completed">Completed</string>
 
 </resources>

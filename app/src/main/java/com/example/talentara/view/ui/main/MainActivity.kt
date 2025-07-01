@@ -8,7 +8,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.talentara.R
 import com.example.talentara.databinding.ActivityMainBinding
-import com.example.talentara.view.ui.portfolio.add.NewPortfolioActivity
 import com.example.talentara.view.ui.project.add.NewProjectActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -37,15 +36,6 @@ class MainActivity : AppCompatActivity() {
                 binding.btnNewProject.visibility = View.VISIBLE
                 binding.btnNewProject.setOnClickListener {
                     val intent = Intent(this, NewProjectActivity::class.java)
-                    startActivity(intent)
-                }
-            } else if (destination.id == R.id.navigation_profile) {
-                binding.btnNewProject.visibility = View.VISIBLE
-                binding.btnNewProject.setOnClickListener {
-                    val intent =
-                        Intent(this, NewPortfolioActivity::class.java).apply {
-                            putExtra(NewPortfolioActivity.STATE, "NewPortfolio")
-                        }
                     startActivity(intent)
                 }
             } else {

@@ -68,9 +68,9 @@
                 android:id="@+id/btnDeletePortfolio"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/calendar"
+                android:src="@drawable/delete_icon"
                 android:padding="4dp"
-                app:tint="@color/blue"
+                app:tint="@color/red"
                 tools:ignore="ContentDescription" />
 
         </androidx.cardview.widget.CardView>

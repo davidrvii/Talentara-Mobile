@@ -1,5 +1,6 @@
 package com.example.talentara.view.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.example.talentara.R
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.FragmentProfileBinding
+import com.example.talentara.view.ui.portfolio.add.NewPortfolioActivity
 import com.example.talentara.view.ui.profile.talent.TalentProfileFragment
 import com.example.talentara.view.ui.profile.user.UserProfileFragment
 import com.example.talentara.view.utils.FactoryViewModel
@@ -39,6 +41,16 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getUserDetail()
+        setupActionButton()
+    }
+
+    private fun setupActionButton() {
+        binding.btnNewPortfolio.setOnClickListener {
+            val intent = Intent(context, NewPortfolioActivity::class.java).apply {
+                    putExtra(NewPortfolioActivity.STATE, "NewPortfolio")
+                }
+            startActivity(intent)
+        }
     }
 
     private fun getUserDetail() {

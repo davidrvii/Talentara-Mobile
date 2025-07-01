@@ -1,11 +1,16 @@
 package com.example.talentara.view.ui.portfolio.detail
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +18,7 @@ import com.example.talentara.R
 import com.example.talentara.data.model.response.portfolio.PortfolioDetailItem
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.ActivityPortfolioDetailBinding
+import com.example.talentara.databinding.CustomDeletePortfolioDialogBinding
 import com.example.talentara.view.utils.FactoryViewModel
 import com.google.android.flexbox.*
 
@@ -22,6 +28,7 @@ class PortfolioDetailActivity : AppCompatActivity() {
         FactoryViewModel.getInstance(this)
     }
     private lateinit var binding: ActivityPortfolioDetailBinding
+    private lateinit var bindingDeleteDialog: CustomDeletePortfolioDialogBinding
 
     private val featureAdapter = ItemsAdapter(emptyList())
     private val platformAdapter = ItemsAdapter(emptyList())
@@ -52,37 +59,72 @@ class PortfolioDetailActivity : AppCompatActivity() {
                 finish()
             }
             btnDeletePortfolio.setOnClickListener {
-                portfolioDetailViewModel.deletePortfolio(intent.getIntExtra(PORTFOLIO_ID, 0))
-                portfolioDetailViewModel.portfolioDelete.observe(this@PortfolioDetailActivity) { result ->
-                    when (result) {
-                        is Results.Loading -> {
-                            showLoading(true)
-                        }
+                showCustomDeleteDialog()
+            }
+        }
+    }
 
-                        is Results.Success -> {
-                            showLoading(false)
-                            Toast.makeText(
-                                this@PortfolioDetailActivity,
-                                "Portfolio Deleted Successfully",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            finish()
-                        }
+    private fun showCustomDeleteDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-                        is Results.Error -> {
-                            showLoading(false)
-                            Toast.makeText(
-                                this@PortfolioDetailActivity,
-                                getString(R.string.failed_to_delete_portfolio),
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                            Log.e(
-                                "PortfolioDetailActivity",
-                                "Error deleting portfolio: ${result.error}"
-                            )
-                        }
-                    }
+        bindingDeleteDialog = CustomDeletePortfolioDialogBinding.inflate(layoutInflater)
+
+        dialog.setContentView(bindingDeleteDialog.root)
+        dialog.setCancelable(true)
+
+        dialog.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val cardView = bindingDeleteDialog.root.findViewById<CardView>(R.id.DeleteCard)
+        val layoutParams = cardView.layoutParams as ViewGroup.MarginLayoutParams
+        val margin = (40 * resources.displayMetrics.density).toInt()
+        layoutParams.setMargins(margin, 0, margin, 0)
+        cardView.layoutParams = layoutParams
+
+        bindingDeleteDialog.btYesDelete.setOnClickListener {
+            dialog.dismiss()
+            portfolioDetailViewModel.deletePortfolio(intent.getIntExtra(PORTFOLIO_ID, 0))
+            deletePortfolioObserver()
+        }
+        bindingDeleteDialog.btCancelDelete.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun deletePortfolioObserver() {
+        portfolioDetailViewModel.portfolioDelete.observe(this@PortfolioDetailActivity) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        this@PortfolioDetailActivity,
+                        "Portfolio Deleted Successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        this@PortfolioDetailActivity,
+                        getString(R.string.failed_to_delete_portfolio),
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    Log.e(
+                        "PortfolioDetailActivity",
+                        "Error deleting portfolio: ${result.error}"
+                    )
                 }
             }
         }

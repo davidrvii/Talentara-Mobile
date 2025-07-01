@@ -57,7 +57,7 @@
     <string name="logout">Logout</string>
     <string name="availibility_true">Ready to join a project!</string>
     <string name="project_count">12</string>
-    <string name="talent_rating">4.9</string>
+    <string name="talent_rating">0.0</string>
     <string name="project">Project</string>
     <string name="experiences">Experiences</string>
     <string name="role">Role</string>

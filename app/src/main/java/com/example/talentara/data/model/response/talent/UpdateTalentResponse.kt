@@ -40,9 +40,6 @@ data class UpdatedTalent(
 	@field:SerializedName("roles")
 	val roles: List<String?>? = null,
 
-	@field:SerializedName("talent_avg_rating")
-	val talentAvgRating: Any? = null,
-
 	@field:SerializedName("availability")
 	val availability: Int? = null,
 

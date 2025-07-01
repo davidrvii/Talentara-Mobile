@@ -299,13 +299,6 @@ interface ApiService {
         @Field("availability") availability: Boolean,
     ): UpdateTalentResponse
 
-    @PATCH("talent/update/{id}")
-    suspend fun updateTalentAvgRating(
-        @Header("Authorization") token: String,
-        @Path("talent_id") talentId: Int,
-        @Field("talent_avg_rating") talentAvgRating: Int,
-    ): UpdateTalentResponse
-
     //PORTFOLIO
     @FormUrlEncoded
     @POST("portfolio/add")

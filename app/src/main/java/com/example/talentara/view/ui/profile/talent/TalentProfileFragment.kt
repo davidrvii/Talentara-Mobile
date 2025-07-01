@@ -93,7 +93,6 @@ class TalentProfileFragment : Fragment() {
                     talentAvailability = talent?.availability
                     binding.ivAvailibility.setImageResource(if (talent?.availability == 1) R.color.green else R.color.red)
                     binding.tvProjectCount.text = talent?.projectDone.toString()
-                    binding.tvRatingCount.text = talent?.talentAvgRating.toString()
                     bindProfile(talent!!)
                 }
 

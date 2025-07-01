@@ -116,7 +116,6 @@ class TalentDetailActivity : AppCompatActivity() {
                     binding.tvGithub.text = talent?.github
                     binding.tvGmail.text = talent?.userEmail
                     binding.tvProjectCount.text = talent?.projectDone.toString()
-                    binding.tvRatingCount.text = talent?.talentAvgRating.toString()
                     Glide.with(this)
                         .load(talent?.userImage)
                         .placeholder(R.drawable.blank_avatar)

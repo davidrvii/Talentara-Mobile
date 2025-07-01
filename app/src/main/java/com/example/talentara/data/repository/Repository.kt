@@ -447,21 +447,6 @@ class Repository private constructor(
         }
     }
 
-    fun updateTalentAvgRating(
-        token: String,
-        talentId: Int,
-        talentAvgRating: Int,
-    ): LiveData<Results<UpdateTalentResponse>> = liveData {
-        emit(Results.Loading)
-        try {
-            val response =
-                apiService.updateTalentAvgRating("Bearer $token", talentId, talentAvgRating)
-            emit(Results.Success(response))
-        } catch (e: Exception) {
-            emit(Results.Error(e.message.toString()))
-        }
-    }
-
     fun updateTalentAvailability(
         token: String,
         talentId: Int,

@@ -49,9 +49,6 @@ data class TalentDetailItem(
 	@field:SerializedName("created_at")
 	val createdAt: String? = null,
 
-	@field:SerializedName("talent_avg_rating")
-	val talentAvgRating: String? = null,
-
 	@field:SerializedName("availability")
 	val availability: Int? = null,
 

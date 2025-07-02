@@ -139,6 +139,7 @@ class ProjectDetailActivity : AppCompatActivity() {
     private fun bindProject(project: ProjectDetailItem) {
         binding.apply {
             tvStatus.text = project.statusName.toString()
+            tvEmail.text = project.clientEmail.toString()
             tvProjectClient.text = project.clientName.toString()
             tvProjectName.text = project.projectName
             tvProjectDescription.text = project.projectDesc

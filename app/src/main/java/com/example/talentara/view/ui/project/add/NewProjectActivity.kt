@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.talentara.R
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.ActivityNewProjectBinding
+import com.example.talentara.view.ui.notifications.NotificationsViewModel
 import com.example.talentara.view.ui.waiting.WaitingPageActivity
 import com.example.talentara.view.utils.FactoryViewModel
 import com.google.android.material.textfield.TextInputLayout
@@ -23,6 +24,9 @@ import java.util.Calendar
 class NewProjectActivity : AppCompatActivity() {
 
     private val newProjectViewModel: NewProjectViewModel by viewModels {
+        FactoryViewModel.getInstance(this)
+    }
+    private val notificationViewModel: NotificationsViewModel by viewModels {
         FactoryViewModel.getInstance(this)
     }
     private lateinit var binding: ActivityNewProjectBinding
@@ -127,6 +131,12 @@ class NewProjectActivity : AppCompatActivity() {
                         "Successfully create project", Toast.LENGTH_SHORT
                     ).show()
                     newProjectViewModel.updateUserIsOnProject(true)
+                    notificationViewModel.addNotification(
+                        title       = "Create New Project",
+                        desc        = "Waiting for project manager to join",
+                        type        = "PROJECT_DONE",
+                        clickAction = "NONE"
+                    )
                     updateUserIsOnProjectObserver()
                 }
 

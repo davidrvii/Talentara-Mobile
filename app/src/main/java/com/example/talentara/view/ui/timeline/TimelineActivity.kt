@@ -28,7 +28,9 @@ import com.example.talentara.databinding.ActivityTimelineBinding
 import com.example.talentara.databinding.CustomCreateTimelineDialogBinding
 import com.example.talentara.databinding.CustomDeleteTimelineDialogBinding
 import com.example.talentara.databinding.CustomUpdateTimelineDialogBinding
+import com.example.talentara.view.ui.notifications.NotificationsViewModel
 import com.example.talentara.view.ui.portfolio.add.NewPortfolioViewModel
+import com.example.talentara.view.ui.project.add.NewProjectViewModel
 import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
 import com.example.talentara.view.ui.project.detail.ProjectDetailViewModel
 import com.example.talentara.view.utils.FactoryViewModel
@@ -47,6 +49,13 @@ class TimelineActivity : AppCompatActivity() {
     private val timelineViewModel: TimelineViewModel by viewModels {
         FactoryViewModel.getInstance(this)
     }
+    private val newProjectViewModel: NewProjectViewModel by viewModels {
+        FactoryViewModel.getInstance(this)
+    }
+    private val notificationViewModel: NotificationsViewModel by viewModels {
+        FactoryViewModel.getInstance(this)
+    }
+
     private lateinit var binding: ActivityTimelineBinding
     private lateinit var timelineAdapter: TimelineAdapter
     private lateinit var bindingDialog: CustomCreateTimelineDialogBinding
@@ -54,6 +63,8 @@ class TimelineActivity : AppCompatActivity() {
     private lateinit var bindingUpdateDialog: CustomUpdateTimelineDialogBinding
 
     private lateinit var projectAccess: String
+    private lateinit var projectStatus: String
+    private lateinit var talentId: List<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,11 +77,12 @@ class TimelineActivity : AppCompatActivity() {
             insets
         }
 
-        setupProjectTimelineList()
+        checkProjectDetail()
+        getProjectAccess()
         setupButtonAction()
+        setupProjectTimelineList()
         deleteTimeline()
         updateTimeline()
-        getProjectAccess()
     }
 
     private fun getProjectAccess() {
@@ -119,8 +131,19 @@ class TimelineActivity : AppCompatActivity() {
             cvBack.setOnClickListener {
                 finish()
             }
-            cvAddTimeline.setOnClickListener {
-                setupAddTimelineDialog()
+
+            if (projectAccess == "Project Manger") {
+                if (projectStatus == "Completed") {
+                    cvAddTimeline.visibility = View.GONE
+                } else {
+                    cvAddTimeline.visibility = View.VISIBLE
+
+                    cvAddTimeline.setOnClickListener {
+                        setupAddTimelineDialog()
+                    }
+                }
+            } else {
+                cvAddTimeline.visibility = View.GONE
             }
         }
     }
@@ -470,8 +493,15 @@ class TimelineActivity : AppCompatActivity() {
                             timelineViewModel.updateProjectCompleted(projectId, completedDate)
                             updateProjectCompletedObserver()
 
-                            timelineViewModel.updateTalentProjectDone(1)
-                            updateTalentProjectDoneObserver()
+                            if (projectAccess == "Client") {
+                                newProjectViewModel.updateUserIsOnProject(false)
+                                updateUserProjectDoneObserver()
+                            } else {
+                                for (id in talentId) {
+                                    timelineViewModel.updateTalentProjectDone(1, id)
+                                    updateTalentProjectDoneObserver(id)
+                                }
+                            }
                         }
                     }
                 }
@@ -479,6 +509,64 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Error -> {
                     showLoading(false)
                     Toast.makeText(this, "Failed to get Project Timeline", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.e("TimelineActivity", "Error: ${result.error}")
+                }
+            }
+        }
+    }
+
+    private fun updateUserProjectDoneObserver() {
+        newProjectViewModel.updateUserIsOnProject.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Project Completed", Toast.LENGTH_SHORT).show()
+                    notificationViewModel.addNotification(
+                        title       = "Project Completed",
+                        desc        = "You have completed your project",
+                        type        = "PROJECT_DONE",
+                        clickAction = "NONE"
+                    )
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Failed to update project completed", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.e("TimelineActivity", "Error: ${result.error}")
+                }
+            }
+        }
+    }
+
+    private fun updateTalentProjectDoneObserver(id: Int) {
+        timelineViewModel.updateTalentProjectDone.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Talent project done updated", Toast.LENGTH_SHORT).show()
+                    notificationViewModel.addNotificationTalent(
+                        talentId    = id,
+                        title       = "Project Completed",
+                        desc        = "You have completed your project",
+                        type        = "PROJECT_DONE",
+                        clickAction = "NONE"
+                    )
+                    getProjectDetail(id)
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Failed to update talent project done", Toast.LENGTH_SHORT)
                         .show()
                     Log.e("TimelineActivity", "Error: ${result.error}")
                 }
@@ -508,31 +596,8 @@ class TimelineActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateTalentProjectDoneObserver() {
-        timelineViewModel.updateTalentProjectDone.observe(this) { result ->
-            when (result) {
-                is Results.Loading -> {
-                    showLoading(true)
-                }
-
-                is Results.Success -> {
-                    showLoading(false)
-                    Toast.makeText(this, "Talent project done updated", Toast.LENGTH_SHORT).show()
-                    getProjectDetail()
-                }
-
-                is Results.Error -> {
-                    showLoading(false)
-                    Toast.makeText(this, "Failed to update talent project done", Toast.LENGTH_SHORT)
-                        .show()
-                    Log.e("TimelineActivity", "Error: ${result.error}")
-                }
-            }
-        }
-    }
-
-    private fun getProjectDetail() {
-        val projectId = intent.getIntExtra(ProjectDetailActivity.Companion.PROJECT_ID, 0)
+    private fun getProjectDetail(id: Int) {
+        val projectId = intent.getIntExtra(ProjectDetailActivity.PROJECT_ID, 0)
         projectDetailViewModel.getProjectDetail(projectId)
         projectDetailViewModel.getProjectDetail.observe(this) { result ->
             when (result) {
@@ -543,7 +608,8 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     val project = result.data.projectDetail
-                    addPortfolio(project!!)
+                    addPortfolio(project!!, id)
+
                 }
 
                 is Results.Error -> {
@@ -562,7 +628,43 @@ class TimelineActivity : AppCompatActivity() {
         }
     }
 
-    private fun addPortfolio(project: ProjectDetailItem) {
+    private fun checkProjectDetail() {
+        val projectId = intent.getIntExtra(ProjectDetailActivity.PROJECT_ID, 0)
+        projectDetailViewModel.getProjectDetail(projectId)
+        projectDetailViewModel.getProjectDetail.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    val project = result.data.projectDetail
+                    val talent = project?.talents
+                    val talentsList = talent?.split("|")
+                    talentId = talentsList?.map { entry ->
+                        entry.substringBefore(":").toInt()
+                    } ?: emptyList()
+                    projectStatus = project?.statusName.toString()
+                }
+
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        this,
+                        getString(R.string.failed_to_get_portfolio_detail),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e(
+                        "ProjectDetailActivity",
+                        "Error getting project detail: ${result.error}"
+                    )
+                }
+            }
+        }
+    }
+
+    private fun addPortfolio(project: ProjectDetailItem, id: Int) {
         val rawFeatures = project.features ?: ""
         val featuresList = rawFeatures
             .split("|")
@@ -610,11 +712,11 @@ class TimelineActivity : AppCompatActivity() {
             feature = featuresList.toList()
         )
 
-        newPortfolioViewModel.addPortfolio(request)
-        addPortfolioViewModelObserver()
+        newPortfolioViewModel.addPortfolioTalent(id, request)
+        addPortfolioViewModelObserver(id)
     }
 
-    private fun addPortfolioViewModelObserver() {
+    private fun addPortfolioViewModelObserver(id: Int) {
         newPortfolioViewModel.addPortfolio.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {
@@ -624,7 +726,13 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     Toast.makeText(this, "Portfolio Successfully Added", Toast.LENGTH_SHORT).show()
-                    finish()
+                    notificationViewModel.addNotificationTalent(
+                        talentId    = id,
+                        title       = "New Portfolio Created",
+                        desc        = "You have created a new portfolio",
+                        type        = "NEW_PORTFOLIO",
+                        clickAction = "NONE"
+                    )
                 }
 
                 is Results.Error -> {

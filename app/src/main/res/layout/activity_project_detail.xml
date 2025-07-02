@@ -119,6 +119,34 @@
                 app:layout_constraintTop_toBottomOf="@id/tvClient" />
 
             <TextView
+                android:id="@+id/tvClientEmail"
+                style="@style/TextAppearance.Material3.BodyLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/client_email"
+                android:textColor="@color/dark_gray"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/tvProjectClient"
+                app:layout_constraintTop_toBottomOf="@id/tvProjectClient" />
+
+            <TextView
+                android:id="@+id/tvEmail"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/email"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/tvClientEmail"
+                app:layout_constraintTop_toBottomOf="@id/tvClientEmail" />
+
+            <TextView
                 android:id="@+id/tvProject"
                 style="@style/TextAppearance.Material3.BodyLarge"
                 android:layout_width="match_parent"
@@ -129,8 +157,8 @@
                 android:textColor="@color/dark_gray"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/tvProjectClient"
-                app:layout_constraintTop_toBottomOf="@id/tvProjectClient" />
+                app:layout_constraintStart_toStartOf="@id/tvEmail"
+                app:layout_constraintTop_toBottomOf="@id/tvEmail" />
 
             <TextView
                 android:id="@+id/tvProjectName"

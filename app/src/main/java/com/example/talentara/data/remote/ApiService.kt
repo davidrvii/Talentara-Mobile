@@ -29,6 +29,7 @@ import com.example.talentara.data.model.response.timeline.TimelineProjectRespons
 import com.example.talentara.data.model.response.timeline.UpdateTimelineResponse
 import com.example.talentara.data.model.response.user.LoginResponse
 import com.example.talentara.data.model.response.user.RegisterResponse
+import com.example.talentara.data.model.response.user.SaveFcmTokenResponse
 import com.example.talentara.data.model.response.user.UpdateUserResponse
 import com.example.talentara.data.model.response.user.UserBasicResponse
 import com.example.talentara.data.model.response.user.UserDetailResponse
@@ -82,9 +83,15 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("user_id") id: Int,
         @PartMap fields: Map<String, @JvmSuppressWildcards RequestBody>,
-        @Part userImage: MultipartBody.Part? = null,
-        //@Field("fcm_token") fcmToken: String,
+        @Part userImage: MultipartBody.Part? = null
     ): UpdateUserResponse
+
+    @FormUrlEncoded
+    @PATCH("user/fcm")
+    suspend fun updateFcmToken(
+        @Header("Authorization") token: String,
+        @Field("fcm_token") fcmToken: String,
+    ): SaveFcmTokenResponse
 
     @FormUrlEncoded
     @PATCH("user/update/{id}")
@@ -110,6 +117,8 @@ interface ApiService {
         @Field("user_id") userId: Int,
         @Field("notification_title") title: String,
         @Field("notification_desc") desc: String,
+        @Field("notification_type") type: String,
+        @Field("click_action") clickAction: String,
     ): NewNotificationResponse
 
     @GET("notification/history/{id}")
@@ -304,6 +313,7 @@ interface ApiService {
     @POST("portfolio/add")
     suspend fun addPortfolio(
         @Header("Authorization") token: String,
+        @Field("talent_id") talentId: Int,
         @Body request: AddPortfolioRequest,
     ): NewPortfolioResponse
 

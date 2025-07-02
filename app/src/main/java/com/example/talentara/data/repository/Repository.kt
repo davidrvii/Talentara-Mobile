@@ -31,6 +31,7 @@ import com.example.talentara.data.model.response.timeline.TimelineDetailResponse
 import com.example.talentara.data.model.response.timeline.TimelineProjectResponse
 import com.example.talentara.data.model.response.timeline.UpdateTimelineResponse
 import com.example.talentara.data.model.response.user.RegisterResponse
+import com.example.talentara.data.model.response.user.SaveFcmTokenResponse
 import com.example.talentara.data.model.response.user.UpdateUserResponse
 import com.example.talentara.data.model.response.user.UserBasicResponse
 import com.example.talentara.data.model.response.user.UserDetailResponse
@@ -76,6 +77,19 @@ class Repository private constructor(
 
     suspend fun logout() {
         userPreference.logout()
+    }
+
+    fun saveFcmToken(
+        token: String,
+        fcmToken: String,
+    ): LiveData<Results<SaveFcmTokenResponse>> = liveData {
+        emit(Results.Loading)
+        try {
+            val response = apiService.updateFcmToken("Bearer $token", fcmToken)
+            emit(Results.Success(response))
+        } catch (e: Exception) {
+            emit(Results.Error(e.message.toString()))
+        }
     }
 
     fun getUserBasic(
@@ -161,10 +175,12 @@ class Repository private constructor(
         userId: Int,
         title: String,
         desc: String,
+        type: String,
+        clickAction: String,
     ): LiveData<Results<NewNotificationResponse>> = liveData {
         emit(Results.Loading)
         try {
-            val response = apiService.addNotification(token, userId, title, desc)
+            val response = apiService.addNotification(token, userId, title, desc, type, clickAction)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
@@ -464,11 +480,12 @@ class Repository private constructor(
 
     fun addPortfolio(
         token: String,
+        talentId: Int,
         request: ApiService.AddPortfolioRequest,
     ): LiveData<Results<NewPortfolioResponse>> = liveData {
         emit(Results.Loading)
         try {
-            val response = apiService.addPortfolio("Bearer $token", request)
+            val response = apiService.addPortfolio("Bearer $token", talentId, request)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))

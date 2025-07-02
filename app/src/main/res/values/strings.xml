@@ -165,5 +165,7 @@
     <string name="delete_this_portfolio">Delete this portfolio?</string>
     <string name="portfolio_will_be_deleted_permanently">Portfolio will be deleted permanently</string>
     <string name="add_new_portfolio">Add New Portfolio</string>
+    <string name="client_email">Client Email</string>
+    <string name="project_s_timeline">Project\'s Timeline</string>
 
 </resources>

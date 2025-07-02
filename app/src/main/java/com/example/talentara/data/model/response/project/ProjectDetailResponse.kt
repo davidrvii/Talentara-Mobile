@@ -25,6 +25,9 @@ data class ProjectDetailItem(
 	@field:SerializedName("end_date")
 	val endDate: String? = null,
 
+	@field:SerializedName("client_email")
+	val clientEmail: String? = null,
+
 	@field:SerializedName("languages")
 	val languages: String? = null,
 

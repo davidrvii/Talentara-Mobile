@@ -27,6 +27,7 @@
         android:elevation="8dp"
         app:fabCustomSize="72dp"
         app:layout_constraintBottom_toTopOf="@id/nav_cardview"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/add_icon"
         app:tint="@color/white" />

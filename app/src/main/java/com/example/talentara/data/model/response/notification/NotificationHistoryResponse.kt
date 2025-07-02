@@ -22,11 +22,8 @@ data class NotificationHistoryResponse(
 
 data class NotificationHistoryItem(
 
-	@field:SerializedName("notification_desc")
-	val notificationDesc: String? = null,
-
-	@field:SerializedName("updated_at")
-	val updatedAt: String? = null,
+	@field:SerializedName("notification_id")
+	val notificationId: Int? = null,
 
 	@field:SerializedName("user_id")
 	val userId: Int? = null,
@@ -34,12 +31,28 @@ data class NotificationHistoryItem(
 	@field:SerializedName("notification_title")
 	val notificationTitle: String? = null,
 
+	@field:SerializedName("notification_desc")
+	val notificationType: String? = null,
+
+	@field:SerializedName("notification_type")
+	val notificationImage: String? = null,
+
+	@field:SerializedName("reference_id")
+	val referenceId: Int? = null,
+
+	@field:SerializedName("click_action")
+	val clickAction: String? = null,
+
+	@field:SerializedName("status")
+	val status: String? = null,
+
 	@field:SerializedName("created_at")
 	val createdAt: String? = null,
 
-	@field:SerializedName("notification_id")
-	val notificationId: Int? = null,
+	@field:SerializedName("updated_at")
+	val updatedAt: String? = null,
 
-	@field:SerializedName("status")
-	val status: String? = null
+
+
+
 )

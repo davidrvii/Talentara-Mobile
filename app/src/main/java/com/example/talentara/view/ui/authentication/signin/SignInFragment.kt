@@ -21,6 +21,7 @@ import com.example.talentara.view.ui.authentication.AuthenticationActivity
 import com.example.talentara.view.ui.authentication.AuthenticationViewModel
 import com.example.talentara.view.ui.main.MainActivity
 import com.example.talentara.view.utils.FactoryViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SignInFragment : Fragment() {
@@ -98,6 +99,17 @@ class SignInFragment : Fragment() {
     }
 
     private fun loginSuccess() {
+        lifecycleScope.launch {
+            val fcmToken = preference.getSession().first().fcmToken
+            authViewModel.saveFcmToken(fcmToken)
+        }
+        authViewModel.saveFcmTokenResponse.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Results.Loading -> {}
+                is Results.Success -> {}
+                is Results.Error -> Log.e("MainActivity", "Error saving FCM token: ${result.error}")
+            }
+        }
         val intent = Intent(requireContext(), MainActivity::class.java)
         startActivity(intent)
         requireActivity().finish()

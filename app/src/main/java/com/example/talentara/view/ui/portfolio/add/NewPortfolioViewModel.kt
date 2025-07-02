@@ -23,9 +23,34 @@ class NewPortfolioViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             _addPortfolio.value = Results.Loading
             try {
+                val talentId = repository.getSession().first().userId
+
                 repository.getSession().collect { user ->
                     user.token.let { token ->
-                        _addPortfolio.addSource(repository.addPortfolio(token, request)) { result ->
+                        _addPortfolio.addSource(repository.addPortfolio(token, talentId, request)) { result ->
+                            _addPortfolio.value = result
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                _addPortfolio.value = Results.Error(e.message.toString())
+            }
+        }
+    }
+
+    private val _addPortfolioTalent = MediatorLiveData<Results<NewPortfolioResponse>>()
+    val addPortfolioTalent: LiveData<Results<NewPortfolioResponse>> = _addPortfolioTalent
+
+    fun addPortfolioTalent(
+        talentId: Int,
+        request: ApiService.AddPortfolioRequest,
+    ) {
+        viewModelScope.launch {
+            _addPortfolio.value = Results.Loading
+            try {
+                repository.getSession().collect { user ->
+                    user.token.let { token ->
+                        _addPortfolio.addSource(repository.addPortfolio(token, talentId, request)) { result ->
                             _addPortfolio.value = result
                         }
                     }

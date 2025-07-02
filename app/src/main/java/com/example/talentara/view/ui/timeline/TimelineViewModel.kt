@@ -293,12 +293,12 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
 
     fun updateTalentProjectDone(
         projectDone: Int,
+        talentId: Int
     ) {
         viewModelScope.launch {
             _updateTalentProjectDone.value = Results.Loading
             try {
                 val token = repository.getSession().first().token
-                val talentId = repository.getSession().first().userId
 
                 _updateTalentProjectDone.addSource(
                     repository.updateTalentProjectDone(

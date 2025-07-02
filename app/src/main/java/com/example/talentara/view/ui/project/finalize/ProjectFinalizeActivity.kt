@@ -11,6 +11,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColorInt
@@ -24,6 +25,7 @@ import com.example.talentara.data.remote.ApiService
 import com.example.talentara.data.remote.ApiService.ProjectRole
 import com.example.talentara.databinding.ActivityProjectFinalizeBinding
 import com.example.talentara.databinding.RoleItemBinding
+import com.example.talentara.view.ui.notifications.NotificationsViewModel
 import com.example.talentara.view.ui.portfolio.add.NewPortfolioViewModel
 import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
 import com.example.talentara.view.ui.project.detail.ProjectDetailViewModel
@@ -45,7 +47,11 @@ class ProjectFinalizeActivity : AppCompatActivity() {
     private val newPortfolioViewModel: NewPortfolioViewModel by viewModels {
         FactoryViewModel.getInstance(this)
     }
+    private val notificationViewModel: NotificationsViewModel by viewModels {
+        FactoryViewModel.getInstance(this)
+    }
     private lateinit var binding: ActivityProjectFinalizeBinding
+    private var clientId: Int = 0
 
     private val selectedRoles = mutableSetOf<String>()
     private val selectedFeatures = mutableSetOf<String>()
@@ -104,6 +110,7 @@ class ProjectFinalizeActivity : AppCompatActivity() {
                     binding.tilProjectDescription.editText!!.setText(project?.projectDesc)
                     binding.tilStartDate.editText!!.setText(project?.startDate)
                     binding.tilEndDate.editText!!.setText(project?.endDate)
+                    clientId = project?.userId ?: 0
                 }
 
                 is Results.Error -> {
@@ -296,7 +303,46 @@ class ProjectFinalizeActivity : AppCompatActivity() {
         lifecycleScope.launch {
             projectFinalizeViewModel.updateProject(projectId, request)
         }
+        updateProjectObserver()
     }
+
+    private fun updateProjectObserver() {
+        projectFinalizeViewModel.updateProject.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+                is Results.Success -> {
+                    showLoading(false)
+                    finish()
+
+                    notificationViewModel.addNotification(
+                        title       = "Project Finalized",
+                        desc        = "Waiting for team to join the project",
+                        type        = "PROJECT_FINALIZED",
+                        clickAction = "NONE"
+                    )
+                    notificationViewModel.addNotificationTalent(
+                        talentId    = clientId,
+                        title       = "Project Finalized",
+                        desc        = "Waiting for team to join the project",
+                        type        = "PROJECT_FINALIZED",
+                        clickAction = "NONE"
+                    )
+                }
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(
+                        this,
+                        "Failed update project", Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("ProjectFinalizeActivity", "Error: ${result.error}")
+                }
+            }
+        }
+
+    }
+
     private fun textFieldWatcher() {
         val watcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

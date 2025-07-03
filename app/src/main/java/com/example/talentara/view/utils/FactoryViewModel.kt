@@ -27,7 +27,7 @@ class FactoryViewModel(
 ) : ViewModelProvider.NewInstanceFactory() {
 
     private val mainViewModelInstance: MainViewModel by lazy {
-        MainViewModel(repository)
+        MainViewModel()
     }
 
     @Suppress("UNCHECKED_CAST")

@@ -120,7 +120,7 @@ class EditProfileActivity : AppCompatActivity() {
                 is Results.Loading -> showLoading(true)
                 is Results.Success -> {
                     showLoading(false)
-                    val user = result.data.userDetail
+                    val user = result.data.userDetail?.firstOrNull()
                     binding.apply {
                         tilUsername.editText?.setText(user?.userName)
                         tilEmail.editText?.setText(user?.userEmail)

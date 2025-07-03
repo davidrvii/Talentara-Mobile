@@ -167,5 +167,7 @@
     <string name="add_new_portfolio">Add New Portfolio</string>
     <string name="client_email">Client Email</string>
     <string name="project_s_timeline">Project\'s Timeline</string>
+    <string name="logout_dialog_title">Logout</string>
+    <string name="are_you_sure_you_want_to_log_out">Are you sure you want to log out?</string>
 
 </resources>

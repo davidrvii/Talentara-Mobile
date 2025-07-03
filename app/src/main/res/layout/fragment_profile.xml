@@ -24,7 +24,7 @@
                 android:layout_width="68dp"
                 android:layout_height="68dp"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="56dp"
                 android:src="@drawable/blank_avatar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -173,21 +173,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="visible" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnNewPortfolio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="56dp"
-                android:backgroundTint="@color/blue"
-                android:contentDescription="@string/add_new_portfolio"
-                android:elevation="8dp"
-                app:fabCustomSize="72dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/add_icon"
-                app:tint="@color/white" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

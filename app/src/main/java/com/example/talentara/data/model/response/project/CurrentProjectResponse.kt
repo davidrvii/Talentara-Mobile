@@ -11,7 +11,7 @@ data class CurrentProjectResponse(
 	val message: String? = null,
 
 	@field:SerializedName("currentProject")
-	val currentProject: CurrentProjectItem? = null,
+	val currentProject: List<CurrentProjectItem?>? = null,
 
 	@field:SerializedName("statusCode")
 	val statusCode: Int? = null,

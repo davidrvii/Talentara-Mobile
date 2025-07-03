@@ -64,7 +64,7 @@ class HistoryFragment : Fragment() {
                 is Results.Success -> {
                     showLoading(false)
 
-                    val currentProject = result.data.currentProject
+                    val currentProject = result.data.currentProject?.firstOrNull()
 
                     if (currentProject == null) {
                         binding.tvOngoing.isVisible = false

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class CurrentTimelineResponse(
 
 	@field:SerializedName("currentTimeline")
-	val currentTimeline: CurrentTimelineItem? = null,
+	val currentTimeline: List<CurrentTimelineItem?>? = null,
 
 	@field:SerializedName("success")
 	val success: Boolean? = null,

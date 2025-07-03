@@ -50,8 +50,9 @@ class SignInFragment : Fragment() {
             (requireActivity() as AuthenticationActivity).switchPage(0)
         }
 
+        textFieldWatcher()
+
         binding.btnSignIn.setOnClickListener {
-            textFieldWatcher()
             val email = binding.tilEmail.editText!!.text.toString().trim()
             val password  = binding.tilPassword.editText!!.text.toString().trim()
 
@@ -141,6 +142,8 @@ class SignInFragment : Fragment() {
         val isFieldFilled = email.isNotEmpty() && password.isNotEmpty()
 
         binding.btnSignIn.isEnabled = isFieldFilled
+        Log.d("buttonSet", "isFieldFilled: $isFieldFilled")
+        Log.d("buttonEnabel", "isEnable: ${binding.btnSignIn.isEnabled}")
     }
 
     private fun showLoading(isLoading: Boolean) {

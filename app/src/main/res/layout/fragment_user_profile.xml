@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/dark_blue"
     android:paddingHorizontal="12dp"
+    android:paddingBottom="24dp"
     tools:context=".view.ui.profile.user.UserProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout

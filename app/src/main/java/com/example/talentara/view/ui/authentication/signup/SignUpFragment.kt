@@ -42,8 +42,9 @@ class SignUpFragment : Fragment() {
             (requireActivity() as AuthenticationActivity).switchPage(1)
         }
 
+        textFieldWatcher()
+
         binding.btnSignUp.setOnClickListener {
-            textFieldWatcher()
             val username = binding.tilUsername.editText.toString().trim()
             val email = binding.tilEmail.editText.toString().trim()
             val pass = binding.tilPassword.editText.toString().trim()

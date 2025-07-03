@@ -6,7 +6,7 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.example.talentara.R
 import com.example.talentara.data.model.response.portfolio.TalentPortfolioItem
 import com.example.talentara.databinding.PortfolioItemBinding
@@ -53,13 +53,15 @@ class PortfolioAdapter(
                 binding.tvProduct.text = itemView.context.getString(R.string.project_product, firstProduct, firstPlatform)
                 binding.tvCompleted.text = itemView.context.getString(R.string.completed_in_d_days, daysWorked)
                 if (item.portfolioLabel == "Portfolio") {
-                    Glide.with(binding.root.context)
-                        .load(R.drawable.ic_portfolio_outside)
-                        .into(binding.ivPortfolioBadge)
+                    binding.ivPortfolioBadge.load(R.drawable.ic_portfolio_outside) {
+                        placeholder(R.drawable.blank_avatar)
+                        error(R.drawable.blank_avatar)
+                    }
                 } else if (item.portfolioLabel == "Talentara"){
-                    Glide.with(binding.root.context)
-                        .load(R.drawable.ic_portfolio_inside)
-                        .into(binding.ivPortfolioBadge)
+                    binding.ivPortfolioBadge.load(R.drawable.ic_portfolio_inside) {
+                        placeholder(R.drawable.blank_avatar)
+                        error(R.drawable.blank_avatar)
+                    }
                 }
                 val intent = Intent(itemView.context, ProjectDetailActivity::class.java).apply {
                     putExtra(PortfolioDetailActivity.PORTFOLIO_ID, item.portfolioId)

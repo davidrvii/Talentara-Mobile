@@ -68,7 +68,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.datastore.core.android)
     implementation(libs.threetenabp)
-    implementation(libs.glide)
     implementation(libs.flexbox)
     implementation(libs.play.services.auth)
+    implementation(libs.coil)
 }

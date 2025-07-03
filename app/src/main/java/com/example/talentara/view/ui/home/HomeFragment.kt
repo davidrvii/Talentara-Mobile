@@ -8,10 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
+import coil.load
 import com.example.talentara.R
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.FragmentHomeBinding
@@ -32,7 +31,6 @@ class HomeFragment : Fragment() {
     }
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private var projectId: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +46,6 @@ class HomeFragment : Fragment() {
 
         getUserBasic()
         getCurrentProject()
-        getCurrentTimeline()
     }
 
     private fun getUserBasic() {
@@ -61,13 +58,12 @@ class HomeFragment : Fragment() {
 
                 is Results.Success -> {
                     showLoading(false)
-                    val user = result.data.usersBasic
+                    val user = result.data.usersBasic?.firstOrNull()
                     binding.tvHeading.text = getString(R.string.home_heading, user?.userName)
-                    Glide.with(this)
-                        .load(user?.userImage)
-                        .placeholder(R.drawable.blank_avatar)
-                        .error(R.drawable.blank_avatar)
-                        .into(binding.ivUserImage)
+                    binding.ivUserImage.load(user?.userImage) {
+                        placeholder(R.drawable.blank_avatar)
+                        error(R.drawable.blank_avatar)
+                    }
                 }
 
                 is Results.Error -> {
@@ -85,23 +81,17 @@ class HomeFragment : Fragment() {
         homeViewmodel.getCurrentProject.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Results.Loading -> {
+                    binding.cvCurrentProject.visibility = View.GONE
                     showLoading(true)
                 }
 
                 is Results.Success -> {
                     showLoading(false)
-                    val currentProject = result.data.currentProject
-                    currentProject?.projectId?.let { projectId = it.toInt() }
-
+                    val currentProject = result.data.currentProject?.firstOrNull()
                     if (currentProject == null) {
-                        binding.tvCurrentProject.isVisible = false
-                        binding.cvCurrentProject.isVisible = false
-                        binding.cvCurrentTimeline.isVisible = false
+                        binding.cvCurrentProject.visibility = View.GONE
                     } else {
-                        binding.tvCurrentProject.isVisible = true
-                        binding.cvCurrentProject.isVisible = true
-                        binding.cvCurrentTimeline.isVisible = true
-
+                        getCurrentTimeline(currentProject.projectId?.toInt() ?: 0)
                         //Get First Item of Product Type and Platform
                         val firstProduct =
                             currentProject.productTypes?.split("|")?.firstOrNull() ?: "-"
@@ -146,6 +136,7 @@ class HomeFragment : Fragment() {
 
                 is Results.Error -> {
                     showLoading(false)
+                    binding.cvCurrentProject.visibility = View.GONE
                     Toast.makeText(
                         requireContext(),
                         "Failed to get Current Project",
@@ -157,60 +148,82 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun getCurrentTimeline() {
-        homeViewmodel.getCurrentTimeline(projectId)
-        homeViewmodel.getCurrentTimeline.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Results.Loading -> {
-                    showLoading(true)
-                }
-
-                is Results.Success -> {
-                    showLoading(false)
-                    val currentTimeline = result.data.currentTimeline
-
-                    //Count Timeline Worked Days
-                    val daysWorked: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        // API 26+
-                        val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                        val start = LocalDate.parse(currentTimeline?.startDate, fmt)
-                        val completed = currentTimeline?.completedDate?.let { LocalDate.parse(it, fmt) }
-                        completed?.let { ChronoUnit.DAYS.between(start, it).toInt() } ?: 0
-                    } else {
-                        // API <26
-                        val fmt = LegacyDateTimeFormatter.ofPattern("yyyy-MM-dd")
-                        val start = LegacyLocalDate.parse(currentTimeline?.startDate, fmt)
-                        val completed = currentTimeline?.completedDate?.let { LegacyLocalDate.parse(it, fmt) }
-                        completed?.let { LegacyChronosUnit.DAYS.between(start, it).toInt() } ?: 0
+    private fun getCurrentTimeline(projectId: Int) {
+        if (projectId != 0) {
+            homeViewmodel.getCurrentTimeline(projectId)
+            homeViewmodel.getCurrentTimeline.observe(viewLifecycleOwner) { result ->
+                when (result) {
+                    is Results.Loading -> {
+                        binding.Timeline.visibility = View.GONE
+                        showLoading(true)
                     }
 
-                    binding.tvPhase.text = currentTimeline?.projectPhase
-                    binding.tvEvidence.text = currentTimeline?.evidance
-                    binding.tvDeadline.text = currentTimeline?.endDate
-                    if (currentTimeline?.completedDate != null){
-                        binding.tvComplete.text = getString(R.string.completed_in_d_days, daysWorked)
-                    } else {
-                        binding.tvComplete.text = getString(R.string.project_is_on_progress)
-                    }
+                    is Results.Success -> {
+                        showLoading(false)
+                        val currentTimeline = result.data.currentTimeline?.firstOrNull()
 
-                    binding.cvCurrentTimeline.setOnClickListener {
-                        val intent = Intent(context, TimelineActivity::class.java).apply {
-                            putExtra(TimelineActivity.PROJECT_ID, projectId)
+                        if (currentTimeline == null) {
+                            binding.cvCurrentTimeline.visibility = View.GONE
+                        } else {
+                            //Count Timeline Worked Days
+                            val daysWorked: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                // API 26+
+                                val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                val start = LocalDate.parse(currentTimeline.startDate, fmt)
+                                val completed =
+                                    currentTimeline.completedDate?.let { LocalDate.parse(it, fmt) }
+                                completed?.let { ChronoUnit.DAYS.between(start, it).toInt() } ?: 0
+                            } else {
+                                // API <26
+                                val fmt = LegacyDateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                val start = LegacyLocalDate.parse(currentTimeline.startDate, fmt)
+                                val completed =
+                                    currentTimeline.completedDate?.let { LegacyLocalDate.parse(it, fmt) }
+                                completed?.let { LegacyChronosUnit.DAYS.between(start, it).toInt() } ?: 0
+                            }
+
+                            binding.tvPhase.text = currentTimeline.projectPhase
+                            binding.tvEvidence.text = currentTimeline.evidance
+                            binding.tvDeadline.text = currentTimeline.endDate
+                            if (currentTimeline.completedDate != null) {
+                                binding.tvComplete.text =
+                                    getString(R.string.completed_in_d_days, daysWorked)
+                            } else {
+                                binding.tvComplete.text = getString(R.string.project_is_on_progress)
+                            }
+
+                            binding.cvCurrentTimeline.setOnClickListener {
+                                val intent = Intent(context, TimelineActivity::class.java).apply {
+                                    putExtra(TimelineActivity.PROJECT_ID, projectId)
+                                }
+                                startActivity(intent)
+                            }
                         }
-                        startActivity(intent)
                     }
-                }
 
-                is Results.Error -> {
-                    showLoading(false)
-                    Toast.makeText(
-                        requireContext(),
-                        "Failed to get Current Timeline",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.e("HomeFragment", "Error getting current timeline: ${result.error}")
+                    is Results.Error -> {
+                        showLoading(false)
+                        binding.Timeline.visibility = View.GONE
+
+                        if (result.error.contains("HTTP 404")) {
+                            Toast.makeText(
+                                requireContext(),
+                                "There is no timeline yet for this project",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Failed to get Current Timeline",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e("HomeFragment", "Error getting current timeline: ${result.error}")
+                        }
+                    }
                 }
             }
+        } else {
+            Toast.makeText(requireContext(), "Project ID is null", Toast.LENGTH_SHORT).show()
         }
     }
 

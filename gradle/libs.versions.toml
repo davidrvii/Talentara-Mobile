@@ -23,7 +23,7 @@ datastoreCoreAndroid = "1.1.7"
 coroutines = "1.7.3"
 datastorePreferences = "1.1.7"
 threetenabp = "1.4.5"
-glide = "4.15.1"
+coil = "2.5.0"
 flexbox = "3.0.0"
 googleGmsGoogleServices = "4.4.3"
 firebaseAuth = "23.1.0"
@@ -56,7 +56,7 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 threetenabp = { group = "com.jakewharton.threetenabp", name = "threetenabp", version.ref = "threetenabp" }
-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 flexbox = { group = "com.google.android.flexbox", name = "flexbox", version.ref = "flexbox" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }

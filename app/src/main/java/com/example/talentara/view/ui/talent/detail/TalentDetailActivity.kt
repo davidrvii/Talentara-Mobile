@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.example.talentara.R
 import com.example.talentara.data.model.response.talent.TalentDetailItem
 import com.example.talentara.data.model.result.Results
@@ -116,11 +116,10 @@ class TalentDetailActivity : AppCompatActivity() {
                     binding.tvGithub.text = talent?.github
                     binding.tvGmail.text = talent?.userEmail
                     binding.tvProjectCount.text = talent?.projectDone.toString()
-                    Glide.with(this)
-                        .load(talent?.userImage)
-                        .placeholder(R.drawable.blank_avatar)
-                        .error(R.drawable.blank_avatar)
-                        .into(binding.ivTalentImage)
+                    binding.ivTalentImage.load(talent?.userImage) {
+                        placeholder(R.drawable.blank_avatar)
+                        error(R.drawable.blank_avatar)
+                    }
                     bindTalent(talent!!)
                 }
 

@@ -10,13 +10,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.bumptech.glide.Glide
+import coil.load
 import com.example.talentara.R
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.FragmentProfileBinding
 import com.example.talentara.view.ui.portfolio.add.NewPortfolioActivity
 import com.example.talentara.view.ui.profile.talent.TalentProfileFragment
 import com.example.talentara.view.ui.profile.user.UserProfileFragment
+import com.example.talentara.view.ui.talent.apply.TalentApplyActivity
 import com.example.talentara.view.utils.FactoryViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -41,16 +42,6 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getUserDetail()
-        setupActionButton()
-    }
-
-    private fun setupActionButton() {
-        binding.btnNewPortfolio.setOnClickListener {
-            val intent = Intent(context, NewPortfolioActivity::class.java).apply {
-                    putExtra(NewPortfolioActivity.STATE, "NewPortfolio")
-                }
-            startActivity(intent)
-        }
     }
 
     private fun getUserDetail() {
@@ -60,32 +51,47 @@ class ProfileFragment : Fragment() {
                 is Results.Loading -> {
                     showLoading(true)
                 }
+
                 is Results.Success -> {
                     showLoading(false)
-                    val user = result.data.userDetail
+                    val user = result.data.userDetail?.firstOrNull()
                     binding.tvUsername.text = user?.userName
-                    binding.tvLinkedin.text = user?.linkedin
-                    binding.tvGithub.text = user?.github
+                    binding.tvLinkedin.text = user?.linkedin ?: "Not provided"
+                    binding.tvGithub.text = user?.github ?: "Not provided"
                     binding.tvGmail.text = user?.userEmail
-                    Glide.with(this)
-                        .load(user?.userImage)
-                        .placeholder(R.drawable.blank_avatar)
-                        .error(R.drawable.blank_avatar)
-                        .into(binding.ivUserImage)
-                    if (user?.talentAccess == 1) {
-                        Glide.with(this)
-                            .load(R.drawable.ic_talent_apply)
-                            .into(binding.btnTalentApply)
+                    binding.ivUserImage.load(user?.userImage) {
+                        placeholder(R.drawable.blank_avatar)
+                        error(R.drawable.blank_avatar)
+                    }
+                    if (user?.talentAccess == 0) {
+                        binding.btnTalentApply.load(R.drawable.ic_talent_apply) {
+                            placeholder(R.drawable.blank_avatar)
+                            error(R.drawable.blank_avatar)
+                        }
+                        binding.btnTalentApply.setOnClickListener {
+                            val intent = Intent(context, TalentApplyActivity::class.java).apply {
+                                putExtra(NewPortfolioActivity.STATE, "TalentApply")
+                            }
+                            startActivity(intent)
+                        }
+                    } else if (user?.talentAccess == 1) {
+                        binding.btnTalentApply.load(R.drawable.ic_project_manager_apply) {
+                            placeholder(R.drawable.blank_avatar)
+                            error(R.drawable.blank_avatar)
+                        }
                     } else {
                         binding.btnTalentApply.visibility = View.GONE
                     }
-                    hasTalentAccess = result.data.userDetail?.talentAccess == 1
+                    hasTalentAccess = user?.talentAccess == 1
                     setupViewPagerWithTabs(hasTalentAccess)
                 }
+
                 is Results.Error -> {
                     showLoading(false)
-                    Toast.makeText(requireContext(),
-                        getString(R.string.failed_to_get_user_information), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.failed_to_get_user_information), Toast.LENGTH_SHORT
+                    ).show()
                     Log.e("ProfileFragment", "Error: ${result.error}")
                 }
             }
@@ -98,6 +104,7 @@ class ProfileFragment : Fragment() {
                 UserProfileFragment(),
                 TalentProfileFragment()
             )
+
             override fun getItemCount() = pages.size
             override fun createFragment(position: Int) = pages[position]
         }

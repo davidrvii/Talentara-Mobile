@@ -65,20 +65,20 @@ interface ApiService {
         @Field("user_password") password: String,
     ): LoginResponse
 
-    @GET("user/basic/{id}")
+    @GET("user/basic/{user_id}")
     suspend fun getUserBasic(
         @Header("Authorization") token: String,
         @Path("user_id") id: Int,
     ): UserBasicResponse
 
-    @GET("user/detail/{id}")
+    @GET("user/detail/{user_id}")
     suspend fun getUserDetail(
         @Header("Authorization") token: String,
         @Path("user_id") id: Int,
     ): UserDetailResponse
 
     @FormUrlEncoded
-    @PATCH("user/update/{id}")
+    @PATCH("user/update/{user_id}")
     suspend fun updateUser(
         @Header("Authorization") token: String,
         @Path("user_id") id: Int,
@@ -94,7 +94,7 @@ interface ApiService {
     ): SaveFcmTokenResponse
 
     @FormUrlEncoded
-    @PATCH("user/update/{id}")
+    @PATCH("user/update/{user_id}")
     suspend fun updateUserIsOnProject(
         @Header("Authorization") token: String,
         @Path("user_id") id: Int,
@@ -102,7 +102,7 @@ interface ApiService {
     ): UpdateUserResponse
 
     @FormUrlEncoded
-    @PATCH("user/update/{id}")
+    @PATCH("user/update/{user_id}")
     suspend fun updateUserTalentAccess(
         @Header("Authorization") token: String,
         @Path("user_id") id: Int,
@@ -121,20 +121,20 @@ interface ApiService {
         @Field("click_action") clickAction: String,
     ): NewNotificationResponse
 
-    @GET("notification/history/{id}")
+    @GET("notification/history/{user_id}")
     suspend fun getNotificationHistory(
         @Header("Authorization") token: String,
         @Path("user_id") userId: Int,
     ): NotificationHistoryResponse
 
-    @PATCH("notification/update/{id}")
+    @PATCH("notification/update/{notification_id}")
     suspend fun updateNotification(
         @Header("Authorization") token: String,
         @Path("notification_id") notificationId: Int,
         @Field("status") status: String,
     ): UpdateNotificationResponse
 
-    @DELETE("notification/delete/{id}")
+    @DELETE("notification/delete/{notification_id}")
     suspend fun deleteNotification(
         @Header("Authorization") token: String,
         @Path("notification_id") notificationId: Int,
@@ -151,31 +151,31 @@ interface ApiService {
         @Field("end_date") endDate: String,
     ): NewTimelineResponse
 
-    @GET("timeline/project/{id}")
+    @GET("timeline/project/{project_id}")
     suspend fun getProjectTimeline(
         @Header("Authorization") token: String,
         @Path("project_id") projectId: Int,
     ): TimelineProjectResponse
 
-    @GET("timeline/detail/{id}")
+    @GET("timeline/detail/{timeline_id}")
     suspend fun getTimelineDetail(
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
     ): TimelineDetailResponse
 
-    @GET("timeline/current/{id}")
+    @GET("timeline/current/{project_id}")
     suspend fun getCurrentTimeline(
         @Header("Authorization") token: String,
         @Path("project_id") projectId: Int,
     ): CurrentTimelineResponse
 
-    @GET("timeline/approve/{id}")
+    @GET("timeline/approve/{project_id}")
     suspend fun getTimelineApprove(
         @Header("Authorization") token: String,
         @Path("project_id") projectId: Int,
     ): TimelineApprovementResponse
 
-    @PATCH("timeline/update/{id}")
+    @PATCH("timeline/update/{timeline_id}")
     suspend fun updateTimeline(
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
@@ -185,28 +185,28 @@ interface ApiService {
         @Field("evidance") evidence: String,
     ): UpdateTimelineResponse
 
-    @PATCH("timeline/update/{id}")
+    @PATCH("timeline/update/{timeline_id}")
     suspend fun updateTimelineClientApprove(
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
         @Field("client_approved") clientApproved: Boolean,
     ): UpdateTimelineResponse
 
-    @PATCH("timeline/update/{id}")
+    @PATCH("timeline/update/{timeline_id}")
     suspend fun updateTimelineLeaderApprove(
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
         @Field("leader_approved") leaderApproved: Boolean,
     ): UpdateTimelineResponse
 
-    @PATCH("timeline/update/{id}")
+    @PATCH("timeline/update/{timeline_id}")
     suspend fun updateTimelineCompletedDate(
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
         @Field("completed_date") completedDate: String,
     ): UpdateTimelineResponse
 
-    @DELETE("timeline/delete/{id}")
+    @DELETE("timeline/delete/{timeline_id}")
     suspend fun deleteTimeline(
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
@@ -258,13 +258,13 @@ interface ApiService {
         val features: List<String>,
     )
 
-    @GET("talent/detail/{id}")
+    @GET("talent/detail/{talent_id}")
     suspend fun getTalentDetail(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
     ): TalentDetailResponse
 
-    @PATCH("talent/update/{id}")
+    @PATCH("talent/update/{talent_id}")
     suspend fun updateTalent(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
@@ -280,28 +280,28 @@ interface ApiService {
         val platforms: List<String>,
     )
 
-    @PATCH("talent/update/{id}")
+    @PATCH("talent/update/{talent_id}")
     suspend fun updateTalentIsOnProject(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
         @Field("is_on_project") isOnProject: Boolean,
     ): UpdateTalentResponse
 
-    @PATCH("talent/update/{id}")
+    @PATCH("talent/update/{talent_id}")
     suspend fun updateTalentIsProjectManager(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
         @Field("is_project_manager") isProjectManager: Boolean,
     ): UpdateTalentResponse
 
-    @PATCH("talent/update/{id}")
+    @PATCH("talent/update/{talent_id}")
     suspend fun updateTalentProjectDone(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
         @Field("project_done") isProjectManager: Int,
     ): UpdateTalentResponse
 
-    @PATCH("talent/update/{id}")
+    @PATCH("talent/update/{talent_id}")
     suspend fun updateTalentAvailability(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
@@ -343,19 +343,19 @@ interface ApiService {
         val feature: List<String>,
     )
 
-    @GET("portfolio/talent/{id}")
+    @GET("portfolio/talent/{talent_id}")
     suspend fun getTalentPortfolio(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
     ): PortfolioTalentResponse
 
-    @GET("portfolio/detail/{id}")
+    @GET("portfolio/detail/{portfolio_id}")
     suspend fun getPortfolioDetail(
         @Header("Authorization") token: String,
         @Path("portfolio_id") portfolioId: Int,
     ): PortfolioDetailResponse
 
-    @PATCH("portfolio/update/{id}")
+    @PATCH("portfolio/update/{portfolio_id}")
     suspend fun updatePortfolio(
         @Header("Authorization") token: String,
         @Path("portfolio_id") portfolioId: Int,
@@ -383,7 +383,7 @@ interface ApiService {
         val productTypes: List<String>,
     )
 
-    @DELETE("portfolio/delete/{id}")
+    @DELETE("portfolio/delete/{portfolio_id}")
     suspend fun deletePortfolio(
         @Header("Authorization") token: String,
         @Path("portfolio_id") portfolioId: Int,
@@ -402,31 +402,31 @@ interface ApiService {
         @Field("end_date") endDate: String,
     ): NewProjectResponse
 
-    @GET("project/detail/{id}")
+    @GET("project/detail/{project_id}")
     suspend fun getProjectDetail(
         @Header("Authorization") token: String,
         @Path("project_id") projectId: Int,
     ): ProjectDetailResponse
 
-    @GET("project/history/{id}")
+    @GET("project/history/{user_id}")
     suspend fun getProjectHistory(
         @Header("Authorization") token: String,
         @Path("user_id") userId: Int,
     ): ProjectHistoryResponse
 
-    @GET("project/current/{id}")
+    @GET("project/current/{user_id}")
     suspend fun getCurrentProject(
         @Header("Authorization") token: String,
         @Path("user_id") userId: Int,
     ): CurrentProjectResponse
 
-    @GET("project/access/{id}")
+    @GET("project/access/{project_id}")
     suspend fun getProjectAccess(
         @Header("Authorization") token: String,
         @Path("project_id") projectId: Int,
     ): ProjectAccessResponse
 
-    @PATCH("project/update/{id}")
+    @PATCH("project/update/{project_id}")
     suspend fun updateProject(
         @Header("Authorization") token: String,
         @Path("project_id") projectId: Int,
@@ -461,7 +461,7 @@ interface ApiService {
         val amount: Int,
     )
 
-    @PATCH("project/update/{id}")
+    @PATCH("project/update/{project_id}")
     suspend fun updateProjectCompleted(
         @Header("Authorization") token: String,
         @Path("project_id") projectId: Int,

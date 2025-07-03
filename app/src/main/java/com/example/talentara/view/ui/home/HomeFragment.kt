@@ -90,6 +90,7 @@ class HomeFragment : Fragment() {
                     val currentProject = result.data.currentProject?.firstOrNull()
                     if (currentProject == null) {
                         binding.cvCurrentProject.visibility = View.GONE
+                        binding.cvNoCurrentProject.visibility = View.VISIBLE
                     } else {
                         getCurrentTimeline(currentProject.projectId?.toInt() ?: 0)
                         //Get First Item of Product Type and Platform
@@ -137,6 +138,7 @@ class HomeFragment : Fragment() {
                 is Results.Error -> {
                     showLoading(false)
                     binding.cvCurrentProject.visibility = View.GONE
+                    binding.cvNoCurrentProject.visibility = View.VISIBLE
                     Toast.makeText(
                         requireContext(),
                         "Failed to get Current Project",
@@ -155,6 +157,7 @@ class HomeFragment : Fragment() {
                 when (result) {
                     is Results.Loading -> {
                         binding.Timeline.visibility = View.GONE
+                        binding.noTimeline.visibility = View.VISIBLE
                         showLoading(true)
                     }
 
@@ -204,6 +207,7 @@ class HomeFragment : Fragment() {
                     is Results.Error -> {
                         showLoading(false)
                         binding.Timeline.visibility = View.GONE
+                        binding.noTimeline.visibility = View.VISIBLE
 
                         if (result.error.contains("HTTP 404")) {
                             Toast.makeText(

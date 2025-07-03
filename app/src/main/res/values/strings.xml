@@ -169,5 +169,7 @@
     <string name="project_s_timeline">Project\'s Timeline</string>
     <string name="logout_dialog_title">Logout</string>
     <string name="are_you_sure_you_want_to_log_out">Are you sure you want to log out?</string>
+    <string name="ther_is_no_current_project">There is no current project</string>
+    <string name="there_is_no_current_timeline">There is no current timeline</string>
 
 </resources>

@@ -83,10 +83,10 @@ class EditProfileActivity : AppCompatActivity() {
         if (false) {
             Toast.makeText(this, getString(R.string.nothing_to_change), Toast.LENGTH_SHORT).show()
             return
+        } else {
+            editProfileViewModel.updateUser(username, email, github, linkedIn, userImage)
+            updateUserObserver()
         }
-
-        editProfileViewModel.updateUser(username, email, github, linkedIn, userImage)
-        updateUserObserver()
     }
 
     private fun updateUserObserver() {

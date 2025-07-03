@@ -20,6 +20,7 @@ import com.example.talentara.view.ui.profile.user.UserProfileFragment
 import com.example.talentara.view.ui.talent.apply.TalentApplyActivity
 import com.example.talentara.view.utils.FactoryViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import androidx.viewpager2.widget.ViewPager2
 
 class ProfileFragment : Fragment() {
 
@@ -122,6 +123,19 @@ class ProfileFragment : Fragment() {
         val talentTabView = tabStrip.getChildAt(1)
         talentTabView.isEnabled = hasTalentAccess
         talentTabView.alpha = if (hasTalentAccess) 1f else 0.5f
+
+        // Disabled horizontal swipe gesture if no access
+        if (!hasTalentAccess) {
+            binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    if (position == 1) {
+                        binding.viewPager.currentItem = 0
+                        Toast.makeText(binding.root.context, "You don't have access to Talent Profile", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+        }
 
         binding.viewPager.currentItem = 0
     }

@@ -42,6 +42,7 @@ class NewProjectActivity : AppCompatActivity() {
             insets
         }
 
+        textFieldWatcher()
         setupActionButton()
     }
 
@@ -51,7 +52,6 @@ class NewProjectActivity : AppCompatActivity() {
                 finish()
             }
             btnFindProjectManager.setOnClickListener {
-                textFieldWatcher()
                 setupDateField(binding.tilStartDate) { selected ->
                     binding.tilStartDate.editText?.setText(selected)
                 }

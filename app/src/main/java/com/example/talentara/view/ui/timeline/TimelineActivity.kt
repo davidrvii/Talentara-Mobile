@@ -607,7 +607,7 @@ class TimelineActivity : AppCompatActivity() {
 
                 is Results.Success -> {
                     showLoading(false)
-                    val project = result.data.projectDetail
+                    val project = result.data.projectDetail?.firstOrNull()
                     addPortfolio(project!!, id)
 
                 }
@@ -639,7 +639,7 @@ class TimelineActivity : AppCompatActivity() {
 
                 is Results.Success -> {
                     showLoading(false)
-                    val project = result.data.projectDetail
+                    val project = result.data.projectDetail?.firstOrNull()
                     val talent = project?.talents
                     val talentsList = talent?.split("|")
                     talentId = talentsList?.map { entry ->

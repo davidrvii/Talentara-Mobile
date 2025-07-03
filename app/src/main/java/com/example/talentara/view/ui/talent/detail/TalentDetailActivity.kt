@@ -110,7 +110,7 @@ class TalentDetailActivity : AppCompatActivity() {
 
                 is Results.Success -> {
                     showLoading(false)
-                    val talent = result.data.talentDetail
+                    val talent = result.data.talentDetail?.firstOrNull()
                     binding.tvTalentName.text = talent?.userName
                     binding.tvLinkedin.text = talent?.linkedin
                     binding.tvGithub.text = talent?.github

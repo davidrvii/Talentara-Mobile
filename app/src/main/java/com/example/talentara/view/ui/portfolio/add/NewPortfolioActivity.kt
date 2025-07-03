@@ -20,7 +20,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.talentara.R
 import com.example.talentara.data.model.response.categories.GetAllCategoriesResponse
-import com.example.talentara.data.model.response.talent.TalentDetailResponse
+import com.example.talentara.data.model.response.talent.TalentDetailItem
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.data.remote.ApiService
 import com.example.talentara.databinding.ActivityNewPortfolioBinding
@@ -64,6 +64,7 @@ class NewPortfolioActivity : AppCompatActivity() {
             insets
         }
 
+        textFieldWatcher()
         getAllCategories()
         setupButtonAction()
     }
@@ -217,7 +218,7 @@ class NewPortfolioActivity : AppCompatActivity() {
                                 }
 
                                 is Results.Success -> {
-                                    mergeAndUpdateTalent(result.data)
+                                    result.data.talentDetail?.firstOrNull()?.let { talent -> mergeAndUpdateTalent(talent) }
                                     showLoading(false)
                                 }
 
@@ -229,7 +230,6 @@ class NewPortfolioActivity : AppCompatActivity() {
                         }
                     }
                     "TalentApply" -> {
-                        textFieldWatcher()
                         setupDateField(binding.tilStartDate) { selected ->
                             binding.tilStartDate.editText?.setText(selected)
                         }
@@ -269,13 +269,13 @@ class NewPortfolioActivity : AppCompatActivity() {
         }
     }
 
-    private fun mergeAndUpdateTalent(talent: TalentDetailResponse) {
+    private fun mergeAndUpdateTalent(talent: TalentDetailItem) {
         // Get old list (NULL-safe)
-        val oldRoles = talent.talentDetail?.roles?.split("|")?.map { it.trim() }.orEmpty()
-        val oldLanguages = talent.talentDetail?.languages?.split("|")?.map { it.trim() }.orEmpty()
-        val oldTools = talent.talentDetail?.tools?.split("|")?.map { it.trim() }.orEmpty()
-        val oldProductTypes = talent.talentDetail?.productTypes?.split("|")?.map { it.trim() }.orEmpty()
-        val oldPlatforms = talent.talentDetail?.platforms?.split("|")?.map { it.trim() }.orEmpty()
+        val oldRoles = talent.roles?.split("|")?.map { it.trim() }.orEmpty()
+        val oldLanguages = talent.languages?.split("|")?.map { it.trim() }.orEmpty()
+        val oldTools = talent.tools?.split("|")?.map { it.trim() }.orEmpty()
+        val oldProductTypes = talent.productTypes?.split("|")?.map { it.trim() }.orEmpty()
+        val oldPlatforms = talent.platforms?.split("|")?.map { it.trim() }.orEmpty()
 
         // Merge + deduce
         val mergedRoles = (oldRoles + selectedRoles).distinct()
@@ -316,7 +316,6 @@ class NewPortfolioActivity : AppCompatActivity() {
     }
 
     private fun uploadPortfolio() {
-        textFieldWatcher()
         setupDateField(binding.tilStartDate) { selected ->
             binding.tilStartDate.editText?.setText(selected)
         }

@@ -71,6 +71,7 @@ class ProjectFinalizeActivity : AppCompatActivity() {
             insets
         }
 
+        textFieldWatcher()
         setupObservers()
         binding.btnFinalizeProject.setOnClickListener { finalizeProject() }
         binding.btnBack.setOnClickListener { finish() }
@@ -104,7 +105,7 @@ class ProjectFinalizeActivity : AppCompatActivity() {
             when (result) {
                 is Results.Success -> {
                     showLoading(false)
-                    val project = result.data.projectDetail
+                    val project = result.data.projectDetail?.firstOrNull()
                     binding.tilClientName.editText!!.setText(project?.clientName)
                     binding.tilProjectName.editText!!.setText(project?.projectName)
                     binding.tilProjectDescription.editText!!.setText(project?.projectDesc)
@@ -263,7 +264,6 @@ class ProjectFinalizeActivity : AppCompatActivity() {
     }
 
     private fun finalizeProject() {
-        textFieldWatcher()
         setupDateField(binding.tilStartDate) { selected ->
             binding.tilStartDate.editText?.setText(selected)
         }

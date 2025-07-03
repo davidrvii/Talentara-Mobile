@@ -89,7 +89,7 @@ class TalentProfileFragment : Fragment() {
 
                 is Results.Success -> {
                     showLoading(false)
-                    val talent = result.data.talentDetail
+                    val talent = result.data.talentDetail?.firstOrNull()
                     talentAvailability = talent?.availability
                     binding.ivAvailibility.setImageResource(if (talent?.availability == 1) R.color.green else R.color.red)
                     binding.tvProjectCount.text = talent?.projectDone.toString()

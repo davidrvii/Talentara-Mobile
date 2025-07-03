@@ -15,6 +15,7 @@
         android:background="@drawable/bottom_rounded_rectangle"
         android:backgroundTint="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -23,10 +24,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="@color/blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck">
 
             <ImageView
                 android:id="@+id/btn_back"
@@ -47,7 +51,7 @@
             android:layout_margin="24dp"
             android:text="@string/project_status"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/cvBack"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,17 +63,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/cvBack"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@id/cvBack"
+            tools:ignore="SpeakableTextPresentCheck">
 
             <ImageView
                 android:id="@+id/btnProjectTimeline"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/calendar"
                 android:padding="4dp"
+                android:src="@drawable/calendar"
                 app:tint="@color/blue"
                 tools:ignore="ContentDescription" />
 
@@ -114,7 +122,7 @@
                 android:text="@string/client_name"
                 android:textColor="@color/blue"
                 android:textSize="16sp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="@id/tvClient"
                 app:layout_constraintTop_toBottomOf="@id/tvClient" />
 
@@ -142,7 +150,7 @@
                 android:text="@string/email"
                 android:textColor="@color/blue"
                 android:textSize="16sp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="@id/tvClientEmail"
                 app:layout_constraintTop_toBottomOf="@id/tvClientEmail" />
 
@@ -170,7 +178,7 @@
                 android:text="@string/project_name"
                 android:textColor="@color/blue"
                 android:textSize="16sp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="@id/tvProject"
                 app:layout_constraintTop_toBottomOf="@id/tvProject" />
 
@@ -198,7 +206,7 @@
                 android:text="@string/description"
                 android:textColor="@color/blue"
                 android:textSize="16sp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="@id/tvDescription"
                 app:layout_constraintTop_toBottomOf="@id/tvDescription" />
 
@@ -226,7 +234,7 @@
                 android:text="@string/project_periode"
                 android:textColor="@color/blue"
                 android:textSize="16sp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="@id/tvPeriode"
                 app:layout_constraintTop_toBottomOf="@id/tvPeriode" />
 
@@ -254,7 +262,7 @@
                 android:text="@string/meeting_link"
                 android:textColor="@color/blue"
                 android:textSize="16sp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="@id/tvMeetLink"
                 app:layout_constraintTop_toBottomOf="@id/tvMeetLink" />
 
@@ -282,7 +290,7 @@
                 android:text="@string/github"
                 android:textColor="@color/blue"
                 android:textSize="16sp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="@id/tvGithub"
                 app:layout_constraintTop_toBottomOf="@id/tvGithub" />
 
@@ -305,7 +313,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginVertical="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvFeature" />
 
@@ -328,7 +336,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginVertical="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvPlatform" />
 
@@ -351,7 +359,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginVertical="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvProductType" />
 
@@ -374,7 +382,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginVertical="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvLanguage" />
 
@@ -397,7 +405,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginVertical="8dp"
                 android:layout_marginBottom="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvTools" />
@@ -421,7 +429,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvTalent"
                 tools:listitem="@layout/talent_item"/>
@@ -439,6 +446,8 @@
         android:indeterminateTint="@color/blue"
         android:indeterminateTintMode="src_in"
         android:visibility="gone"
+        android:clickable="false"
+        android:focusable="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

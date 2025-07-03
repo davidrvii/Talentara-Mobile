@@ -90,10 +90,12 @@ class NotificationFragment : Fragment() {
             when (result) {
                 is Results.Loading -> {
                     showLoading(true)
+                    binding.cvNoNotification.visibility = View.VISIBLE
                 }
 
                 is Results.Success -> {
                     showLoading(false)
+                    binding.cvNoNotification.visibility = View.GONE
                     notificationAdapter.updateData(
                         result.data.notificationHistory?.filterNotNull() ?: emptyList()
                     )
@@ -101,15 +103,25 @@ class NotificationFragment : Fragment() {
 
                 is Results.Error -> {
                     showLoading(false)
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.failed_to_get_notification),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.e(
-                        "NotificationFragment",
-                        "Error getting notification history: ${result.error}"
-                    )
+                    if (result.error.contains("HTTP 404")) {
+                        Toast.makeText(
+                            requireContext(),
+                            "There is no notification yet",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        binding.cvNoNotification.visibility = View.VISIBLE
+                    } else {
+                        binding.cvNoNotification.visibility = View.VISIBLE
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.failed_to_get_notification),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.e(
+                            "NotificationFragment",
+                            "Error getting notification history: ${result.error}"
+                        )
+                    }
                 }
             }
         }

@@ -23,6 +23,9 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.jvm.java
 
 class ProjectDetailActivity : AppCompatActivity() {
@@ -57,10 +60,10 @@ class ProjectDetailActivity : AppCompatActivity() {
 
     private fun setupButtonAction() {
         with(binding) {
-            btnBack.setOnClickListener {
+            cvBack.setOnClickListener {
                 finish()
             }
-            btnProjectTimeline.setOnClickListener {
+            cvProjectTimeline.setOnClickListener {
                 val intent = Intent(this@ProjectDetailActivity, TimelineActivity::class.java).apply {
                     putExtra(TimelineActivity.PROJECT_ID, intent.getIntExtra(PROJECT_ID, 0))
                 }
@@ -143,16 +146,16 @@ class ProjectDetailActivity : AppCompatActivity() {
             tvProjectClient.text = project.clientName.toString()
             tvProjectName.text = project.projectName
             tvProjectDescription.text = project.projectDesc
-            tvProjectGithub.text = project.projectGithub
-            tvProjectMeetLink.text = project.meetLink
+            tvProjectGithub.text = project.projectGithub ?: "-"
+            tvProjectMeetLink.text = project.meetLink ?: "-"
             tvProjectPeriode.text = getString(
                 R.string.periode,
-                project.startDate,
-                project.endDate
+                formatDate(project.startDate),
+                formatDate(project.endDate)
             )
         }
         binding.apply {
-            val rawFeatures = project.features ?: ""
+            val rawFeatures = project.features ?: "-"
             val featuresList = rawFeatures
                 .split("|")
                 .map { it.trim() }
@@ -160,7 +163,7 @@ class ProjectDetailActivity : AppCompatActivity() {
             featureAdapter.updateData(featuresList)
         }
         binding.apply {
-            val rawPlatforms = project.platforms ?: ""
+            val rawPlatforms = project.platforms ?: "-"
             val platformsList = rawPlatforms
                 .split("|")
                 .map { it.trim() }
@@ -168,7 +171,7 @@ class ProjectDetailActivity : AppCompatActivity() {
             platformAdapter.updateData(platformsList)
         }
         binding.apply {
-            val rawTools = project.tools ?: ""
+            val rawTools = project.tools ?: "-"
             val toolsList = rawTools
                 .split("|")
                 .map { it.trim() }
@@ -176,7 +179,7 @@ class ProjectDetailActivity : AppCompatActivity() {
             toolsAdapter.updateData(toolsList)
         }
         binding.apply {
-            val rawProductTypes = project.productTypes ?: ""
+            val rawProductTypes = project.productTypes ?: "-"
             val productTypesList = rawProductTypes
                 .split("|")
                 .map { it.trim() }
@@ -184,7 +187,7 @@ class ProjectDetailActivity : AppCompatActivity() {
             productTypeAdapter.updateData(productTypesList)
         }
         binding.apply {
-            val rawLanguages = project.languages ?: ""
+            val rawLanguages = project.languages ?: "-"
             val languagesList = rawLanguages
                 .split("|")
                 .map { it.trim() }
@@ -198,6 +201,18 @@ class ProjectDetailActivity : AppCompatActivity() {
             talentAdapter.updateData(list)
         }
     }
+
+    private fun formatDate(dateString: String?): String {
+        return try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+            val date = inputFormat.parse(dateString ?: "")
+            outputFormat.format(date ?: Date())
+        } catch (e: Exception) {
+            "-"
+        }
+    }
+
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE

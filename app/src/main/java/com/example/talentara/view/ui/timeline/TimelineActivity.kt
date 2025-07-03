@@ -77,9 +77,12 @@ class TimelineActivity : AppCompatActivity() {
             insets
         }
 
+        binding.cvBack.setOnClickListener {
+            finish()
+        }
+
         checkProjectDetail()
         getProjectAccess()
-        setupButtonAction()
         setupProjectTimelineList()
         deleteTimeline()
         updateTimeline()
@@ -96,6 +99,7 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     projectAccess = result.data.access ?: "NoAccess"
+                    setupButtonAction()
                     timelineAdapter.setAccessLevel(projectAccess)
                 }
 
@@ -128,10 +132,6 @@ class TimelineActivity : AppCompatActivity() {
 
     private fun setupButtonAction() {
         with(binding) {
-            cvBack.setOnClickListener {
-                finish()
-            }
-
             if (projectAccess == "Project Manger") {
                 if (projectStatus == "Completed") {
                     cvAddTimeline.visibility = View.GONE
@@ -311,10 +311,12 @@ class TimelineActivity : AppCompatActivity() {
             when (result) {
                 is Results.Loading -> {
                     showLoading(true)
+                    binding.cvNoTimeline.visibility = View.VISIBLE
                 }
 
                 is Results.Success -> {
                     showLoading(false)
+                    binding.cvNoTimeline.visibility = View.GONE
                     timelineAdapter.updateData(
                         result.data.timelineProject?.filterNotNull() ?: emptyList()
                     )
@@ -322,12 +324,23 @@ class TimelineActivity : AppCompatActivity() {
 
                 is Results.Error -> {
                     showLoading(false)
-                    Toast.makeText(
-                        this,
-                        "Failed to get Project Timeline",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.e("TimelineActivity", "Error getting project timeline: ${result.error}")
+                    if (result.error.contains("HTTP 404")) {
+                        binding.cvNoTimeline.visibility = View.VISIBLE
+                        Toast.makeText(
+                            this,
+                            "No timeline yet for this project",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@observe
+                    } else {
+                        binding.cvNoTimeline.visibility = View.VISIBLE
+                        Toast.makeText(
+                            this,
+                            "Failed to get Project Timeline",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.e("TimelineActivity", "Error getting project timeline: ${result.error}")
+                    }
                 }
             }
         }

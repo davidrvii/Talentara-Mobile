@@ -121,7 +121,7 @@
     <string name="yes">Yes</string>
     <string name="failed_to_delete_notification">Failed to delete notification</string>
     <string name="failed_to_get_portfolio_detail">Failed to get Portfolio Detail</string>
-    <string name="periode">%s - %s</string>
+    <string name="periode">%s ~ %s</string>
     <string name="item_name">Item Name</string>
     <string name="client_name_portfolio_hint">Your Client Name or Individual Project</string>
     <string name="choose_image_first">Choose image first</string>
@@ -171,5 +171,8 @@
     <string name="are_you_sure_you_want_to_log_out">Are you sure you want to log out?</string>
     <string name="ther_is_no_current_project">There is no current project</string>
     <string name="there_is_no_current_timeline">There is no current timeline</string>
+    <string name="there_is_no_notification">There is no notification</string>
+    <string name="there_is_no_project">There is no project</string>
+    <string name="there_is_no_timeline">There is no timeline</string>
 
 </resources>

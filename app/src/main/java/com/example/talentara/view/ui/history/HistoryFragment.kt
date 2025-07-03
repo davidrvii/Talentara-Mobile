@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,6 +58,7 @@ class HistoryFragment : Fragment() {
             when (result) {
                 is Results.Loading -> {
                     showLoading(true)
+                    binding.cvNoProject.visibility = View.GONE
                 }
 
                 is Results.Success -> {
@@ -67,13 +67,15 @@ class HistoryFragment : Fragment() {
                     val currentProject = result.data.currentProject?.firstOrNull()
 
                     if (currentProject == null) {
-                        binding.tvOngoing.isVisible = false
-                        binding.cvOngoingProject.isVisible = false
-                        binding.historyDivider.isVisible = false
+                        binding.cvNoProject.visibility = View.VISIBLE
+                        binding.tvOngoing.visibility = View.GONE
+                        binding.cvOngoingProject.visibility = View.GONE
+                        binding.historyDivider.visibility = View.GONE
                     } else {
-                        binding.tvOngoing.isVisible = true
-                        binding.cvOngoingProject.isVisible = true
-                        binding.historyDivider.isVisible = true
+                        binding.tvOngoing.visibility = View.VISIBLE
+                        binding.cvOngoingProject.visibility =  View.VISIBLE
+                        binding.historyDivider.visibility =  View.VISIBLE
+                        binding.cvNoProject.visibility = View.GONE
 
                         //Get First Item of Product Type and Platform
                         val firstProduct =
@@ -88,6 +90,7 @@ class HistoryFragment : Fragment() {
                                 val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                 val today = LocalDate.now()
                                 val end = currentProject.endDate
+                                    ?.substring(0, 10)
                                     ?.let { LocalDate.parse(it, fmt) }
                                 end?.let { ChronoUnit.DAYS.between(today, it).toInt() } ?: 0
                             } else {
@@ -95,20 +98,32 @@ class HistoryFragment : Fragment() {
                                 val fmt = LegacyDateTimeFormatter.ofPattern("yyyy-MM-dd")
                                 val today = LegacyLocalDate.now()
                                 val end = currentProject.endDate
+                                    ?.substring(0, 10)
                                     ?.let { LegacyLocalDate.parse(it, fmt) }
                                 end?.let { LegacyChronosUnit.DAYS.between(today, it).toInt() } ?: 0
                             }
 
                         binding.apply {
-                            tvStatus.text = currentProject.statusName
-                            tvProject.text = currentProject.projectName
+                            val projectName = currentProject.projectName?.let {
+                                val words = it.split(" ")
+                                if (words.size <= 2) {
+                                    it
+                                } else {
+                                    val firstLine = words.take(2).joinToString(" ")
+                                    val secondLine = words.drop(2).joinToString(" ")
+                                    "$firstLine\n$secondLine"
+                                }
+                            } ?: "-"
+
+                            binding.tvStatus.text = currentProject.statusName?.replace(" ", "\n")
+                            tvProject.text = projectName
                             tvClient.text = currentProject.clientName
                             tvProduct.text =
                                 getString(R.string.project_product, firstProduct, firstPlatform)
                             tvRemaining.text = getString(R.string.completed_in_d_days, daysRemaining)
                         }
 
-                        binding.root.setOnClickListener {
+                        binding.cvOngoingProject.setOnClickListener {
                             val intent = Intent(context, ProjectDetailActivity::class.java).apply {
                                 putExtra(ProjectDetailActivity.PROJECT_ID, currentProject.projectId)
                             }
@@ -119,6 +134,7 @@ class HistoryFragment : Fragment() {
 
                 is Results.Error -> {
                     showLoading(false)
+                    binding.cvNoProject.visibility = View.GONE
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.failed_to_get_current_project),
@@ -136,10 +152,12 @@ class HistoryFragment : Fragment() {
             when (result) {
                 is Results.Loading -> {
                     showLoading(true)
+                    binding.cvNoProject.visibility = View.VISIBLE
                 }
 
                 is Results.Success -> {
                     showLoading(false)
+                    binding.cvNoProject.visibility = View.GONE
                     projectHistoryAdapter.updateData(
                         result.data.historyProject?.filterNotNull() ?: emptyList()
                     )
@@ -147,12 +165,23 @@ class HistoryFragment : Fragment() {
 
                 is Results.Error -> {
                     showLoading(false)
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.failed_to_get_project_history),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.e("HistoryFragment", "Error getting project history: ${result.error}")
+                    if (result.error.contains("HTTP 404")) {
+                        binding.cvNoProject.visibility = View.VISIBLE
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.there_is_no_project),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        binding.cvNoProject.visibility = View.VISIBLE
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.failed_to_get_project_history),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.e("HistoryFragment", "Error getting project history: ${result.error}")
+                    }
+
                 }
             }
         }

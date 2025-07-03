@@ -82,16 +82,20 @@ class HomeFragment : Fragment() {
             when (result) {
                 is Results.Loading -> {
                     binding.cvCurrentProject.visibility = View.GONE
+                    binding.cvNoCurrentProject.visibility = View.VISIBLE
                     showLoading(true)
                 }
 
                 is Results.Success -> {
                     showLoading(false)
                     val currentProject = result.data.currentProject?.firstOrNull()
+                    Log.d("HomeFragment", "Current Project: $currentProject")
                     if (currentProject == null) {
                         binding.cvCurrentProject.visibility = View.GONE
                         binding.cvNoCurrentProject.visibility = View.VISIBLE
                     } else {
+                        binding.cvCurrentProject.visibility = View.VISIBLE
+                        binding.cvNoCurrentProject.visibility = View.GONE
                         getCurrentTimeline(currentProject.projectId?.toInt() ?: 0)
                         //Get First Item of Product Type and Platform
                         val firstProduct =
@@ -106,19 +110,21 @@ class HomeFragment : Fragment() {
                                 val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                 val today = LocalDate.now()
                                 val end = currentProject.endDate
+                                    ?.substring(0, 10)
                                     ?.let { LocalDate.parse(it, fmt) }
                                 end?.let { ChronoUnit.DAYS.between(today, it).toInt() } ?: 0
                             } else {
                                 // API <26
                                 val fmt = LegacyDateTimeFormatter.ofPattern("yyyy-MM-dd")
                                 val today = LegacyLocalDate.now()
-                                val end =
-                                    currentProject.endDate?.let { LegacyLocalDate.parse(it, fmt) }
+                                val end = currentProject.endDate
+                                    ?.substring(0, 10)
+                                    ?.let { LegacyLocalDate.parse(it, fmt) }
                                 end?.let { LegacyChronosUnit.DAYS.between(today, it).toInt() } ?: 0
                             }
 
                         binding.apply {
-                            tvStatus.text = currentProject.statusName
+                            binding.tvStatus.text = currentProject.statusName?.replace(" ", "\n")
                             tvProject.text = currentProject.projectName
                             tvClient.text = currentProject.clientName
                             tvProduct.text =
@@ -126,7 +132,7 @@ class HomeFragment : Fragment() {
                             tvRemaining.text = getString(R.string.remaining_days, daysRemaining)
                         }
 
-                        binding.root.setOnClickListener {
+                        binding.cvCurrentProject.setOnClickListener {
                             val intent = Intent(context, ProjectDetailActivity::class.java).apply {
                                 putExtra(ProjectDetailActivity.PROJECT_ID, currentProject.projectId)
                             }
@@ -157,7 +163,8 @@ class HomeFragment : Fragment() {
                 when (result) {
                     is Results.Loading -> {
                         binding.Timeline.visibility = View.GONE
-                        binding.noTimeline.visibility = View.VISIBLE
+                        binding.cvNoCurrentTimelineYesProject.visibility = View.GONE
+                        binding.cvNoCurrentTimelineNoProject.visibility = View.VISIBLE
                         showLoading(true)
                     }
 
@@ -167,21 +174,31 @@ class HomeFragment : Fragment() {
 
                         if (currentTimeline == null) {
                             binding.cvCurrentTimeline.visibility = View.GONE
+                            binding.cvNoCurrentTimelineYesProject.visibility = View.VISIBLE
+                            binding.cvNoCurrentTimelineNoProject.visibility = View.GONE
                         } else {
+                            binding.cvCurrentTimeline.visibility = View.VISIBLE
+                            binding.cvNoCurrentTimelineYesProject.visibility = View.GONE
+                            binding.cvNoCurrentTimelineNoProject.visibility = View.GONE
+
                             //Count Timeline Worked Days
                             val daysWorked: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 // API 26+
                                 val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                                 val start = LocalDate.parse(currentTimeline.startDate, fmt)
                                 val completed =
-                                    currentTimeline.completedDate?.let { LocalDate.parse(it, fmt) }
+                                    currentTimeline.completedDate
+                                        ?.substring(0, 10)
+                                        ?.let { LocalDate.parse(it, fmt) }
                                 completed?.let { ChronoUnit.DAYS.between(start, it).toInt() } ?: 0
                             } else {
                                 // API <26
                                 val fmt = LegacyDateTimeFormatter.ofPattern("yyyy-MM-dd")
                                 val start = LegacyLocalDate.parse(currentTimeline.startDate, fmt)
                                 val completed =
-                                    currentTimeline.completedDate?.let { LegacyLocalDate.parse(it, fmt) }
+                                    currentTimeline.completedDate
+                                        ?.substring(0, 10)
+                                        ?.let { LegacyLocalDate.parse(it, fmt) }
                                 completed?.let { LegacyChronosUnit.DAYS.between(start, it).toInt() } ?: 0
                             }
 
@@ -206,13 +223,13 @@ class HomeFragment : Fragment() {
 
                     is Results.Error -> {
                         showLoading(false)
-                        binding.Timeline.visibility = View.GONE
-                        binding.noTimeline.visibility = View.VISIBLE
-
                         if (result.error.contains("HTTP 404")) {
+                            binding.Timeline.visibility = View.GONE
+                            binding.cvNoCurrentTimelineYesProject.visibility = View.VISIBLE
+                            binding.cvNoCurrentTimelineNoProject.visibility = View.GONE
                             Toast.makeText(
                                 requireContext(),
-                                "There is no timeline yet for this project",
+                                "No timeline yet for this project",
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
@@ -228,6 +245,9 @@ class HomeFragment : Fragment() {
             }
         } else {
             Toast.makeText(requireContext(), "Project ID is null", Toast.LENGTH_SHORT).show()
+            binding.Timeline.visibility = View.GONE
+            binding.cvNoCurrentTimelineYesProject.visibility = View.GONE
+            binding.cvNoCurrentTimelineNoProject.visibility = View.VISIBLE
         }
     }
 

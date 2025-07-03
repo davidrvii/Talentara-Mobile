@@ -39,7 +39,7 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.tvFooterAction.setOnClickListener {
-            (requireActivity() as AuthenticationActivity).switchPage(0)
+            (requireActivity() as AuthenticationActivity).switchPage(1)
         }
 
         binding.btnSignUp.setOnClickListener {

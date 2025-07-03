@@ -36,19 +36,18 @@ class AuthenticationActivity : AppCompatActivity() {
                 setupUI()
             }
         }
-
-        setupViewPagerWithTabs()
     }
 
     private fun setupUI() {
         binding = ActivityAuthenticationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.authentication)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        setupViewPagerWithTabs()
     }
 
     fun switchPage(toPosition: Int) {
@@ -58,8 +57,8 @@ class AuthenticationActivity : AppCompatActivity() {
     private fun setupViewPagerWithTabs() {
         val adapter = object : FragmentStateAdapter(this) {
             private val pages = listOf(
-                SignInFragment(),
-                SignUpFragment()
+                SignUpFragment(),
+                SignInFragment()
             )
 
             override fun getItemCount() = pages.size
@@ -69,11 +68,11 @@ class AuthenticationActivity : AppCompatActivity() {
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, pos ->
             tab.text = if (pos == 0)
-                getString(R.string.sign_in)
-            else
                 getString(R.string.sign_up)
+            else
+                getString(R.string.sign_in)
         }.attach()
 
-        binding.viewPager.currentItem = 1
+        binding.viewPager.currentItem = 0
     }
 }

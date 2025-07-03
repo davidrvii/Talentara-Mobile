@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.google.gms.google.services)
 }
 
@@ -70,7 +69,6 @@ dependencies {
     implementation(libs.androidx.datastore.core.android)
     implementation(libs.threetenabp)
     implementation(libs.glide)
-    ksp (libs.glide.compiler)
     implementation(libs.flexbox)
     implementation(libs.play.services.auth)
 }

@@ -47,7 +47,7 @@ class SignInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.tvFooterAction.setOnClickListener {
-            (requireActivity() as AuthenticationActivity).switchPage(1)
+            (requireActivity() as AuthenticationActivity).switchPage(0)
         }
 
         binding.btnSignIn.setOnClickListener {

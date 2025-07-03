@@ -32,10 +32,10 @@ data class NotificationHistoryItem(
 	val notificationTitle: String? = null,
 
 	@field:SerializedName("notification_desc")
-	val notificationType: String? = null,
+	val notificationDesc: String? = null,
 
 	@field:SerializedName("notification_type")
-	val notificationImage: String? = null,
+	val notificationType: String? = null,
 
 	@field:SerializedName("reference_id")
 	val referenceId: Int? = null,

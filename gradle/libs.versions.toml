@@ -17,17 +17,16 @@ splashscreen = "1.0.1"
 viewpager2 = "1.1.0"
 retrofit = "2.9.0"
 gson = "2.9.0"
-loggingInterceptor = "4.11.0"
+loggingInterceptor = "4.12.0"
 preferenceKtx = "1.2.1"
 datastoreCoreAndroid = "1.1.7"
 coroutines = "1.7.3"
 datastorePreferences = "1.1.7"
 threetenabp = "1.4.5"
 glide = "4.15.1"
-ksp = "1.9.0-1.0.13"
 flexbox = "3.0.0"
 googleGmsGoogleServices = "4.4.3"
-firebaseAuth = "23.2.1"
+firebaseAuth = "23.1.0"
 credentials = "1.5.0"
 credentialsPlayServicesAuth = "1.5.0"
 googleid = "1.1.1"
@@ -58,7 +57,6 @@ androidx-datastore-core-android = { group = "androidx.datastore", name = "datast
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 threetenabp = { group = "com.jakewharton.threetenabp", name = "threetenabp", version.ref = "threetenabp" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
-glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 flexbox = { group = "com.google.android.flexbox", name = "flexbox", version.ref = "flexbox" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
@@ -70,6 +68,5 @@ firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 

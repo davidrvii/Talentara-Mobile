@@ -5,10 +5,4 @@
         <item name="android:statusBarColor">@color/blue</item>
         <item name="colorSecondaryContainer">@color/white</item>
     </style>
-
-    <style name="Theme.Talentara.Splashscreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/splash_background_color</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_inset</item>
-        <item name="postSplashScreenTheme">@style/Theme.Talentara</item>
-    </style>
 </resources>

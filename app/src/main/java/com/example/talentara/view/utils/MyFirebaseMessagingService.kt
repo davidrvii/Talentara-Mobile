@@ -59,10 +59,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val body = remoteMessage.notification?.body ?: data["notification_desc"]
         val clickAction = data["click_action"]
         val refId = data["reference_id"]?.toIntOrNull()
+        val roleName = data["role_name"]?.toString()
 
         val intent = when (clickAction) {
             "OPEN_PROJECT_OFFER" -> Intent(this, ProjectOfferActivity::class.java).apply {
                 putExtra("project_id", refId)
+                putExtra("role_name", roleName)
             }
 
             "OPEN_PROJECT_DETAIL" -> Intent(this, ProjectDetailActivity::class.java).apply {

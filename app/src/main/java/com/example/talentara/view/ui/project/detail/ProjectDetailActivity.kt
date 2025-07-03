@@ -116,7 +116,7 @@ class ProjectDetailActivity : AppCompatActivity() {
 
                 is Results.Success -> {
                     showLoading(false)
-                    val project = result.data.projectDetail
+                    val project = result.data.projectDetail?.firstOrNull()
                     bindProject(project!!)
                 }
 

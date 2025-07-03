@@ -5,6 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.talentara.data.model.response.project.ProjectOfferResponse
+import com.example.talentara.data.model.response.project.ProjectOrderResponse
 import com.example.talentara.data.model.response.talent.UpdateTalentResponse
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.data.repository.Repository
@@ -53,6 +54,26 @@ class ProjectOfferViewModel(private val repository: Repository) : ViewModel() {
                 }
             } catch (e: Exception) {
                 _updateTalentIsOnProject.value = Results.Error(e.message.toString())
+            }
+        }
+    }
+
+    private val _getProjectOrder = MediatorLiveData<Results<ProjectOrderResponse>>()
+    val getProjectOrder: LiveData<Results<ProjectOrderResponse>> = _getProjectOrder
+
+    fun getProjectOrder(
+        projectId: Int,
+    ) {
+        viewModelScope.launch {
+            _getProjectOrder.value = Results.Loading
+            try {
+                val token = repository.getSession().first().token
+
+                _getProjectOrder.addSource(repository.getProjectOrder(token, projectId)) { result ->
+                    _getProjectOrder.value = result
+                }
+            } catch (e: Exception) {
+                _getProjectOrder.value = Results.Error(e.message.toString())
             }
         }
     }

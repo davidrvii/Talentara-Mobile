@@ -19,6 +19,7 @@ import com.example.talentara.data.model.response.project.ProjectAccessResponse
 import com.example.talentara.data.model.response.project.ProjectDetailResponse
 import com.example.talentara.data.model.response.project.ProjectHistoryResponse
 import com.example.talentara.data.model.response.project.ProjectOfferResponse
+import com.example.talentara.data.model.response.project.ProjectOrderResponse
 import com.example.talentara.data.model.response.project.UpdateProjectResponse
 import com.example.talentara.data.model.response.talent.NewTalentResponse
 import com.example.talentara.data.model.response.talent.TalentDetailResponse
@@ -578,6 +579,19 @@ class Repository private constructor(
         emit(Results.Loading)
         try {
             val response = apiService.getProjectDetail("Bearer $token", projectId)
+            emit(Results.Success(response))
+        } catch (e: Exception) {
+            emit(Results.Error(e.message.toString()))
+        }
+    }
+
+    fun getProjectOrder(
+        token: String,
+        projectId: Int,
+    ): LiveData<Results<ProjectOrderResponse>> = liveData {
+        emit(Results.Loading)
+        try {
+            val response = apiService.getProjectOrder("Bearer $token", projectId)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))

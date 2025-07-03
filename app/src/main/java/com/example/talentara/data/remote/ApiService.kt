@@ -16,6 +16,7 @@ import com.example.talentara.data.model.response.project.ProjectAccessResponse
 import com.example.talentara.data.model.response.project.ProjectDetailResponse
 import com.example.talentara.data.model.response.project.ProjectHistoryResponse
 import com.example.talentara.data.model.response.project.ProjectOfferResponse
+import com.example.talentara.data.model.response.project.ProjectOrderResponse
 import com.example.talentara.data.model.response.project.UpdateProjectResponse
 import com.example.talentara.data.model.response.talent.NewTalentResponse
 import com.example.talentara.data.model.response.talent.TalentDetailResponse
@@ -407,6 +408,12 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("project_id") projectId: Int,
     ): ProjectDetailResponse
+
+    @GET("project/order/{project_id}")
+    suspend fun getProjectOrder(
+        @Header("Authorization") token: String,
+        @Path("project_id") projectId: Int,
+    ): ProjectOrderResponse
 
     @GET("project/history/{user_id}")
     suspend fun getProjectHistory(

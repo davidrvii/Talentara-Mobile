@@ -8,7 +8,7 @@ data class TalentDetailResponse(
 	val success: Boolean? = null,
 
 	@field:SerializedName("talentDetail")
-	val talentDetail: TalentDetailItem? = null,
+	val talentDetail: List<TalentDetailItem?>? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null,

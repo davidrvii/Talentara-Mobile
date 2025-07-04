@@ -15,6 +15,7 @@
         android:background="@drawable/bottom_rounded_rectangle"
         android:backgroundTint="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -47,7 +48,7 @@
             android:layout_margin="24dp"
             android:text="@string/portfolio"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/cvBack"
             app:layout_constraintEnd_toEndOf="parent"
@@ -114,7 +115,7 @@
             android:text="@string/client_name"
             android:textColor="@color/blue"
             android:textSize="16sp"
-            android:textStyle="bold"
+            android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/tvClient"
             app:layout_constraintTop_toBottomOf="@id/tvClient" />
 
@@ -142,7 +143,7 @@
             android:text="@string/project_name"
             android:textColor="@color/blue"
             android:textSize="16sp"
-            android:textStyle="bold"
+            android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/tvProject"
             app:layout_constraintTop_toBottomOf="@id/tvProject" />
 
@@ -170,7 +171,7 @@
             android:text="@string/description"
             android:textColor="@color/blue"
             android:textSize="16sp"
-            android:textStyle="bold"
+            android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/tvDescription"
             app:layout_constraintTop_toBottomOf="@id/tvDescription" />
 
@@ -198,7 +199,7 @@
             android:text="@string/periode"
             android:textColor="@color/blue"
             android:textSize="16sp"
-            android:textStyle="bold"
+            android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/tvPeriode"
             app:layout_constraintTop_toBottomOf="@id/tvPeriode" />
 
@@ -226,7 +227,7 @@
             android:text="@string/github"
             android:textColor="@color/blue"
             android:textSize="16sp"
-            android:textStyle="bold"
+            android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/tvGithub"
             app:layout_constraintTop_toBottomOf="@id/tvGithub" />
 

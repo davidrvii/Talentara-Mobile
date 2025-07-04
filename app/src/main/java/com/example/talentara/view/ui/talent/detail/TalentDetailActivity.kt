@@ -22,8 +22,6 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import kotlin.collections.mapNotNull
-import kotlin.collections.orEmpty
 
 class TalentDetailActivity : AppCompatActivity() {
 
@@ -180,7 +178,7 @@ class TalentDetailActivity : AppCompatActivity() {
 
     private fun setupActionButton() {
         with(binding) {
-            btnBack.setOnClickListener {
+            cvBack.setOnClickListener {
                 finish()
             }
         }

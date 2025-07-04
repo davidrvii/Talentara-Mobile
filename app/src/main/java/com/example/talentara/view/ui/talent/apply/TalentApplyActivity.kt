@@ -275,7 +275,7 @@ class TalentApplyActivity : AppCompatActivity() {
 
     private fun setupButtonAction() {
         with(binding) {
-            btnBack.setOnClickListener {
+            cvBack.setOnClickListener {
                 finish()
             }
             btnTalentApply.setOnClickListener {

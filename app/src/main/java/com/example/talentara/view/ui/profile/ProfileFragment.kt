@@ -90,7 +90,7 @@ class ProfileFragment : Fragment() {
                                 is Results.Success -> {
                                     showLoading(false)
                                     val talent = result.data.talentDetail?.firstOrNull()
-                                    if (talent?.isOnProject == 1) {
+                                    if (talent?.isProjectManager == 0) {
                                         binding.btnTalentApply.load(R.drawable.ic_project_manager_apply) {
                                             placeholder(R.drawable.blank_avatar)
                                             error(R.drawable.blank_avatar)

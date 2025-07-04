@@ -17,7 +17,7 @@ data class TimelineDetailResponse(
 	val timestamp: String? = null,
 
 	@field:SerializedName("timelineDetail")
-	val timelineDetail: TimelineDetailItem? = null
+	val timelineDetail: List<TimelineDetailItem?>? = null
 )
 
 data class TimelineDetailItem(

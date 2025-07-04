@@ -29,7 +29,8 @@
         <activity
             android:name=".view.ui.authentication.AuthenticationActivity"
             android:exported="true"
-            android:theme="@style/Theme.Talentara.Splashscreen">
+            android:theme="@style/Theme.Talentara.Splashscreen"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -40,19 +41,23 @@
             android:exported="false" />
         <activity
             android:name=".view.ui.portfolio.add.NewPortfolioActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".view.ui.profile.edit.EditProfileActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".view.ui.project.add.NewProjectActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".view.ui.project.detail.ProjectDetailActivity"
             android:exported="false" />
         <activity
             android:name=".view.ui.project.finalize.ProjectFinalizeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".view.ui.project.offer.ProjectOfferActivity"
             android:exported="false" />
@@ -61,10 +66,12 @@
             android:exported="false" />
         <activity
             android:name=".view.ui.talent.apply.TalentApplyActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".view.ui.timeline.TimelineActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".view.ui.waiting.WaitingPageActivity"
             android:exported="false" />

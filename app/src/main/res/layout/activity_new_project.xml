@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_rounded_rectangle"
         android:backgroundTint="@color/blue"
+        android:elevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -46,7 +47,7 @@
             android:layout_margin="24dp"
             android:text="@string/new_project"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/cvBack"
             app:layout_constraintEnd_toEndOf="parent"
@@ -77,7 +78,7 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/client_name"
                 android:textColor="@color/blue"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -115,10 +116,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/project_name"
                 android:textColor="@color/blue"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilClientName" />
@@ -156,10 +157,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/project_description"
                 android:textColor="@color/blue"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilProjectName" />
@@ -169,7 +170,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="24dp"
                 app:layout_constraintStart_toStartOf="@id/tvProjectDescription"
@@ -188,8 +189,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:boxBackgroundMode="none"
+                        app:hintEnabled="false"
+                        app:hintTextColor="@color/dark_gray"
                         app:prefixText="@string/project_purpose_prefix"
-                        app:prefixTextColor="@color/black">
+                        app:prefixTextAppearance="@style/PrefixTextStyle">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
@@ -202,7 +205,6 @@
                             android:scrollbars="none"
                             android:scrollHorizontally="false"
                             android:textColor="@color/black"
-                            android:textColorHint="@color/dark_gray"
                             android:textSize="14sp"
                             android:paddingBottom="4dp"
                             android:paddingTop="8dp"/>
@@ -214,8 +216,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:boxBackgroundMode="none"
+                        app:hintEnabled="false"
+                        app:hintTextColor="@color/dark_gray"
                         app:prefixText="@string/product_type_prefix"
-                        app:prefixTextColor="@color/black">
+                        app:prefixTextAppearance="@style/PrefixTextStyle">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
@@ -225,12 +229,12 @@
                             android:maxLines="10"
                             android:minLines="1"
                             android:overScrollMode="never"
+                            android:paddingVertical="4dp"
                             android:scrollbars="none"
                             android:scrollHorizontally="false"
                             android:textColor="@color/black"
-                            android:textColorHint="@color/dark_gray"
                             android:textSize="14sp"
-                            android:paddingVertical="4dp"/>
+                            tools:ignore="TouchTargetSizeCheck" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- 3) Platform Target -->
@@ -239,8 +243,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:boxBackgroundMode="none"
+                        app:hintEnabled="false"
+                        app:hintTextColor="@color/dark_gray"
                         app:prefixText="@string/platform_target_prefix"
-                        app:prefixTextColor="@color/black">
+                        app:prefixTextAppearance="@style/PrefixTextStyle">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
@@ -250,12 +256,12 @@
                             android:maxLines="10"
                             android:minLines="1"
                             android:overScrollMode="never"
+                            android:paddingVertical="4dp"
                             android:scrollbars="none"
                             android:scrollHorizontally="false"
                             android:textColor="@color/black"
-                            android:textColorHint="@color/dark_gray"
                             android:textSize="14sp"
-                            android:paddingVertical="4dp"/>
+                            tools:ignore="TouchTargetSizeCheck" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- 4) Target User -->
@@ -264,8 +270,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:boxBackgroundMode="none"
+                        app:hintEnabled="false"
+                        app:hintTextColor="@color/dark_gray"
                         app:prefixText="@string/target_user_prefix"
-                        app:prefixTextColor="@color/black">
+                        app:prefixTextAppearance="@style/PrefixTextStyle">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
@@ -278,7 +286,6 @@
                             android:scrollbars="none"
                             android:scrollHorizontally="false"
                             android:textColor="@color/black"
-                            android:textColorHint="@color/dark_gray"
                             android:textSize="14sp"
                             android:paddingVertical="4dp"/>
                     </com.google.android.material.textfield.TextInputLayout>
@@ -289,8 +296,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:boxBackgroundMode="none"
+                        app:hintEnabled="false"
+                        app:hintTextColor="@color/dark_gray"
                         app:prefixText="@string/key_features_prefix"
-                        app:prefixTextColor="@color/black">
+                        app:prefixTextAppearance="@style/PrefixTextStyle">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
@@ -303,19 +312,19 @@
                             android:scrollbars="none"
                             android:scrollHorizontally="false"
                             android:textColor="@color/black"
-                            android:textColorHint="@color/dark_gray"
                             android:textSize="14sp"
                             android:paddingTop="4dp"
                             android:paddingBottom="16dp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- 5) Key Features -->
+                    <!-- 6) Additional -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilAdditional"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:boxBackgroundMode="none"
-                        app:prefixTextColor="@color/black">
+                        app:hintEnabled="false"
+                        app:hintTextColor="@color/dark_gray"
+                        app:boxBackgroundMode="none">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
@@ -328,7 +337,6 @@
                             android:scrollbars="none"
                             android:scrollHorizontally="false"
                             android:textColor="@color/black"
-                            android:textColorHint="@color/dark_gray"
                             android:textSize="14sp"
                             android:paddingTop="4dp"
                             android:paddingBottom="16dp"/>
@@ -343,10 +351,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/project_periode"
                 android:textColor="@color/blue"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/etProjectDesc" />
@@ -387,7 +395,8 @@
                         android:hint="@string/start_date"
                         android:inputType="date"
                         android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        tools:ignore="DuplicateSpeakableTextCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -415,7 +424,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/start_date"
+                        android:hint="@string/end_date"
                         android:inputType="date"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
@@ -451,7 +460,7 @@
             android:padding="12dp"
             android:text="@string/btn_find_project_manager"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:cornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

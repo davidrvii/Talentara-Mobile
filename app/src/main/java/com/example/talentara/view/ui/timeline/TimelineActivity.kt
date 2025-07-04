@@ -1,7 +1,9 @@
 package com.example.talentara.view.ui.timeline
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
@@ -34,7 +36,9 @@ import com.example.talentara.view.ui.project.add.NewProjectViewModel
 import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
 import com.example.talentara.view.ui.project.detail.ProjectDetailViewModel
 import com.example.talentara.view.utils.FactoryViewModel
+import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -118,7 +122,7 @@ class TimelineActivity : AppCompatActivity() {
 
     private fun updateTimeline() {
         timelineAdapter.setOnItemClickListener { item ->
-            if (projectAccess == "Project Manger") {
+            if (projectAccess == "Project Manager") {
                 setupUpdateTimelineDialog(timelineId = item.timelineId ?: 0)
             } else {
                 Toast.makeText(
@@ -132,7 +136,7 @@ class TimelineActivity : AppCompatActivity() {
 
     private fun setupButtonAction() {
         with(binding) {
-            if (projectAccess == "Project Manger") {
+            if (projectAccess == "Project Manager") {
                 if (projectStatus == "Completed") {
                     cvAddTimeline.visibility = View.GONE
                 } else {
@@ -169,14 +173,30 @@ class TimelineActivity : AppCompatActivity() {
         layoutParams.setMargins(margin, 0, margin, 0)
         cardView.layoutParams = layoutParams
 
+        bindingDialog.tilStartDate.editText?.apply {
+            isFocusable = false
+            isClickable = true
+            setOnClickListener {
+                showDatePicker(this@TimelineActivity, this as TextInputEditText)
+            }
+        }
+
+        bindingDialog.tilEndDate.editText?.apply {
+            isFocusable = false
+            isClickable = true
+            setOnClickListener {
+                showDatePicker(this@TimelineActivity, this as TextInputEditText)
+            }
+        }
+
         bindingDialog.btYes.setOnClickListener {
             dialog.dismiss()
             val projectPhase = bindingDialog.tilProjectPhase.editText?.text.toString()
-            val startDate = bindingDialog.tilStartDate.editText?.text.toString()
-            val endDate = bindingDialog.tilEndDate.editText?.text.toString()
-            if (projectPhase.isNotEmpty() && startDate.isNotEmpty() && endDate.isNotEmpty()) {
+            val startDateStored = (bindingDialog.tilStartDate.editText?.getTag(R.id.dateTag)).toString()
+            val endDateStored = (bindingDialog.tilEndDate.editText?.getTag(R.id.dateTag)).toString()
+            if (projectPhase.isNotEmpty() && startDateStored.isNotEmpty() && endDateStored.isNotEmpty()) {
                 val projectId = intent.getIntExtra(PROJECT_ID, 0)
-                timelineViewModel.addTimeline(projectId, projectPhase, startDate, endDate)
+                timelineViewModel.addTimeline(projectId, projectPhase, startDateStored, endDateStored)
             } else {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             }
@@ -186,6 +206,26 @@ class TimelineActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun showDatePicker(context: Context, targetEditText: TextInputEditText) {
+        val calendar = Calendar.getInstance()
+
+        val datePicker = DatePickerDialog(
+            context,
+            { _, year, month, dayOfMonth ->
+                val dateStored = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth) // for db
+                val dateDisplayed = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year) // for user
+
+                targetEditText.setTag(R.id.dateTag, dateStored)
+                targetEditText.setText(dateDisplayed)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePicker.show()
     }
 
     private fun setupUpdateTimelineDialog(timelineId: Int) {
@@ -198,7 +238,7 @@ class TimelineActivity : AppCompatActivity() {
 
                 is Results.Success -> {
                     showLoading(false)
-                    val timeline = result.data.timelineDetail
+                    val timeline = result.data.timelineDetail?.firstOrNull()
                     bindingUpdateDialog.tilProjectPhase.editText?.setText(timeline?.projectPhase)
                     bindingUpdateDialog.tilStartDate.editText?.setText(timeline?.startDate)
                     bindingUpdateDialog.tilEndDate.editText?.setText(timeline?.endDate)
@@ -235,18 +275,34 @@ class TimelineActivity : AppCompatActivity() {
         layoutParams.setMargins(margin, 0, margin, 0)
         cardView.layoutParams = layoutParams
 
+        bindingUpdateDialog.tilStartDate.editText?.apply {
+            isFocusable = false
+            isClickable = true
+            setOnClickListener {
+                showDatePicker(this@TimelineActivity, this as TextInputEditText)
+            }
+        }
+
+        bindingUpdateDialog.tilEndDate.editText?.apply {
+            isFocusable = false
+            isClickable = true
+            setOnClickListener {
+                showDatePicker(this@TimelineActivity, this as TextInputEditText)
+            }
+        }
+
         bindingUpdateDialog.btYes.setOnClickListener {
             dialog.dismiss()
             val projectPhase = bindingUpdateDialog.tilProjectPhase.editText?.text.toString()
-            val startDate = bindingUpdateDialog.tilStartDate.editText?.text.toString()
-            val endDate = bindingUpdateDialog.tilEndDate.editText?.text.toString()
+            val startDateStored = (bindingDialog.tilStartDate.editText?.getTag(R.id.dateTag)).toString()
+            val endDateStored = (bindingDialog.tilEndDate.editText?.getTag(R.id.dateTag)).toString()
             val evidence = bindingUpdateDialog.tilProjectEvidence.editText?.text.toString()
-            if (projectPhase.isNotEmpty() && startDate.isNotEmpty() && endDate.isNotEmpty()) {
+            if (projectPhase.isNotEmpty() && startDateStored.isNotEmpty() && endDateStored.isNotEmpty()) {
                 timelineViewModel.updateTimeline(
                     timelineId,
                     projectPhase,
-                    startDate,
-                    endDate,
+                    startDateStored,
+                    endDateStored,
                     evidence
                 )
             } else {
@@ -270,7 +326,7 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     Toast.makeText(this, "Timeline updated successfully", Toast.LENGTH_SHORT).show()
-                    timelineViewModel.getProjectTimeline(intent.getIntExtra(PROJECT_ID, 0))
+                    setupProjectTimelineList()
                 }
 
                 is Results.Error -> {
@@ -292,7 +348,7 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     Toast.makeText(this, "Timeline added successfully", Toast.LENGTH_SHORT).show()
-                    timelineViewModel.getProjectTimeline(intent.getIntExtra(PROJECT_ID, 0))
+                    setupProjectTimelineList()
                 }
 
                 is Results.Error -> {
@@ -358,12 +414,12 @@ class TimelineActivity : AppCompatActivity() {
 
         timelineAdapter.setOnManagerApproveClick { item ->
             val id = item.timelineId ?: return@setOnManagerApproveClick
-            timelineViewModel.updateTimelineLeaderApprove(id, (item.leaderApproved == true))
+            timelineViewModel.updateTimelineLeaderApprove(id, (item.leaderApproved == 1))
             updateTimelineLeaderApproveObserver(item.timelineId)
         }
         timelineAdapter.setOnClientApproveClick { item ->
             val id = item.timelineId ?: return@setOnClientApproveClick
-            timelineViewModel.updateTimelineClientApprove(id, (item.clientApproved == true))
+            timelineViewModel.updateTimelineClientApprove(id, (item.clientApproved == 1))
             updateTimelineClientApproveObserver(item.timelineId)
         }
     }
@@ -497,7 +553,7 @@ class TimelineActivity : AppCompatActivity() {
 
                     if (items.isNotEmpty()) {
                         val last = items.last()
-                        if (last.clientApproved == true && last.leaderApproved == true) {
+                        if (last.clientApproved == 1 && last.leaderApproved == 1) {
                             timelineViewModel.getProjectTimeline(intent.getIntExtra(PROJECT_ID, 0))
                             val completedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                                 .format(Date())

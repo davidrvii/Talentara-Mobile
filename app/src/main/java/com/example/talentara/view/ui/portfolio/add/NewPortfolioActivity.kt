@@ -1,6 +1,8 @@
 package com.example.talentara.view.ui.portfolio.add
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -29,6 +31,7 @@ import com.example.talentara.view.ui.profile.edit.EditProfileViewModel
 import com.example.talentara.view.utils.FactoryViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -203,9 +206,26 @@ class NewPortfolioActivity : AppCompatActivity() {
 
     private fun setupButtonAction() {
         with(binding) {
-            btnBack.setOnClickListener {
+            cvBack.setOnClickListener {
                 finish()
             }
+
+            tilStartDate.editText?.apply {
+                isFocusable = false
+                isClickable = true
+                setOnClickListener {
+                    showDatePicker(this@NewPortfolioActivity, this as TextInputEditText)
+                }
+            }
+
+            tilEndDate.editText?.apply {
+                isFocusable = false
+                isClickable = true
+                setOnClickListener {
+                    showDatePicker(this@NewPortfolioActivity, this as TextInputEditText)
+                }
+            }
+
             btnUploadPortfolio.setOnClickListener {
                 val state = intent.getStringExtra(STATE)
                 when (state) {
@@ -328,8 +348,8 @@ class NewPortfolioActivity : AppCompatActivity() {
         val portfolioDesc = binding.tilProjectDescription.editText!!.text.toString().trim()
         val github = binding.tilProjectGithub.editText!!.text.toString().trim()
         val linkedIn = binding.tilProjectLinkedIn.editText!!.text.toString().trim()
-        val startDate = binding.tilStartDate.editText!!.text.toString().trim()
-        val endDate = binding.tilEndDate.editText!!.text.toString().trim()
+        val startDateStored = binding.tilStartDate.editText?.getTag(R.id.dateTag)?.toString()
+        val endDateStored = binding.tilEndDate.editText?.getTag(R.id.dateTag)?.toString()
 
 
         val request = ApiService.AddPortfolioRequest(
@@ -339,8 +359,8 @@ class NewPortfolioActivity : AppCompatActivity() {
             portfolioGithub = github,
             portfolioDesc = portfolioDesc,
             portfolioLabel = "Portfolio",
-            startDate = startDate.toString(),
-            endDate = endDate.toString(),
+            startDate = startDateStored.toString(),
+            endDate = endDateStored.toString(),
             platforms = selectedPlatforms.toList(),
             tools = selectedTools.toList(),
             languages = selectedLanguages.toList(),
@@ -352,6 +372,26 @@ class NewPortfolioActivity : AppCompatActivity() {
             newPortfolioViewModel.addPortfolio(request)
             addPortfolioViewModelObserver()
         }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun showDatePicker(context: Context, targetEditText: TextInputEditText) {
+        val calendar = Calendar.getInstance()
+
+        val datePicker = DatePickerDialog(
+            context,
+            { _, year, month, dayOfMonth ->
+                val dateStored = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth) // for db
+                val dateDisplayed = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year) // for user
+
+                targetEditText.setTag(R.id.dateTag, dateStored)
+                targetEditText.setText(dateDisplayed)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePicker.show()
     }
 
     private fun addPortfolioViewModelObserver() {

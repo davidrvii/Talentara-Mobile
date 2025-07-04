@@ -1,6 +1,7 @@
 package com.example.talentara.view.ui.timeline
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,10 +9,16 @@ import com.example.talentara.R
 import com.example.talentara.data.model.response.timeline.TimelineProjectItem
 import com.example.talentara.databinding.TimelineItemBinding
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Locale
+import org.threeten.bp.LocalDate as LegacyLocalDate
+import org.threeten.bp.format.DateTimeFormatter as LegacyDateTimeFormatter
+import org.threeten.bp.temporal.ChronoUnit as LegacyChronosUnit
 
 class TimelineAdapter(
-    private var listTimeline: List<TimelineProjectItem>
+    private var listTimeline: List<TimelineProjectItem>,
 ): RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
 
     private var accessLevel: String = "NoAccess"
@@ -47,12 +54,75 @@ class TimelineAdapter(
                     item.endDate.toString()
                 )
                 val deadline = formattedDeadline
+
+                //Count Timeline Remaining Days
+                val daysRemaining: Int =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        // API 26+
+                        val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        val today = LocalDate.now()
+                        val end = item.endDate
+                            ?.substring(0, 10)
+                            ?.let { LocalDate.parse(it, fmt) }
+                        end?.let { ChronoUnit.DAYS.between(today, it).toInt() } ?: 0
+                    } else {
+                        // API <26
+                        val fmt = LegacyDateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        val today = LegacyLocalDate.now()
+                        val end = item.endDate
+                            ?.substring(0, 10)
+                            ?.let { LegacyLocalDate.parse(it, fmt) }
+                        end?.let { LegacyChronosUnit.DAYS.between(today, it).toInt() } ?: 0
+                    }
+
+                //Count Timeline Completed Days
+                val completedDays: Int =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        val start = item.startDate
+                            ?.substring(0, 10)
+                            ?.let { LocalDate.parse(it, fmt) }
+                        val completed = item.completedDate
+                            ?.substring(0, 10)
+                            ?.let { LocalDate.parse(it, fmt) }
+                        if (start != null && completed != null) {
+                            ChronoUnit.DAYS.between(start, completed).toInt()
+                        } else 0
+                    } else {
+                        val fmt = LegacyDateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        val start = item.startDate
+                            ?.substring(0, 10)
+                            ?.let { LegacyLocalDate.parse(it, fmt) }
+                        val completed = item.completedDate
+                            ?.substring(0, 10)
+                            ?.let { LegacyLocalDate.parse(it, fmt) }
+                        if (start != null && completed != null) {
+                            LegacyChronosUnit.DAYS.between(start, completed).toInt()
+                        } else 0
+                    }
+
+
                 binding.apply {
                     tvPhase.text = item.projectPhase
                     tvDeadline.text = itemView.context.getString(R.string.phase_deadline, deadline)
-                    tvEvidance.text = itemView.context.getString(R.string.evidence_s, item.evidance)
-                    if (item.clientApproved == true && item.leaderApproved == true) {
+                    if (item.completedDate != null) {
+                        binding.tvRemaining.visibility = ViewGroup.GONE
+                        binding.tvComplete.visibility = ViewGroup.VISIBLE
+                        tvCompleted.text = itemView.context.getString(R.string.completed_in_d_days, completedDays)
+                    } else {
+                        binding.tvRemaining.visibility = ViewGroup.VISIBLE
+                        binding.tvComplete.visibility = ViewGroup.GONE
+                        tvRemaining.text = itemView.context.getString(R.string.remaining_days, daysRemaining)
+                    }
+                    tvEvidance.text = itemView.context.getString(R.string.evidence_s, item.evidance ?: "-")
+                    if (item.clientApproved == 1 && item.leaderApproved == 1) {
                         cvCompleted.visibility = ViewGroup.VISIBLE
+                        cvManagerApproved.visibility = ViewGroup.GONE
+                        cvClientApproved.visibility = ViewGroup.GONE
+                    } else {
+                        cvCompleted.visibility = ViewGroup.GONE
+                        cvManagerApproved.visibility = ViewGroup.VISIBLE
+                        cvClientApproved.visibility = ViewGroup.VISIBLE
                     }
                 }
 
@@ -61,11 +131,11 @@ class TimelineAdapter(
 
                 binding.cvManagerApproved.apply {
                     when (item.clientApproved) {
-                        true -> {
+                        1 -> {
                             binding.cvClientApproved.setCardBackgroundColor(itemView.context.getColor(R.color.blue))
                             binding.cvClientApproved.isEnabled = true
                         }
-                        false -> {
+                        0 -> {
                             binding.cvClientApproved.setCardBackgroundColor(itemView.context.getColor(R.color.dark_gray))
                             isClickable = isManager
                             alpha = if (isManager) 1f else 0.5f
@@ -78,11 +148,11 @@ class TimelineAdapter(
                 }
                 binding.cvClientApproved.apply {
                     when (item.leaderApproved) {
-                        true -> {
+                        1 -> {
                             binding.cvManagerApproved.setCardBackgroundColor(itemView.context.getColor(R.color.blue))
                             binding.cvClientApproved.isEnabled = true
                         }
-                        false -> {
+                        0 -> {
                             binding.cvManagerApproved.setCardBackgroundColor(itemView.context.getColor(R.color.dark_gray))
                             isClickable = isClient
                             alpha = if (isClient) 1f else 0.5f

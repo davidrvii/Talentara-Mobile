@@ -2,7 +2,6 @@ package com.example.talentara.view.ui.profile.talent
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,12 +11,8 @@ import com.example.talentara.data.model.response.portfolio.TalentPortfolioItem
 import com.example.talentara.databinding.PortfolioItemBinding
 import com.example.talentara.view.ui.portfolio.detail.PortfolioDetailActivity
 import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
-import org.threeten.bp.LocalDate as LegacyLocalDate
-import org.threeten.bp.format.DateTimeFormatter as LegacyDateTimeFormatter
-import org.threeten.bp.temporal.ChronoUnit as LegacyChronosUnit
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PortfolioAdapter(
     private var listPortfolio: List<TalentPortfolioItem>,
@@ -33,25 +28,16 @@ class PortfolioAdapter(
                 val firstProduct = item.productTypes?.split("|")?.firstOrNull() ?: "-"
                 val firstPlatform = item.platforms?.split("|")?.firstOrNull() ?: "-"
 
-                //Count Project Worked Days
-                val daysWorked: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    // API 26+
-                    val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                    val start = LocalDate.parse(item.startDate, fmt)
-                    val completed = item.endDate?.let { LocalDate.parse(it, fmt) }
-                    completed?.let { ChronoUnit.DAYS.between(start, it).toInt() } ?: 0
-                } else {
-                    // API <26
-                    val fmt = LegacyDateTimeFormatter.ofPattern("yyyy-MM-dd")
-                    val start = LegacyLocalDate.parse(item.startDate, fmt)
-                    val completed = item.endDate?.let { LegacyLocalDate.parse(it, fmt) }
-                    completed?.let { LegacyChronosUnit.DAYS.between(start, it).toInt() } ?: 0
-                }
+                val formattedDeadline = formatDeadline(item.startDate.toString(),
+                    item.endDate.toString()
+                )
+                val deadline = formattedDeadline
 
                 binding.tvProject.text = item.portfolioName.orEmpty()
-                binding.tvClient.text = item.portfolioLinkedin.orEmpty()
+                binding.tvClient.text = item.clientName.orEmpty()
                 binding.tvProduct.text = itemView.context.getString(R.string.project_product, firstProduct, firstPlatform)
-                binding.tvCompleted.text = itemView.context.getString(R.string.completed_in_d_days, daysWorked)
+                binding.tvCompleted.text = deadline
+
                 if (item.portfolioLabel == "Portfolio") {
                     binding.ivPortfolioBadge.load(R.drawable.ic_portfolio_outside) {
                         placeholder(R.drawable.blank_avatar)
@@ -67,6 +53,32 @@ class PortfolioAdapter(
                     putExtra(PortfolioDetailActivity.PORTFOLIO_ID, item.portfolioId)
                 }
                 itemView.context.startActivity(intent)
+            }
+        }
+
+        private fun formatDeadline(start: String, end: String): String {
+            // Input and output patterns
+            val inputPattern = "yyyy-MM-dd"
+            val outputPattern = "dd MMM yyyy"
+            val locale = Locale.getDefault()
+
+            return try {
+                val sdfIn = SimpleDateFormat(inputPattern, Locale.US)
+                val sdfOut = SimpleDateFormat(outputPattern, locale)
+
+                val sDate = sdfIn.parse(start)
+                val eDate = sdfIn.parse(end)
+
+                if (sDate != null && eDate != null) {
+                    "${sdfOut.format(sDate)} - ${sdfOut.format(eDate)}"
+                } else {
+                    // fallback to raw strings
+                    "$start - $end"
+                }
+            } catch (e: Exception) {
+                // If parsing fails, show raw
+                e.printStackTrace()
+                "$start - $end"
             }
         }
     }

@@ -1,6 +1,8 @@
 package com.example.talentara.view.ui.project.finalize
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
@@ -32,7 +34,7 @@ import com.example.talentara.view.ui.project.detail.ProjectDetailViewModel
 import com.example.talentara.view.utils.FactoryViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -73,8 +75,25 @@ class ProjectFinalizeActivity : AppCompatActivity() {
 
         textFieldWatcher()
         setupObservers()
+
+        binding.tilStartDate.editText?.apply {
+            isFocusable = false
+            isClickable = true
+            setOnClickListener {
+                showDatePicker(this@ProjectFinalizeActivity, this as TextInputEditText)
+            }
+        }
+
+        binding.tilEndDate.editText?.apply {
+            isFocusable = false
+            isClickable = true
+            setOnClickListener {
+                showDatePicker(this@ProjectFinalizeActivity, this as TextInputEditText)
+            }
+        }
+
         binding.btnFinalizeProject.setOnClickListener { finalizeProject() }
-        binding.btnBack.setOnClickListener { finish() }
+        binding.cvBack.setOnClickListener { finish() }
     }
 
     private fun setupObservers() {
@@ -264,13 +283,8 @@ class ProjectFinalizeActivity : AppCompatActivity() {
     }
 
     private fun finalizeProject() {
-        setupDateField(binding.tilStartDate) { selected ->
-            binding.tilStartDate.editText?.setText(selected)
-        }
-
-        setupDateField(binding.tilEndDate) { selected ->
-            binding.tilEndDate.editText?.setText(selected)
-        }
+        val startDateStored = binding.tilStartDate.editText?.getTag(R.id.dateTag)?.toString()
+        val endDateStored = binding.tilEndDate.editText?.getTag(R.id.dateTag)?.toString()
         // build request
         val projectId = intent.getIntExtra(PROJECT_ID, 0)
         val roleList = mutableListOf<ProjectRole>()
@@ -291,8 +305,8 @@ class ProjectFinalizeActivity : AppCompatActivity() {
             clientName = binding.tilClientName.editText!!.text.toString().trim(),
             projectName = binding.tilProjectName.editText!!.text.toString().trim(),
             projectDesc = binding.tilProjectDescription.editText!!.text.toString().trim(),
-            startDate = binding.tilStartDate.editText!!.text.toString().trim(),
-            endDate = binding.tilEndDate.editText!!.text.toString().trim(),
+            startDate = startDateStored.toString(),
+            endDate = endDateStored.toString(),
             platform = selectedPlatforms.toList(),
             productType = selectedProductTypes.toList(),
             role = roleList,
@@ -382,30 +396,24 @@ class ProjectFinalizeActivity : AppCompatActivity() {
         binding.btnFinalizeProject.isEnabled = filled
     }
 
-    private fun setupDateField(
-        textInputLayout: TextInputLayout,
-        onDateChanged: (selected: String) -> Unit,
-    ) {
-        // get EditText
-        val editText = textInputLayout.editText ?: return
+    @SuppressLint("DefaultLocale")
+    private fun showDatePicker(context: Context, targetEditText: TextInputEditText) {
+        val calendar = Calendar.getInstance()
 
-        // non-focus to remove keyboard
-        editText.isFocusable = false
-        editText.isClickable = true
+        val datePicker = DatePickerDialog(
+            context,
+            { _, year, month, dayOfMonth ->
+                val dateStored = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth) // for db
+                val dateDisplayed = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year) // for user
 
-        editText.setOnClickListener {
-            val now = Calendar.getInstance()
-            DatePickerDialog(
-                this,
-                { _, year, month, dayOfMonth ->
-                    val formatted = "%02d/%02d/%04d".format(dayOfMonth, month + 1, year)
-                    onDateChanged(formatted)
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            ).show()
-        }
+                targetEditText.setTag(R.id.dateTag, dateStored)
+                targetEditText.setText(dateDisplayed)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePicker.show()
     }
 
     private fun showLoading(isLoading: Boolean) {

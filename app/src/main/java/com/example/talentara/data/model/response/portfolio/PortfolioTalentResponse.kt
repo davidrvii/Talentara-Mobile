@@ -40,6 +40,9 @@ data class TalentPortfolioItem(
 	@field:SerializedName("portfolio_name")
 	val portfolioName: String? = null,
 
+	@field:SerializedName("client_name")
+	val clientName: String? = null,
+
 	@field:SerializedName("portfolio_desc")
 	val portfolioDesc: String? = null,
 

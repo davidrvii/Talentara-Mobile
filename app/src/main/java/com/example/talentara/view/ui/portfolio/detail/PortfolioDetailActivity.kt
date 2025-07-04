@@ -20,7 +20,12 @@ import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.ActivityPortfolioDetailBinding
 import com.example.talentara.databinding.CustomDeletePortfolioDialogBinding
 import com.example.talentara.view.utils.FactoryViewModel
-import com.google.android.flexbox.*
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PortfolioDetailActivity : AppCompatActivity() {
 
@@ -55,10 +60,10 @@ class PortfolioDetailActivity : AppCompatActivity() {
 
     private fun setupActionButton() {
         with(binding) {
-            btnBack.setOnClickListener {
+            cvBack.setOnClickListener {
                 finish()
             }
-            btnDeletePortfolio.setOnClickListener {
+            cvDeletePortfolio.setOnClickListener {
                 showCustomDeleteDialog()
             }
         }
@@ -180,18 +185,45 @@ class PortfolioDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun formatDeadline(start: String, end: String): String {
+        // Input and output patterns
+        val inputPattern = "yyyy-MM-dd"
+        val outputPattern = "dd MMM yyyy"
+        val locale = Locale.getDefault()
+
+        return try {
+            val sdfIn = SimpleDateFormat(inputPattern, Locale.US)
+            val sdfOut = SimpleDateFormat(outputPattern, locale)
+
+            val sDate = sdfIn.parse(start)
+            val eDate = sdfIn.parse(end)
+
+            if (sDate != null && eDate != null) {
+                "${sdfOut.format(sDate)} - ${sdfOut.format(eDate)}"
+            } else {
+                // fallback to raw strings
+                "$start - $end"
+            }
+        } catch (e: Exception) {
+            // If parsing fails, show raw
+            e.printStackTrace()
+            "$start - $end"
+        }
+    }
+
     private fun bindPortfolio(portfolio: PortfolioDetailItem) {
+        val formattedDeadline = formatDeadline(portfolio.startDate.toString(),
+            portfolio.endDate.toString()
+        )
+        val deadline = formattedDeadline
+
         binding.apply {
             tvStatus.text = portfolio.portfolioLabel
             tvProjectClient.text = portfolio.clientName
             tvProjectName.text = portfolio.portfolioName
             tvProjectDescription.text = portfolio.portfolioDesc
             tvProjectGithub.text = portfolio.portfolioGithub
-            tvProjectPeriode.text = getString(
-                R.string.periode,
-                portfolio.startDate,
-                portfolio.endDate
-            )
+            tvProjectPeriode.text = deadline
         }
         binding.apply {
             val rawFeatures = portfolio.features ?: ""

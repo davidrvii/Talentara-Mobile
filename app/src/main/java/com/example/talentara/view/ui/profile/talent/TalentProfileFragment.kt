@@ -1,5 +1,6 @@
 package com.example.talentara.view.ui.profile.talent
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -36,7 +37,7 @@ class TalentProfileFragment : Fragment() {
     private val toolsAdapter       = ItemsAdapter(emptyList())
     private val productTypeAdapter = ItemsAdapter(emptyList())
     private val languageAdapter    = ItemsAdapter(emptyList())
-    private val portfolioAdapter = PortfolioAdapter(emptyList())
+    private lateinit var portfolioAdapter: PortfolioAdapter
 
     private var talentAvailability: Int? = 0
 
@@ -55,28 +56,42 @@ class TalentProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initRecyclerViews()
         getTalentDetail()
-        setupActionButton()
         getTalentPortfolio()
+        setupActionButton()
     }
 
     private fun getTalentPortfolio() {
         talentProfileViewModel.getTalentPortfolio()
-        talentProfileViewModel.getTalentPortfolio.observe(viewLifecycleOwner) { res ->
-            when (res) {
+        talentProfileViewModel.getTalentPortfolio.observe(viewLifecycleOwner) { result ->
+            when (result) {
                 is Results.Loading -> { }
                 is Results.Success -> {
-                    val items = res.data.talentPortfolio
-                        .orEmpty()
-                        .mapNotNull { it }
-                    portfolioAdapter.updateData(items)
+                    val portfolios = result.data.talentPortfolio?.filterNotNull() ?: emptyList()
+                    if (portfolios.isNotEmpty()) {
+                        portfolioAdapter.updateData(portfolios)
+                        binding.cvNoPortfolio.visibility = View.GONE
+                    } else {
+                        binding.cvNoPortfolio.visibility = View.VISIBLE
+                    }
                 }
                 is Results.Error   -> {
                     Toast.makeText(requireContext(),
                         getString(R.string.failed_to_load_portfolio), Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+        setupPortfolioRecyclerView()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setupPortfolioRecyclerView() {
+        Log.d("TalentProfileFragment", "Setup Portfolio RecyclerView")
+        portfolioAdapter = PortfolioAdapter(emptyList())
+        binding.rvPortfolio.apply {
+            adapter = portfolioAdapter
+            layoutManager = LinearLayoutManager(context)
+            isNestedScrollingEnabled = false
         }
     }
 
@@ -108,6 +123,7 @@ class TalentProfileFragment : Fragment() {
                 }
             }
         }
+        initRecyclerViews()
     }
 
     private fun bindProfile(talent: TalentDetailItem) {
@@ -168,17 +184,6 @@ class TalentProfileFragment : Fragment() {
         binding.rvTools.setupFlex(toolsAdapter)
         binding.rvProductType.setupFlex(productTypeAdapter)
         binding.rvLanguage.setupFlex(languageAdapter)
-
-        if (portfolioAdapter.itemCount == 0) {
-            binding.cvNoPortfolio.visibility = View.VISIBLE
-        } else {
-            binding.rvPortfolio.apply {
-                layoutManager = LinearLayoutManager(requireContext(),
-                    RecyclerView.VERTICAL,
-                    false)
-                adapter = portfolioAdapter
-            }
-        }
     }
 
     private fun setupActionButton() {

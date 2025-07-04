@@ -1,6 +1,8 @@
 package com.example.talentara.view.ui.project.add
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -18,6 +20,7 @@ import com.example.talentara.databinding.ActivityNewProjectBinding
 import com.example.talentara.view.ui.notifications.NotificationsViewModel
 import com.example.talentara.view.ui.waiting.WaitingPageActivity
 import com.example.talentara.view.utils.FactoryViewModel
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.util.Calendar
 
@@ -48,7 +51,7 @@ class NewProjectActivity : AppCompatActivity() {
 
     private fun setupActionButton() {
         with(binding) {
-            btnBack.setOnClickListener {
+            cvBack.setOnClickListener {
                 finish()
             }
             btnFindProjectManager.setOnClickListener {
@@ -62,6 +65,23 @@ class NewProjectActivity : AppCompatActivity() {
 
                 addProject()
             }
+
+            tilStartDate.editText?.apply {
+                isFocusable = false
+                isClickable = true
+                setOnClickListener {
+                    showDatePicker(this@NewProjectActivity, this as TextInputEditText)
+                }
+            }
+
+            tilEndDate.editText?.apply {
+                isFocusable = false
+                isClickable = true
+                setOnClickListener {
+                    showDatePicker(this@NewProjectActivity, this as TextInputEditText)
+                }
+            }
+
         }
     }
 
@@ -104,17 +124,38 @@ class NewProjectActivity : AppCompatActivity() {
 
         val clientName = binding.tilClientName.editText!!.text.toString()
         val projectName = binding.tilProjectName.editText!!.text.toString()
-        val startDate = binding.tilStartDate.editText!!.text.toString()
-        val endDate = binding.tilEndDate.editText!!.text.toString()
+        val startDateStored = binding.tilStartDate.editText?.getTag(R.id.dateTag)?.toString()
+        val endDateStored = binding.tilEndDate.editText?.getTag(R.id.dateTag)?.toString()
+
 
         newProjectViewModel.addProject(
             clientName,
             projectName,
             projectDesc,
-            startDate,
-            endDate
+            startDateStored.toString(),
+            endDateStored.toString()
         )
         addProjectObserver()
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun showDatePicker(context: Context, targetEditText: TextInputEditText) {
+        val calendar = Calendar.getInstance()
+
+        val datePicker = DatePickerDialog(
+            context,
+            { _, year, month, dayOfMonth ->
+                val dateStored = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth) // for db
+                val dateDisplayed = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year) // for user
+
+                targetEditText.setTag(R.id.dateTag, dateStored)
+                targetEditText.setText(dateDisplayed)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePicker.show()
     }
 
     private fun addProjectObserver() {

@@ -181,7 +181,7 @@ class Repository private constructor(
     ): LiveData<Results<NewNotificationResponse>> = liveData {
         emit(Results.Loading)
         try {
-            val response = apiService.addNotification(token, userId, title, desc, type, clickAction)
+            val response = apiService.addNotification("Bearer $token", userId, title, desc, type, clickAction)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
@@ -238,7 +238,7 @@ class Repository private constructor(
         emit(Results.Loading)
         try {
             val response =
-                apiService.addTimeline(token, projectId, projectPhase, startDate, endDate)
+                apiService.addTimeline("Bearer $token", projectId, projectPhase, startDate, endDate)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))

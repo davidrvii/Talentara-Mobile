@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/completed_in_d_days"
+            android:text="@string/periode"
             android:textColor="@color/blue"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@id/tvProduct"

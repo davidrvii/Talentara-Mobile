@@ -24,9 +24,7 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
-import kotlin.jvm.java
 
 class ProjectDetailActivity : AppCompatActivity() {
 
@@ -139,7 +137,38 @@ class ProjectDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun formatDeadline(start: String, end: String): String {
+        // Input and output patterns
+        val inputPattern = "yyyy-MM-dd"
+        val outputPattern = "dd MMM yyyy"
+        val locale = Locale.getDefault()
+
+        return try {
+            val sdfIn = SimpleDateFormat(inputPattern, Locale.US)
+            val sdfOut = SimpleDateFormat(outputPattern, locale)
+
+            val sDate = sdfIn.parse(start)
+            val eDate = sdfIn.parse(end)
+
+            if (sDate != null && eDate != null) {
+                "${sdfOut.format(sDate)} - ${sdfOut.format(eDate)}"
+            } else {
+                // fallback to raw strings
+                "$start - $end"
+            }
+        } catch (e: Exception) {
+            // If parsing fails, show raw
+            e.printStackTrace()
+            "$start - $end"
+        }
+    }
+
     private fun bindProject(project: ProjectDetailItem) {
+        val formattedDeadline = formatDeadline(project.startDate.toString(),
+            project.endDate.toString()
+        )
+        val deadline = formattedDeadline
+
         binding.apply {
             tvStatus.text = project.statusName.toString()
             tvEmail.text = project.clientEmail.toString()
@@ -148,11 +177,7 @@ class ProjectDetailActivity : AppCompatActivity() {
             tvProjectDescription.text = project.projectDesc
             tvProjectGithub.text = project.projectGithub ?: "-"
             tvProjectMeetLink.text = project.meetLink ?: "-"
-            tvProjectPeriode.text = getString(
-                R.string.periode,
-                formatDate(project.startDate),
-                formatDate(project.endDate)
-            )
+            tvProjectPeriode.text = deadline
         }
         binding.apply {
             val rawFeatures = project.features ?: "-"
@@ -201,18 +226,6 @@ class ProjectDetailActivity : AppCompatActivity() {
             talentAdapter.updateData(list)
         }
     }
-
-    private fun formatDate(dateString: String?): String {
-        return try {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-            val outputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-            val date = inputFormat.parse(dateString ?: "")
-            outputFormat.format(date ?: Date())
-        } catch (e: Exception) {
-            "-"
-        }
-    }
-
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE

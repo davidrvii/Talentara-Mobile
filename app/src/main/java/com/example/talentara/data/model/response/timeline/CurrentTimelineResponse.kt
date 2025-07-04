@@ -29,7 +29,7 @@ data class CurrentTimelineItem(
 	val projectId: Int? = null,
 
 	@field:SerializedName("leader_approved")
-	val leaderApproved: Boolean? = null,
+	val leaderApproved: Int? = null,
 
 	@field:SerializedName("project_phase")
 	val projectPhase: String? = null,
@@ -41,7 +41,7 @@ data class CurrentTimelineItem(
 	val timelineId: Int? = null,
 
 	@field:SerializedName("client_approved")
-	val clientApproved: Boolean? = null,
+	val clientApproved: Int? = null,
 
 	@field:SerializedName("start_date")
 	val startDate: String? = null,

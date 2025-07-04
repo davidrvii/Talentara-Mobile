@@ -56,7 +56,7 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="logout">Logout</string>
     <string name="availibility_true">Ready to join a project!</string>
-    <string name="project_count">12</string>
+    <string name="project_count">0</string>
     <string name="talent_rating">0.0</string>
     <string name="project">Project</string>
     <string name="experiences">Experiences</string>
@@ -175,5 +175,7 @@
     <string name="there_is_no_project">There is no project</string>
     <string name="there_is_no_timeline">There is no timeline</string>
     <string name="there_is_no_portfolio">There is no portfolio</string>
+    <string name="end_date">End Date</string>
+    <string name="add_portfolio">Add Portfolio +</string>
 
 </resources>

@@ -17,9 +17,11 @@ import com.example.talentara.databinding.FragmentHomeBinding
 import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
 import com.example.talentara.view.ui.timeline.TimelineActivity
 import com.example.talentara.view.utils.FactoryViewModel
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.Locale
 import org.threeten.bp.LocalDate as LegacyLocalDate
 import org.threeten.bp.format.DateTimeFormatter as LegacyDateTimeFormatter
 import org.threeten.bp.temporal.ChronoUnit as LegacyChronosUnit
@@ -156,6 +158,32 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun formatDeadline(start: String, end: String): String {
+        // Input and output patterns
+        val inputPattern = "yyyy-MM-dd"
+        val outputPattern = "dd MMM yyyy"
+        val locale = Locale.getDefault()
+
+        return try {
+            val sdfIn = SimpleDateFormat(inputPattern, Locale.US)
+            val sdfOut = SimpleDateFormat(outputPattern, locale)
+
+            val sDate = sdfIn.parse(start)
+            val eDate = sdfIn.parse(end)
+
+            if (sDate != null && eDate != null) {
+                "${sdfOut.format(sDate)} - ${sdfOut.format(eDate)}"
+            } else {
+                // fallback to raw strings
+                "$start - $end"
+            }
+        } catch (e: Exception) {
+            // If parsing fails, show raw
+            e.printStackTrace()
+            "$start - $end"
+        }
+    }
+
     private fun getCurrentTimeline(projectId: Int) {
         if (projectId != 0) {
             homeViewmodel.getCurrentTimeline(projectId)
@@ -171,48 +199,49 @@ class HomeFragment : Fragment() {
                     is Results.Success -> {
                         showLoading(false)
                         val currentTimeline = result.data.currentTimeline?.firstOrNull()
+                        Log.d("HomeFragment", "Current Timeline: $currentTimeline")
 
                         if (currentTimeline == null) {
-                            binding.cvCurrentTimeline.visibility = View.GONE
+                            binding.Timeline.visibility = View.GONE
                             binding.cvNoCurrentTimelineYesProject.visibility = View.VISIBLE
                             binding.cvNoCurrentTimelineNoProject.visibility = View.GONE
                         } else {
-                            binding.cvCurrentTimeline.visibility = View.VISIBLE
+                            binding.Timeline.visibility = View.VISIBLE
                             binding.cvNoCurrentTimelineYesProject.visibility = View.GONE
                             binding.cvNoCurrentTimelineNoProject.visibility = View.GONE
 
-                            //Count Timeline Worked Days
-                            val daysWorked: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                // API 26+
-                                val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                                val start = LocalDate.parse(currentTimeline.startDate, fmt)
-                                val completed =
-                                    currentTimeline.completedDate
+                            val formattedDeadline = formatDeadline(currentTimeline.startDate.toString(),
+                                currentTimeline.endDate.toString()
+                            )
+                            val deadline = formattedDeadline
+
+                            //Count Timeline Remaining Days
+                            val daysRemaining: Int =
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    // API 26+
+                                    val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                    val today = LocalDate.now()
+                                    val end = currentTimeline.endDate
                                         ?.substring(0, 10)
                                         ?.let { LocalDate.parse(it, fmt) }
-                                completed?.let { ChronoUnit.DAYS.between(start, it).toInt() } ?: 0
-                            } else {
-                                // API <26
-                                val fmt = LegacyDateTimeFormatter.ofPattern("yyyy-MM-dd")
-                                val start = LegacyLocalDate.parse(currentTimeline.startDate, fmt)
-                                val completed =
-                                    currentTimeline.completedDate
+                                    end?.let { ChronoUnit.DAYS.between(today, it).toInt() } ?: 0
+                                } else {
+                                    // API <26
+                                    val fmt = LegacyDateTimeFormatter.ofPattern("yyyy-MM-dd")
+                                    val today = LegacyLocalDate.now()
+                                    val end = currentTimeline.endDate
                                         ?.substring(0, 10)
                                         ?.let { LegacyLocalDate.parse(it, fmt) }
-                                completed?.let { LegacyChronosUnit.DAYS.between(start, it).toInt() } ?: 0
-                            }
+                                    end?.let { LegacyChronosUnit.DAYS.between(today, it).toInt() } ?: 0
+                                }
 
                             binding.tvPhase.text = currentTimeline.projectPhase
                             binding.tvEvidence.text = currentTimeline.evidance
-                            binding.tvDeadline.text = currentTimeline.endDate
-                            if (currentTimeline.completedDate != null) {
-                                binding.tvComplete.text =
-                                    getString(R.string.completed_in_d_days, daysWorked)
-                            } else {
-                                binding.tvComplete.text = getString(R.string.project_is_on_progress)
-                            }
+                            binding.tvDeadline.text = getString(R.string.phase_deadline, deadline)
+                            binding.tvComplete.text = getString(R.string.remaining_days, daysRemaining)
+                            binding.tvEvidence.text = getString(R.string.evidence_s, currentTimeline.evidance ?: "-")
 
-                            binding.cvCurrentTimeline.setOnClickListener {
+                            binding.Timeline.setOnClickListener {
                                 val intent = Intent(context, TimelineActivity::class.java).apply {
                                     putExtra(TimelineActivity.PROJECT_ID, projectId)
                                 }

@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="@string/project_name"
             android:textColor="@color/blue"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -38,7 +38,7 @@
             android:layout_marginTop="4dp"
             android:text="@string/client_name"
             android:textColor="@color/blue"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@id/tvProject"
             app:layout_constraintTop_toBottomOf="@id/tvProject" />
 
@@ -50,7 +50,7 @@
             android:layout_marginTop="4dp"
             android:text="@string/project_product"
             android:textColor="@color/blue"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@id/tvClient"
             app:layout_constraintTop_toBottomOf="@id/tvClient" />
 
@@ -62,7 +62,7 @@
             android:layout_marginTop="4dp"
             android:text="@string/completed_in_d_days"
             android:textColor="@color/blue"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@id/tvProduct"
             app:layout_constraintTop_toBottomOf="@id/tvProduct" />
 
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:text="@string/project_status"
             android:textColor="@color/blue"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

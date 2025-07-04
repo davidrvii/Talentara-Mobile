@@ -82,7 +82,7 @@ class HomeFragment : Fragment() {
             when (result) {
                 is Results.Loading -> {
                     binding.cvCurrentProject.visibility = View.GONE
-                    binding.cvNoCurrentProject.visibility = View.VISIBLE
+                    binding.cvNoCurrentProject.visibility = View.GONE
                     showLoading(true)
                 }
 
@@ -164,7 +164,7 @@ class HomeFragment : Fragment() {
                     is Results.Loading -> {
                         binding.Timeline.visibility = View.GONE
                         binding.cvNoCurrentTimelineYesProject.visibility = View.GONE
-                        binding.cvNoCurrentTimelineNoProject.visibility = View.VISIBLE
+                        binding.cvNoCurrentTimelineNoProject.visibility = View.GONE
                         showLoading(true)
                     }
 

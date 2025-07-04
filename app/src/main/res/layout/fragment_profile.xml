@@ -39,6 +39,7 @@
                 android:text="@string/username"
                 android:textColor="@color/white"
                 android:textStyle="bold"
+                android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@id/ivUserImage"
                 app:layout_constraintTop_toTopOf="@id/ivUserImage" />
 
@@ -55,10 +56,11 @@
 
             <ImageView
                 android:id="@+id/btnTalentApply"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
+                android:visibility="gone"
                 android:background="@drawable/ic_talent_apply"
                 android:contentDescription="@string/edit_profile_desc"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -67,8 +69,8 @@
 
             <ImageView
                 android:id="@+id/ivLinkedin"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/ic_linkedin"
                 app:layout_constraintStart_toStartOf="@id/tvUsername"
@@ -81,6 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
+                android:textSize="12sp"
                 android:text="@string/user_linkedin"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@id/ivLinkedin"
@@ -89,8 +92,8 @@
 
             <ImageView
                 android:id="@+id/ivGithub"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/ic_github"
                 app:layout_constraintStart_toStartOf="@id/ivLinkedin"
@@ -105,14 +108,15 @@
                 android:layout_marginStart="12dp"
                 android:text="@string/user_github"
                 android:textColor="@color/white"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@id/ivGithub"
                 app:layout_constraintStart_toEndOf="@id/ivGithub"
                 app:layout_constraintTop_toTopOf="@id/ivGithub" />
 
             <ImageView
                 android:id="@+id/ivGmail"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/ic_gmail"
                 app:layout_constraintStart_toStartOf="@id/ivGithub"
@@ -127,6 +131,7 @@
                 android:layout_marginStart="12dp"
                 android:text="@string/user_gmail"
                 android:textColor="@color/white"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@id/ivGmail"
                 app:layout_constraintStart_toEndOf="@id/ivGmail"
                 app:layout_constraintTop_toTopOf="@id/ivGmail" />

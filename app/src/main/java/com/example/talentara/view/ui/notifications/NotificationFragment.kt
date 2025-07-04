@@ -90,7 +90,7 @@ class NotificationFragment : Fragment() {
             when (result) {
                 is Results.Loading -> {
                     showLoading(true)
-                    binding.cvNoNotification.visibility = View.VISIBLE
+                    binding.cvNoNotification.visibility = View.GONE
                 }
 
                 is Results.Success -> {

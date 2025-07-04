@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/personal_detail"
                     android:textColor="@color/blue"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -47,11 +47,11 @@
                     style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/profile"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/tvPersonalDetail"
                     app:layout_constraintTop_toBottomOf="@id/tvPersonalDetail" />
 
@@ -72,7 +72,7 @@
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/profile"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/dividerPersonalDetail"
                     app:layout_constraintTop_toBottomOf="@id/dividerPersonalDetail" />
 
@@ -93,7 +93,7 @@
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/profile"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/dividerPersonalDetail1"
                     app:layout_constraintTop_toBottomOf="@id/dividerPersonalDetail1" />
 
@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/account_settings"
                     android:textColor="@color/blue"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -135,11 +135,11 @@
                     style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/account_settings"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/tvAccountSetting"
                     app:layout_constraintTop_toBottomOf="@id/tvAccountSetting" />
 
@@ -160,7 +160,7 @@
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/account_settings"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/dividerAccountSettings"
                     app:layout_constraintTop_toBottomOf="@id/dividerAccountSettings" />
 
@@ -181,7 +181,7 @@
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/account_settings"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/dividerAccountSettings1"
                     app:layout_constraintTop_toBottomOf="@id/dividerAccountSettings1" />
 
@@ -213,7 +213,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/security"
                     android:textColor="@color/blue"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -223,11 +223,11 @@
                     style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/security"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/tvSecurity"
                     app:layout_constraintTop_toBottomOf="@id/tvSecurity" />
 
@@ -248,7 +248,7 @@
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/security"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/dividerSecurity"
                     app:layout_constraintTop_toBottomOf="@id/dividerSecurity" />
 
@@ -269,7 +269,7 @@
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/security"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/dividerSecurity1"
                     app:layout_constraintTop_toBottomOf="@id/dividerSecurity1" />
 
@@ -301,7 +301,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/application_settings"
                     android:textColor="@color/blue"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -311,11 +311,11 @@
                     style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="4dp"
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/application_settings"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/tvApplicationSettings"
                     app:layout_constraintTop_toBottomOf="@id/tvApplicationSettings" />
 
@@ -336,7 +336,7 @@
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/application_settings"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/dividerApplicationSettings"
                     app:layout_constraintTop_toBottomOf="@id/dividerApplicationSettings" />
 
@@ -357,7 +357,7 @@
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/application_settings"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/dividerApplicationSettings1"
                     app:layout_constraintTop_toBottomOf="@id/dividerApplicationSettings1" />
 
@@ -372,9 +372,9 @@
             android:layout_marginTop="16dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="24dp"
-            app:layout_constraintEnd_toEndOf="@id/cvSecurity"
-            app:layout_constraintStart_toStartOf="@id/cvSecurity"
-            app:layout_constraintTop_toBottomOf="@id/cvSecurity">
+            app:layout_constraintEnd_toEndOf="@id/cvApplicationSettings"
+            app:layout_constraintStart_toStartOf="@id/cvApplicationSettings"
+            app:layout_constraintTop_toBottomOf="@id/cvApplicationSettings">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -389,7 +389,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/about_us"
                     android:textColor="@color/blue"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -399,11 +399,11 @@
                     style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/contact_us"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/tvAboutUs"
                     app:layout_constraintTop_toBottomOf="@id/tvAboutUs" />
 
@@ -424,7 +424,7 @@
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/terms_and_conditions"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/dividerAboutUs"
                     app:layout_constraintTop_toBottomOf="@id/dividerAboutUs" />
 
@@ -445,7 +445,7 @@
                     android:paddingHorizontal="24dp"
                     android:paddingVertical="8dp"
                     android:text="@string/privacy_policy"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/dividerAboutUs1"
                     app:layout_constraintTop_toBottomOf="@id/dividerAboutUs1" />
 
@@ -490,7 +490,7 @@
                     android:layout_marginStart="20dp"
                     android:text="@string/logout"
                     android:textColor="#FF0000"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/ivLogout"
                     app:layout_constraintStart_toEndOf="@id/ivLogout"

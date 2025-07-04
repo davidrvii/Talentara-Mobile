@@ -76,6 +76,9 @@ class HistoryFragment : Fragment() {
                         binding.cvOngoingProject.visibility =  View.VISIBLE
                         binding.historyDivider.visibility =  View.VISIBLE
                         binding.cvNoProject.visibility = View.GONE
+                        binding.currentProject.visibility = View.VISIBLE
+                        binding.cvOngoingProject.visibility = View.VISIBLE
+                        binding.historyDivider.visibility = View.VISIBLE
 
                         //Get First Item of Product Type and Platform
                         val firstProduct =
@@ -152,7 +155,7 @@ class HistoryFragment : Fragment() {
             when (result) {
                 is Results.Loading -> {
                     showLoading(true)
-                    binding.cvNoProject.visibility = View.VISIBLE
+                    binding.cvNoProject.visibility = View.GONE
                 }
 
                 is Results.Success -> {

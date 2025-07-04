@@ -10,17 +10,18 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.example.talentara.R
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.FragmentProfileBinding
 import com.example.talentara.view.ui.portfolio.add.NewPortfolioActivity
+import com.example.talentara.view.ui.profile.edit.EditProfileActivity
 import com.example.talentara.view.ui.profile.talent.TalentProfileFragment
 import com.example.talentara.view.ui.profile.user.UserProfileFragment
 import com.example.talentara.view.ui.talent.apply.TalentApplyActivity
 import com.example.talentara.view.utils.FactoryViewModel
 import com.google.android.material.tabs.TabLayoutMediator
-import androidx.viewpager2.widget.ViewPager2
 
 class ProfileFragment : Fragment() {
 
@@ -43,6 +44,11 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getUserDetail()
+
+        binding.ivEditProfile.setOnClickListener {
+            val intent = Intent(requireContext(), EditProfileActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun getUserDetail() {
@@ -65,6 +71,7 @@ class ProfileFragment : Fragment() {
                         error(R.drawable.blank_avatar)
                     }
                     if (user?.talentAccess == 0) {
+                        binding.btnTalentApply.visibility = View.VISIBLE
                         binding.btnTalentApply.load(R.drawable.ic_talent_apply) {
                             placeholder(R.drawable.blank_avatar)
                             error(R.drawable.blank_avatar)
@@ -76,9 +83,24 @@ class ProfileFragment : Fragment() {
                             startActivity(intent)
                         }
                     } else if (user?.talentAccess == 1) {
-                        binding.btnTalentApply.load(R.drawable.ic_project_manager_apply) {
-                            placeholder(R.drawable.blank_avatar)
-                            error(R.drawable.blank_avatar)
+                        viewModel.getTalentDetail()
+                        viewModel.getTalentDetail.observe(viewLifecycleOwner) { result ->
+                            when (result) {
+                                is Results.Loading -> showLoading(true)
+                                is Results.Success -> {
+                                    showLoading(false)
+                                    val talent = result.data.talentDetail?.firstOrNull()
+                                    if (talent?.isOnProject == 1) {
+                                        binding.btnTalentApply.load(R.drawable.ic_project_manager_apply) {
+                                            placeholder(R.drawable.blank_avatar)
+                                            error(R.drawable.blank_avatar)
+                                        }
+                                    } else {
+                                        binding.btnTalentApply.visibility = View.GONE
+                                    }
+                                }
+                                is Results.Error -> showLoading(false)
+                            }
                         }
                     } else {
                         binding.btnTalentApply.visibility = View.GONE
@@ -126,12 +148,17 @@ class ProfileFragment : Fragment() {
 
         // Disabled horizontal swipe gesture if no access
         if (!hasTalentAccess) {
-            binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            binding.viewPager.registerOnPageChangeCallback(object :
+                ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     if (position == 1) {
                         binding.viewPager.currentItem = 0
-                        Toast.makeText(binding.root.context, "You don't have access to Talent Profile", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            binding.root.context,
+                            "You don't have access to Talent Profile",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             })

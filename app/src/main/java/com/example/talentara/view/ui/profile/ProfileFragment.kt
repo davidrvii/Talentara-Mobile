@@ -17,6 +17,7 @@ import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.FragmentProfileBinding
 import com.example.talentara.view.ui.portfolio.add.NewPortfolioActivity
 import com.example.talentara.view.ui.profile.edit.EditProfileActivity
+import com.example.talentara.view.ui.profile.edit.EditProfileViewModel
 import com.example.talentara.view.ui.profile.talent.TalentProfileFragment
 import com.example.talentara.view.ui.profile.user.UserProfileFragment
 import com.example.talentara.view.ui.talent.apply.TalentApplyActivity
@@ -26,6 +27,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 class ProfileFragment : Fragment() {
 
     private val viewModel: ProfileViewModel by viewModels {
+        FactoryViewModel.getInstance(requireActivity())
+    }
+    private val editProfileViewModel: EditProfileViewModel by viewModels {
         FactoryViewModel.getInstance(requireActivity())
     }
     private var _binding: FragmentProfileBinding? = null
@@ -44,11 +48,12 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getUserDetail()
-
+        updateProfile()
         binding.ivEditProfile.setOnClickListener {
             val intent = Intent(requireContext(), EditProfileActivity::class.java)
             startActivity(intent)
         }
+
     }
 
     private fun getUserDetail() {
@@ -165,6 +170,15 @@ class ProfileFragment : Fragment() {
         }
 
         binding.viewPager.currentItem = 0
+    }
+
+    private fun updateProfile() {
+        editProfileViewModel.isDataDetailUpdate.observe(viewLifecycleOwner) {
+            if (it == true) {
+                editProfileViewModel.setDataDetailUpdate(false)
+                getUserDetail()
+            }
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {

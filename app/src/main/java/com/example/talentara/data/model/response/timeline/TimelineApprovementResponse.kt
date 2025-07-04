@@ -8,7 +8,7 @@ data class TimelineApprovementResponse(
 	val success: Boolean? = null,
 
 	@field:SerializedName("approvement")
-	val approvement: ApprovementItem? = null,
+	val approvement: List<ApprovementItem?>? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null,

@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/blue"
-            android:elevation="16dp"
+            android:elevation="8dp"
             android:visibility="gone"
             app:cardCornerRadius="24dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -177,7 +177,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/blue"
-            android:elevation="16dp"
+            android:elevation="8dp"
             android:visibility="gone"
             app:cardCornerRadius="24dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -214,14 +214,15 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:elevation="16dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cvCurrentProject">
 
             <ImageView
                 android:id="@+id/ivTimelineAccent"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="16dp"
+                android:layout_height="94dp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/timeline_accent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -235,7 +236,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:backgroundTint="@color/white"
-                android:elevation="16dp"
+                android:elevation="8dp"
                 app:cardCornerRadius="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -256,7 +257,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/project_phase"
                         android:textColor="@color/blue"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -269,7 +270,7 @@
                         android:layout_marginTop="4dp"
                         android:text="@string/phase_deadline"
                         android:textColor="@color/blue"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@id/tvPhase"
                         app:layout_constraintTop_toBottomOf="@id/tvPhase" />
 
@@ -281,7 +282,7 @@
                         android:layout_marginTop="4dp"
                         android:text="@string/remaining_days"
                         android:textColor="@color/blue"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@id/tvDeadline"
                         app:layout_constraintTop_toBottomOf="@id/tvDeadline" />
 
@@ -293,7 +294,7 @@
                         android:layout_marginTop="4dp"
                         android:text="@string/phase_evidence"
                         android:textColor="@color/blue"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@id/tvComplete"
                         app:layout_constraintTop_toBottomOf="@id/tvComplete" />
 
@@ -308,7 +309,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            android:elevation="16dp"
+            android:elevation="8dp"
             android:visibility="gone"
             app:cardCornerRadius="24dp"
             android:layout_marginTop="8dp"
@@ -346,7 +347,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            android:elevation="16dp"
+            android:elevation="8dp"
             android:visibility="gone"
             app:cardCornerRadius="24dp"
             android:layout_marginTop="8dp"

@@ -83,7 +83,7 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
     val updateTalentAvailability: LiveData<Results<UpdateTalentResponse>> = _updateTalentAvailability
 
     fun updateTalentAvailability(
-        availability: Boolean
+        availability: Int
     ) {
         viewModelScope.launch {
             _updateTalentAvailability.value = Results.Loading

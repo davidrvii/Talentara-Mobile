@@ -85,11 +85,10 @@ class TimelineActivity : AppCompatActivity() {
             finish()
         }
 
-        checkProjectDetail()
         getProjectAccess()
+        checkProjectDetail()
         setupProjectTimelineList()
         deleteTimeline()
-        updateTimeline()
     }
 
     private fun getProjectAccess() {
@@ -103,7 +102,6 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     projectAccess = result.data.access ?: "NoAccess"
-                    setupButtonAction()
                     timelineAdapter.setAccessLevel(projectAccess)
                 }
 
@@ -116,20 +114,6 @@ class TimelineActivity : AppCompatActivity() {
                     ).show()
                     Log.e("TimelineActivity", "Error getting project access: ${result.error}")
                 }
-            }
-        }
-    }
-
-    private fun updateTimeline() {
-        timelineAdapter.setOnItemClickListener { item ->
-            if (projectAccess == "Project Manager") {
-                setupUpdateTimelineDialog(timelineId = item.timelineId ?: 0)
-            } else {
-                Toast.makeText(
-                    this,
-                    "$projectAccess are not authorized to update this timeline",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         }
     }
@@ -148,6 +132,18 @@ class TimelineActivity : AppCompatActivity() {
                 }
             } else {
                 cvAddTimeline.visibility = View.GONE
+            }
+
+            timelineAdapter.setOnItemClickListener { item ->
+                if (projectAccess == "Project Manager") {
+                    setupUpdateTimelineDialog(timelineId = item.timelineId ?: 0)
+                } else {
+                    Toast. makeText(
+                        this@TimelineActivity,
+                        "$projectAccess are not authorized to update this timeline",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
@@ -326,7 +322,7 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     Toast.makeText(this, "Timeline updated successfully", Toast.LENGTH_SHORT).show()
-                    setupProjectTimelineList()
+                    timelineViewModel.getProjectTimeline(intent.getIntExtra(PROJECT_ID, 0))
                 }
 
                 is Results.Error -> {
@@ -338,6 +334,7 @@ class TimelineActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun addTimelineObserver() {
         timelineViewModel.addTimeline.observe(this) { result ->
             when (result) {
@@ -348,7 +345,7 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     Toast.makeText(this, "Timeline added successfully", Toast.LENGTH_SHORT).show()
-                    setupProjectTimelineList()
+                    timelineViewModel.getProjectTimeline(intent.getIntExtra(PROJECT_ID, 0))
                 }
 
                 is Results.Error -> {
@@ -361,13 +358,12 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     private fun setupProjectTimelineList() {
-        val projectId = intent.getIntExtra(PROJECT_ID, 0)
-        timelineViewModel.getProjectTimeline(projectId)
+        timelineViewModel.getProjectTimeline(intent.getIntExtra(PROJECT_ID, 0))
         timelineViewModel.getProjectTimeline.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {
                     showLoading(true)
-                    binding.cvNoTimeline.visibility = View.VISIBLE
+                    binding.cvNoTimeline.visibility = View.GONE
                 }
 
                 is Results.Success -> {
@@ -405,7 +401,7 @@ class TimelineActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setupRecyclerView() {
-        Log.d("HistoryFragment", "Setup RecyclerView")
+        Log.d("TimelineActivity", "Setup RecyclerView")
         timelineAdapter = TimelineAdapter(emptyList())
         binding.rvTimeline.apply {
             adapter = timelineAdapter
@@ -414,12 +410,12 @@ class TimelineActivity : AppCompatActivity() {
 
         timelineAdapter.setOnManagerApproveClick { item ->
             val id = item.timelineId ?: return@setOnManagerApproveClick
-            timelineViewModel.updateTimelineLeaderApprove(id, (item.leaderApproved == 1))
+            timelineViewModel.updateTimelineLeaderApprove(id, (if (item.leaderApproved == 1) 0 else 1))
             updateTimelineLeaderApproveObserver(item.timelineId)
         }
         timelineAdapter.setOnClientApproveClick { item ->
             val id = item.timelineId ?: return@setOnClientApproveClick
-            timelineViewModel.updateTimelineClientApprove(id, (item.clientApproved == 1))
+            timelineViewModel.updateTimelineClientApprove(id, (if (item.clientApproved == 1) 0 else 1))
             updateTimelineClientApproveObserver(item.timelineId)
         }
     }
@@ -496,7 +492,7 @@ class TimelineActivity : AppCompatActivity() {
                     showLoading(false)
                     timelineViewModel.getProjectTimeline(intent.getIntExtra(PROJECT_ID, 0))
                     val approvement = result.data.approvement
-                    if (approvement?.leaderApproved == 1 && approvement.clientApproved == 1) {
+                    if (approvement?.firstOrNull()?.leaderApproved == 1 && approvement.firstOrNull()?.clientApproved == 1) {
                         val completedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                             .format(Date())
                         timelineViewModel.updateTimelineCompletedDate(timelineId, completedDate)
@@ -715,6 +711,7 @@ class TimelineActivity : AppCompatActivity() {
                         entry.substringBefore(":").toInt()
                     } ?: emptyList()
                     projectStatus = project?.statusName.toString()
+                    setupButtonAction()
                 }
 
                 is Results.Error -> {
@@ -825,7 +822,7 @@ class TimelineActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val pos = viewHolder.bindingAdapterPosition
                 val item = timelineAdapter.getItemAt(pos)
-                showCustomDeleteDialog(item.timelineId ?: 0)
+                showCustomDeleteDialog(item.timelineId ?: 0, pos)
             }
 
             override fun onChildDraw(
@@ -865,7 +862,7 @@ class TimelineActivity : AppCompatActivity() {
         ItemTouchHelper(callback).attachToRecyclerView(binding.rvTimeline)
     }
 
-    private fun showCustomDeleteDialog(timelineId: Int) {
+    private fun showCustomDeleteDialog(timelineId: Int, position: Int) {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
@@ -893,6 +890,7 @@ class TimelineActivity : AppCompatActivity() {
         }
         bindingDeleteDialog.btCancelDelete.setOnClickListener {
             dialog.dismiss()
+            timelineAdapter.notifyItemChanged(position)
         }
         dialog.show()
     }

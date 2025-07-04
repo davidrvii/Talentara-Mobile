@@ -43,6 +43,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -78,13 +79,13 @@ interface ApiService {
         @Path("user_id") id: Int,
     ): UserDetailResponse
 
-    @FormUrlEncoded
+    @Multipart
     @PATCH("user/update/{user_id}")
     suspend fun updateUser(
         @Header("Authorization") token: String,
         @Path("user_id") id: Int,
         @PartMap fields: Map<String, @JvmSuppressWildcards RequestBody>,
-        @Part userImage: MultipartBody.Part? = null
+        @Part userImage: MultipartBody.Part? = null,
     ): UpdateUserResponse
 
     @FormUrlEncoded
@@ -128,6 +129,7 @@ interface ApiService {
         @Path("user_id") userId: Int,
     ): NotificationHistoryResponse
 
+    @FormUrlEncoded
     @PATCH("notification/update/{notification_id}")
     suspend fun updateNotification(
         @Header("Authorization") token: String,
@@ -176,6 +178,7 @@ interface ApiService {
         @Path("project_id") projectId: Int,
     ): TimelineApprovementResponse
 
+    @FormUrlEncoded
     @PATCH("timeline/update/{timeline_id}")
     suspend fun updateTimeline(
         @Header("Authorization") token: String,
@@ -186,20 +189,23 @@ interface ApiService {
         @Field("evidance") evidence: String,
     ): UpdateTimelineResponse
 
+    @FormUrlEncoded
     @PATCH("timeline/update/{timeline_id}")
     suspend fun updateTimelineClientApprove(
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
-        @Field("client_approved") clientApproved: Boolean,
+        @Field("client_approved") clientApproved: Int,
     ): UpdateTimelineResponse
 
+    @FormUrlEncoded
     @PATCH("timeline/update/{timeline_id}")
     suspend fun updateTimelineLeaderApprove(
         @Header("Authorization") token: String,
         @Path("timeline_id") timelineId: Int,
-        @Field("leader_approved") leaderApproved: Boolean,
+        @Field("leader_approved") leaderApproved: Int,
     ): UpdateTimelineResponse
 
+    @FormUrlEncoded
     @PATCH("timeline/update/{timeline_id}")
     suspend fun updateTimelineCompletedDate(
         @Header("Authorization") token: String,
@@ -265,6 +271,7 @@ interface ApiService {
         @Path("talent_id") talentId: Int,
     ): TalentDetailResponse
 
+    @FormUrlEncoded
     @PATCH("talent/update/{talent_id}")
     suspend fun updateTalent(
         @Header("Authorization") token: String,
@@ -281,6 +288,7 @@ interface ApiService {
         val platforms: List<String>,
     )
 
+    @FormUrlEncoded
     @PATCH("talent/update/{talent_id}")
     suspend fun updateTalentIsOnProject(
         @Header("Authorization") token: String,
@@ -288,6 +296,7 @@ interface ApiService {
         @Field("is_on_project") isOnProject: Boolean,
     ): UpdateTalentResponse
 
+    @FormUrlEncoded
     @PATCH("talent/update/{talent_id}")
     suspend fun updateTalentIsProjectManager(
         @Header("Authorization") token: String,
@@ -295,6 +304,7 @@ interface ApiService {
         @Field("is_project_manager") isProjectManager: Boolean,
     ): UpdateTalentResponse
 
+    @FormUrlEncoded
     @PATCH("talent/update/{talent_id}")
     suspend fun updateTalentProjectDone(
         @Header("Authorization") token: String,
@@ -302,11 +312,12 @@ interface ApiService {
         @Field("project_done") isProjectManager: Int,
     ): UpdateTalentResponse
 
+    @FormUrlEncoded
     @PATCH("talent/update/{talent_id}")
     suspend fun updateTalentAvailability(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
-        @Field("availability") availability: Boolean,
+        @Field("availability") availability: Int,
     ): UpdateTalentResponse
 
     //PORTFOLIO
@@ -356,6 +367,7 @@ interface ApiService {
         @Path("portfolio_id") portfolioId: Int,
     ): PortfolioDetailResponse
 
+    @FormUrlEncoded
     @PATCH("portfolio/update/{portfolio_id}")
     suspend fun updatePortfolio(
         @Header("Authorization") token: String,
@@ -433,6 +445,7 @@ interface ApiService {
         @Path("project_id") projectId: Int,
     ): ProjectAccessResponse
 
+    @FormUrlEncoded
     @PATCH("project/update/{project_id}")
     suspend fun updateProject(
         @Header("Authorization") token: String,
@@ -468,6 +481,7 @@ interface ApiService {
         val amount: Int,
     )
 
+    @FormUrlEncoded
     @PATCH("project/update/{project_id}")
     suspend fun updateProjectCompleted(
         @Header("Authorization") token: String,
@@ -476,6 +490,7 @@ interface ApiService {
         @Field("completed_date") completedDate: String,
     ): UpdateProjectResponse
 
+    @FormUrlEncoded
     @PATCH("project/offer")
     suspend fun projectOffer(
         @Header("Authorization") token: String,

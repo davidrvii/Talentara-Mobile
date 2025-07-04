@@ -190,7 +190,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
 
     fun updateTimelineClientApprove(
         timelineId: Int,
-        clientApproved: Boolean,
+        clientApproved: Int,
     ) {
         viewModelScope.launch {
             _updateTimelineClientApprove.value = Results.Loading
@@ -218,7 +218,7 @@ class TimelineViewModel(private val repository: Repository) : ViewModel() {
 
     fun updateTimelineLeaderApprove(
         timelineId: Int,
-        leaderApproved: Boolean,
+        leaderApproved: Int,
     ) {
         viewModelScope.launch {
             _updateTimelineLeaderApprove.value = Results.Loading

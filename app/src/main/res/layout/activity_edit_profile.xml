@@ -287,7 +287,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="24dp"
-            android:backgroundTint="@color/blue"
+            android:backgroundTint="@color/button_background_color"
             android:elevation="12dp"
             android:enabled="false"
             android:padding="12dp"

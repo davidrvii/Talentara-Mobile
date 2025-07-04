@@ -135,7 +135,7 @@ class TalentDetailActivity : AppCompatActivity() {
 
     private fun bindTalent(talent: TalentDetailItem) {
         binding.apply {
-            val rawPlatforms = talent.platforms ?: ""
+            val rawPlatforms = talent.platforms ?: "-"
             val platformsList = rawPlatforms
                 .split("|")
                 .map { it.trim() }
@@ -143,7 +143,7 @@ class TalentDetailActivity : AppCompatActivity() {
             platformAdapter.updateData(platformsList)
         }
         binding.apply {
-            val rawRoles = talent.roles ?: ""
+            val rawRoles = talent.roles ?: "-"
             val rolesList = rawRoles
                 .split("|")
                 .map { it.trim() }
@@ -151,7 +151,7 @@ class TalentDetailActivity : AppCompatActivity() {
             roleAdapter.updateData(rolesList)
         }
         binding.apply {
-            val rawTools = talent.tools ?: ""
+            val rawTools = talent.tools ?: "-"
             val toolsList = rawTools
                 .split("|")
                 .map { it.trim() }
@@ -159,7 +159,7 @@ class TalentDetailActivity : AppCompatActivity() {
             toolsAdapter.updateData(toolsList)
         }
         binding.apply {
-            val rawProductTypes = talent.productTypes ?: ""
+            val rawProductTypes = talent.productTypes ?: "-"
             val productTypesList = rawProductTypes
                 .split("|")
                 .map { it.trim() }
@@ -167,7 +167,7 @@ class TalentDetailActivity : AppCompatActivity() {
             productTypeAdapter.updateData(productTypesList)
         }
         binding.apply {
-            val rawLanguages = talent.languages ?: ""
+            val rawLanguages = talent.languages ?: "-"
             val languagesList = rawLanguages
                 .split("|")
                 .map { it.trim() }

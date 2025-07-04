@@ -11,7 +11,7 @@ data class PortfolioDetailResponse(
 	val message: String? = null,
 
 	@field:SerializedName("portfolioDetail")
-	val portfolioDetail: PortfolioDetailItem? = null,
+	val portfolioDetail: List<PortfolioDetailItem?>? = null,
 
 	@field:SerializedName("statusCode")
 	val statusCode: Int? = null,

@@ -100,7 +100,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/client"
             android:textColor="@color/dark_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -114,7 +114,7 @@
             android:layout_marginTop="4dp"
             android:text="@string/client_name"
             android:textColor="@color/blue"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/tvClient"
             app:layout_constraintTop_toBottomOf="@id/tvClient" />
@@ -128,7 +128,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/project"
             android:textColor="@color/dark_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/tvProjectClient"
             app:layout_constraintTop_toBottomOf="@id/tvProjectClient" />
@@ -142,7 +142,7 @@
             android:layout_marginTop="4dp"
             android:text="@string/project_name"
             android:textColor="@color/blue"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/tvProject"
             app:layout_constraintTop_toBottomOf="@id/tvProject" />
@@ -156,7 +156,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/description"
             android:textColor="@color/dark_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/tvProjectName"
             app:layout_constraintTop_toBottomOf="@id/tvProjectName" />
@@ -170,7 +170,7 @@
             android:layout_marginTop="4dp"
             android:text="@string/description"
             android:textColor="@color/blue"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/tvDescription"
             app:layout_constraintTop_toBottomOf="@id/tvDescription" />
@@ -184,7 +184,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/project_periode"
             android:textColor="@color/dark_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/tvProjectDescription"
             app:layout_constraintTop_toBottomOf="@id/tvProjectDescription" />
@@ -198,7 +198,7 @@
             android:layout_marginTop="4dp"
             android:text="@string/periode"
             android:textColor="@color/blue"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/tvPeriode"
             app:layout_constraintTop_toBottomOf="@id/tvPeriode" />
@@ -212,7 +212,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/github"
             android:textColor="@color/dark_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/tvProjectPeriode"
             app:layout_constraintTop_toBottomOf="@id/tvProjectPeriode" />
@@ -226,7 +226,7 @@
             android:layout_marginTop="4dp"
             android:text="@string/github"
             android:textColor="@color/blue"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/tvGithub"
             app:layout_constraintTop_toBottomOf="@id/tvGithub" />
@@ -240,7 +240,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/feature"
             android:textColor="@color/dark_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/tvProjectGithub"
             app:layout_constraintTop_toBottomOf="@id/tvProjectGithub" />
@@ -264,7 +264,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/platform"
             android:textColor="@color/dark_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/rvFeature"
             app:layout_constraintTop_toBottomOf="@id/rvFeature" />
@@ -288,7 +288,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/product_type"
             android:textColor="@color/dark_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/rvPlatform"
             app:layout_constraintTop_toBottomOf="@id/rvPlatform" />
@@ -312,7 +312,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/role"
             android:textColor="@color/dark_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/rvProductType"
             app:layout_constraintTop_toBottomOf="@id/rvProductType" />
@@ -336,7 +336,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/language"
             android:textColor="@color/dark_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/rvRole"
             app:layout_constraintTop_toBottomOf="@id/rvRole" />
@@ -360,7 +360,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/tools"
             android:textColor="@color/dark_gray"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/rvLanguage"
             app:layout_constraintTop_toBottomOf="@id/rvLanguage" />

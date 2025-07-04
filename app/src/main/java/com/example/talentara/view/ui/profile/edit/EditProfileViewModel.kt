@@ -2,6 +2,7 @@ package com.example.talentara.view.ui.profile.edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.talentara.data.model.response.talent.UpdateTalentResponse
@@ -18,6 +19,13 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 class EditProfileViewModel(private val repository: Repository) : ViewModel() {
 
+    private val _isDataDetailUpdate = MutableLiveData(false)
+    val isDataDetailUpdate: LiveData<Boolean> = _isDataDetailUpdate
+
+    fun setDataDetailUpdate(value: Boolean) {
+        _isDataDetailUpdate.value = value
+    }
+
     private val _updateUser = MediatorLiveData<Results<UpdateUserResponse>>()
     val updateUser: LiveData<Results<UpdateUserResponse>> = _updateUser
 
@@ -27,7 +35,6 @@ class EditProfileViewModel(private val repository: Repository) : ViewModel() {
         github: String?,
         linkedin: String?,
         userImage: MultipartBody.Part?,
-        //fcmToken: String,
     ) {
 
         if (listOf(username, email, github, linkedin, userImage).all { it == null }) return
@@ -57,7 +64,6 @@ class EditProfileViewModel(private val repository: Repository) : ViewModel() {
                         userId,
                         map,
                         userImage,
-                        //fcmToken
                     )
                 ) { result ->
                     _updateUser.value = result

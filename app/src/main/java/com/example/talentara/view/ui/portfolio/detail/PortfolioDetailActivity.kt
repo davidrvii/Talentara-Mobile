@@ -165,7 +165,7 @@ class PortfolioDetailActivity : AppCompatActivity() {
 
                 is Results.Success -> {
                     showLoading(false)
-                    val portfolio = result.data.portfolioDetail
+                    val portfolio = result.data.portfolioDetail?.firstOrNull()
                     bindPortfolio(portfolio!!)
                 }
 
@@ -226,7 +226,7 @@ class PortfolioDetailActivity : AppCompatActivity() {
             tvProjectPeriode.text = deadline
         }
         binding.apply {
-            val rawFeatures = portfolio.features ?: ""
+            val rawFeatures = portfolio.features ?: "-"
             val featuresList = rawFeatures
                 .split("|")
                 .map { it.trim() }
@@ -234,7 +234,7 @@ class PortfolioDetailActivity : AppCompatActivity() {
             featureAdapter.updateData(featuresList)
         }
         binding.apply {
-            val rawPlatforms = portfolio.platforms ?: ""
+            val rawPlatforms = portfolio.platforms ?: "-"
             val platformsList = rawPlatforms
                 .split("|")
                 .map { it.trim() }
@@ -242,7 +242,7 @@ class PortfolioDetailActivity : AppCompatActivity() {
             platformAdapter.updateData(platformsList)
         }
         binding.apply {
-            val rawRoles = portfolio.roles ?: ""
+            val rawRoles = portfolio.roles ?: "-"
             val rolesList = rawRoles
                 .split("|")
                 .map { it.trim() }
@@ -250,7 +250,7 @@ class PortfolioDetailActivity : AppCompatActivity() {
             roleAdapter.updateData(rolesList)
         }
         binding.apply {
-            val rawTools = portfolio.tools ?: ""
+            val rawTools = portfolio.tools ?: "-"
             val toolsList = rawTools
                 .split("|")
                 .map { it.trim() }
@@ -258,7 +258,7 @@ class PortfolioDetailActivity : AppCompatActivity() {
             toolsAdapter.updateData(toolsList)
         }
         binding.apply {
-            val rawProductTypes = portfolio.productTypes ?: ""
+            val rawProductTypes = portfolio.productTypes ?: "-"
             val productTypesList = rawProductTypes
                 .split("|")
                 .map { it.trim() }
@@ -266,7 +266,7 @@ class PortfolioDetailActivity : AppCompatActivity() {
             productTypeAdapter.updateData(productTypesList)
         }
         binding.apply {
-            val rawLanguages = portfolio.languages ?: ""
+            val rawLanguages = portfolio.languages ?: "-"
             val languagesList = rawLanguages
                 .split("|")
                 .map { it.trim() }

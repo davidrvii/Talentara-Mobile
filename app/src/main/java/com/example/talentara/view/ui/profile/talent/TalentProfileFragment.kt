@@ -56,11 +56,13 @@ class TalentProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupPortfolioRecyclerView()
+        setupActionButton()
         getTalentDetail()
         getTalentPortfolio()
-        setupActionButton()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun getTalentPortfolio() {
         talentProfileViewModel.getTalentPortfolio()
         talentProfileViewModel.getTalentPortfolio.observe(viewLifecycleOwner) { result ->
@@ -70,6 +72,8 @@ class TalentProfileFragment : Fragment() {
                     val portfolios = result.data.talentPortfolio?.filterNotNull() ?: emptyList()
                     if (portfolios.isNotEmpty()) {
                         portfolioAdapter.updateData(portfolios)
+                        portfolioAdapter.notifyDataSetChanged()
+                        binding.rvPortfolio.invalidate()
                         binding.cvNoPortfolio.visibility = View.GONE
                     } else {
                         binding.cvNoPortfolio.visibility = View.VISIBLE
@@ -81,17 +85,18 @@ class TalentProfileFragment : Fragment() {
                 }
             }
         }
-        setupPortfolioRecyclerView()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setupPortfolioRecyclerView() {
         Log.d("TalentProfileFragment", "Setup Portfolio RecyclerView")
-        portfolioAdapter = PortfolioAdapter(emptyList())
-        binding.rvPortfolio.apply {
-            adapter = portfolioAdapter
-            layoutManager = LinearLayoutManager(context)
-            isNestedScrollingEnabled = false
+        if (!::portfolioAdapter.isInitialized) {
+            portfolioAdapter = PortfolioAdapter(emptyList())
+            binding.rvPortfolio.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = portfolioAdapter
+                isNestedScrollingEnabled = false
+            }
         }
     }
 
@@ -190,23 +195,23 @@ class TalentProfileFragment : Fragment() {
         binding.cvAvailability.setOnClickListener {
             if (talentAvailability == 1) {
                 talentAvailability = 0
-                talentProfileViewModel.updateTalentAvailability(false)
+                talentProfileViewModel.updateTalentAvailability(0)
+                binding.ivAvailibility.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.red))
             } else {
                 talentAvailability = 1
-                talentProfileViewModel.updateTalentAvailability(true)
+                talentProfileViewModel.updateTalentAvailability(1)
+                binding.ivAvailibility.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.green))
             }
         }
+        //Disable button after click
+        binding.cvAvailability.postDelayed({
+            binding.cvAvailability.isEnabled = true
+        }, 5000)
 
         talentProfileViewModel.updateTalentAvailability.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is Results.Loading -> {
-                    showLoading(true)
-                }
-
-                is Results.Success -> {
-                    showLoading(false)
-                }
-
+                is Results.Loading -> showLoading(true)
+                is Results.Success -> showLoading(false)
                 is Results.Error -> {
                     showLoading(false)
                     Toast.makeText(

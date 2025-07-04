@@ -124,7 +124,6 @@ class Repository private constructor(
         id: Int,
         fields: Map<String, RequestBody>,
         userImage: MultipartBody.Part?,
-        //fcmToken: String,
     ): LiveData<Results<UpdateUserResponse>> = liveData {
         emit(Results.Loading)
         try {
@@ -133,15 +132,12 @@ class Repository private constructor(
                 id,
                 fields,
                 userImage,
-                //fcmToken
             )
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
         }
     }
-
-    //updateUserFCMToken
 
     fun updateUserIsOnProject(
         token: String,
@@ -324,7 +320,7 @@ class Repository private constructor(
     fun updateTimelineClientApprove(
         token: String,
         timelineId: Int,
-        clientApproved: Boolean,
+        clientApproved: Int,
     ): LiveData<Results<UpdateTimelineResponse>> = liveData {
         emit(Results.Loading)
         try {
@@ -339,7 +335,7 @@ class Repository private constructor(
     fun updateTimelineLeaderApprove(
         token: String,
         timelineId: Int,
-        leaderApproved: Boolean,
+        leaderApproved: Int,
     ): LiveData<Results<UpdateTimelineResponse>> = liveData {
         emit(Results.Loading)
         try {
@@ -467,7 +463,7 @@ class Repository private constructor(
     fun updateTalentAvailability(
         token: String,
         talentId: Int,
-        availability: Boolean,
+        availability: Int,
     ): LiveData<Results<UpdateTalentResponse>> = liveData {
         emit(Results.Loading)
         try {

@@ -62,10 +62,23 @@ class HomeFragment : Fragment() {
                     showLoading(false)
                     val user = result.data.usersBasic?.firstOrNull()
                     binding.tvHeading.text = getString(R.string.home_heading, user?.userName)
+                    Log.d("IMAGE URL", "URL: ${user?.userImage}")
                     binding.ivUserImage.load(user?.userImage) {
                         placeholder(R.drawable.blank_avatar)
                         error(R.drawable.blank_avatar)
                     }
+                    Log.d("COIL LOAD", "Loading image: ${user?.userImage}")
+                    binding.ivUserImage.load(user?.userImage) {
+                        listener(
+                            onError = { request, throwable ->
+                                Log.e("COIL ERROR", "Gagal load gambar: ${throwable.throwable.message}")
+                            },
+                            onSuccess = { _, _ ->
+                                Log.d("COIL SUCCESS", "Berhasil load gambar")
+                            }
+                        )
+                    }
+
                 }
 
                 is Results.Error -> {

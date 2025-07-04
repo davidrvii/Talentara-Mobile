@@ -2,6 +2,9 @@ package com.example.talentara.view.ui.profile.edit
 
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -49,6 +52,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         profileViewModel.getUserDetail()
+        textFieldWatcher()
         getUserInfoObserver()
         setupButtonAction()
     }
@@ -74,19 +78,25 @@ class EditProfileActivity : AppCompatActivity() {
         val email = binding.tilEmail.editText?.text.toString()
         val github = binding.tilGithub.editText?.text.toString()
         val linkedIn = binding.tilLinkedIn.editText?.text.toString()
-        val userImage = chosenImageUri?.let { uri ->
-            val bytes = contentResolver.openInputStream(uri)!!.readBytes()
-            val req = bytes.toRequestBody("image/jpeg".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("user_image", "avatar.jpg", req)
+        val userImage: MultipartBody.Part? = chosenImageUri?.let { uri ->
+            try {
+                val inputStream = contentResolver.openInputStream(uri)
+                val bytes = inputStream?.readBytes()
+                inputStream?.close()
+                bytes?.let {
+                    val requestBody = it.toRequestBody("image/jpeg".toMediaTypeOrNull())
+                    MultipartBody.Part.createFormData("user_image", "avatar.jpg", requestBody)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
         }
 
-        if (false) {
-            Toast.makeText(this, getString(R.string.nothing_to_change), Toast.LENGTH_SHORT).show()
-            return
-        } else {
-            editProfileViewModel.updateUser(username, email, github, linkedIn, userImage)
-            updateUserObserver()
-        }
+        Log.d("EditProfileActivity", "userImage: $userImage")
+
+        editProfileViewModel.updateUser(username, email, github, linkedIn, userImage)
+        updateUserObserver()
     }
 
     private fun updateUserObserver() {
@@ -95,6 +105,7 @@ class EditProfileActivity : AppCompatActivity() {
                 is Results.Loading -> showLoading(true)
                 is Results.Success -> {
                     showLoading(false)
+                    editProfileViewModel.setDataDetailUpdate(true)
                     Toast.makeText(
                         this,
                         getString(R.string.update_user_success),
@@ -144,6 +155,38 @@ class EditProfileActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    private fun textFieldWatcher() {
+        val watcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                buttonSet()
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        with(binding) {
+            tilEmail.editText?.addTextChangedListener(watcher)
+            tilUsername.editText?.addTextChangedListener(watcher)
+            tilGithub.editText?.addTextChangedListener(watcher)
+            tilLinkedIn.editText?.addTextChangedListener(watcher)
+        }
+    }
+
+    private fun buttonSet() {
+        val email = binding.tilEmail.editText!!.text
+        val username = binding.tilUsername.editText!!.text
+        val github = binding.tilGithub.editText!!.text
+        val linkedIn = binding.tilLinkedIn.editText!!.text
+
+        val isFieldFilled = email.isNotEmpty() &&
+                username.isNotEmpty() &&
+                github.isNotEmpty() &&
+                linkedIn.isNotEmpty()
+
+        binding.btnSaveChange.isEnabled = isFieldFilled
     }
 
     private fun showLoading(isLoading: Boolean) {

@@ -112,7 +112,7 @@ class TalentProfileFragment : Fragment() {
 
     private fun bindProfile(talent: TalentDetailItem) {
         binding.apply {
-            val rawPlatforms = talent.platforms ?: ""
+            val rawPlatforms = talent.platforms ?: "-"
             val platformsList = rawPlatforms
                 .split("|")
                 .map { it.trim() }
@@ -120,7 +120,7 @@ class TalentProfileFragment : Fragment() {
             platformAdapter.updateData(platformsList)
         }
         binding.apply {
-            val rawRoles = talent.roles ?: ""
+            val rawRoles = talent.roles ?: "-"
             val rolesList = rawRoles
                 .split("|")
                 .map { it.trim() }
@@ -128,7 +128,7 @@ class TalentProfileFragment : Fragment() {
             roleAdapter.updateData(rolesList)
         }
         binding.apply {
-            val rawTools = talent.tools ?: ""
+            val rawTools = talent.tools ?: "-"
             val toolsList = rawTools
                 .split("|")
                 .map { it.trim() }
@@ -136,7 +136,7 @@ class TalentProfileFragment : Fragment() {
             toolsAdapter.updateData(toolsList)
         }
         binding.apply {
-            val rawProductTypes = talent.productTypes ?: ""
+            val rawProductTypes = talent.productTypes ?: "-"
             val productTypesList = rawProductTypes
                 .split("|")
                 .map { it.trim() }
@@ -144,7 +144,7 @@ class TalentProfileFragment : Fragment() {
             productTypeAdapter.updateData(productTypesList)
         }
         binding.apply {
-            val rawLanguages = talent.languages ?: ""
+            val rawLanguages = talent.languages ?: "-"
             val languagesList = rawLanguages
                 .split("|")
                 .map { it.trim() }
@@ -168,11 +168,16 @@ class TalentProfileFragment : Fragment() {
         binding.rvTools.setupFlex(toolsAdapter)
         binding.rvProductType.setupFlex(productTypeAdapter)
         binding.rvLanguage.setupFlex(languageAdapter)
-        binding.rvPortfolio.apply {
-            layoutManager = LinearLayoutManager(requireContext(),
-                RecyclerView.VERTICAL,
-                false)
-            adapter = portfolioAdapter
+
+        if (portfolioAdapter.itemCount == 0) {
+            binding.cvNoPortfolio.visibility = View.VISIBLE
+        } else {
+            binding.rvPortfolio.apply {
+                layoutManager = LinearLayoutManager(requireContext(),
+                    RecyclerView.VERTICAL,
+                    false)
+                adapter = portfolioAdapter
+            }
         }
     }
 

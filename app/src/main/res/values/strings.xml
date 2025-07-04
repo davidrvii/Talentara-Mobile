@@ -174,5 +174,6 @@
     <string name="there_is_no_notification">There is no notification</string>
     <string name="there_is_no_project">There is no project</string>
     <string name="there_is_no_timeline">There is no timeline</string>
+    <string name="there_is_no_portfolio">There is no portfolio</string>
 
 </resources>

@@ -23,13 +23,18 @@ class AuthenticationViewModel(private val repository: Repository) : ViewModel() 
     private val _register = MediatorLiveData<Results<RegisterResponse>>()
     val register: LiveData<Results<RegisterResponse>> = _register
 
-    suspend fun register(
-        username: String,
-        email: String,
-        password: String
-    ): RegisterResponse {
-        return repository.register(username, email, password)
+    fun register(username: String, email: String, password: String) {
+        viewModelScope.launch {
+            _register.value = Results.Loading
+            try {
+                val response = repository.register(username, email, password)
+                _register.value = Results.Success(response)
+            } catch (e: Exception) {
+                _register.value = Results.Error(e.message.toString())
+            }
+        }
     }
+
 
     private val _login = MediatorLiveData<Results<LoginResponse>>()
     val login: LiveData<Results<LoginResponse>> = _login

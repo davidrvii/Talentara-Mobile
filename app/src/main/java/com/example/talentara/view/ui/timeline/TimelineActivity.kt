@@ -14,6 +14,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.graphics.drawable.toDrawable
@@ -27,6 +28,7 @@ import com.example.talentara.data.model.response.project.ProjectDetailItem
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.data.remote.ApiService
 import com.example.talentara.databinding.ActivityTimelineBinding
+import com.example.talentara.databinding.CustomApproveDialogBinding
 import com.example.talentara.databinding.CustomCreateTimelineDialogBinding
 import com.example.talentara.databinding.CustomDeleteTimelineDialogBinding
 import com.example.talentara.databinding.CustomUpdateTimelineDialogBinding
@@ -41,6 +43,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 class TimelineActivity : AppCompatActivity() {
 
@@ -65,6 +68,7 @@ class TimelineActivity : AppCompatActivity() {
     private lateinit var bindingDialog: CustomCreateTimelineDialogBinding
     private lateinit var bindingDeleteDialog: CustomDeleteTimelineDialogBinding
     private lateinit var bindingUpdateDialog: CustomUpdateTimelineDialogBinding
+    private lateinit var bindingApproveDialogBinding: CustomApproveDialogBinding
 
     private lateinit var projectAccess: String
     private lateinit var projectStatus: String
@@ -88,7 +92,6 @@ class TimelineActivity : AppCompatActivity() {
         getProjectAccess()
         checkProjectDetail()
         setupProjectTimelineList()
-        deleteTimeline()
     }
 
     private fun getProjectAccess() {
@@ -121,6 +124,7 @@ class TimelineActivity : AppCompatActivity() {
     private fun setupButtonAction() {
         with(binding) {
             if (projectAccess == "Project Manager") {
+                deleteTimeline()
                 if (projectStatus == "Completed") {
                     cvAddTimeline.visibility = View.GONE
                 } else {
@@ -133,19 +137,122 @@ class TimelineActivity : AppCompatActivity() {
             } else {
                 cvAddTimeline.visibility = View.GONE
             }
+        }
 
-            timelineAdapter.setOnItemClickListener { item ->
-                if (projectAccess == "Project Manager") {
-                    setupUpdateTimelineDialog(timelineId = item.timelineId ?: 0)
-                } else {
-                    Toast. makeText(
+        timelineAdapter.setOnEditClick { item ->
+            if (projectAccess == "Project Manager") {
+                if (item.leaderApproved == 1 && item.clientApproved == 1) {
+                    Toast.makeText(
                         this@TimelineActivity,
-                        "$projectAccess are not authorized to update this timeline",
+                        "Timeline already completed",
                         Toast.LENGTH_SHORT
                     ).show()
+                } else {
+                    setupUpdateTimelineDialog(timelineId = item.timelineId ?: 0)
                 }
+            } else {
+                Toast. makeText(
+                    this@TimelineActivity,
+                    "$projectAccess are not authorized to update this timeline",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
+
+        timelineAdapter.setOnManagerApproveClick { item ->
+            val id = item.timelineId ?: return@setOnManagerApproveClick
+            if (item.leaderApproved == 0) {
+                showCustomManagerApproveDialog(id)
+            } else {
+                Toast.makeText(this@TimelineActivity, "Timeline already approved", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        timelineAdapter.setOnClientApproveClick { item ->
+            val id = item.timelineId ?: return@setOnClientApproveClick
+            if (item.clientApproved == 0) {
+                showCustomClientApproveDialog(id)
+            } else {
+                Toast.makeText(this@TimelineActivity, "Timeline already approved", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setupRecyclerView() {
+        Log.d("TimelineActivity", "Setup RecyclerView")
+        timelineAdapter = TimelineAdapter(emptyList())
+        binding.rvTimeline.apply {
+            adapter = timelineAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+    }
+
+    private fun showCustomManagerApproveDialog(id: Int) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        bindingApproveDialogBinding = CustomApproveDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(bindingApproveDialogBinding.root)
+        dialog.setCancelable(true)
+
+        dialog.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val cardView = bindingApproveDialogBinding.root.findViewById<CardView>(R.id.DeleteCard)
+        val layoutParams = cardView.layoutParams as ViewGroup.MarginLayoutParams
+        val margin = (40 * resources.displayMetrics.density).toInt()
+        layoutParams.setMargins(margin, 0, margin, 0)
+        cardView.layoutParams = layoutParams
+
+        bindingApproveDialogBinding.btYesApprove.setOnClickListener {
+            dialog.dismiss()
+            timelineViewModel.updateTimelineLeaderApprove(id, 1)
+            updateTimelineLeaderApproveObserver(id)
+        }
+
+        bindingApproveDialogBinding.btCancelApprove.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun showCustomClientApproveDialog(timelineId: Int?) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        bindingApproveDialogBinding = CustomApproveDialogBinding.inflate(layoutInflater)
+        dialog.setContentView(bindingApproveDialogBinding.root)
+        dialog.setCancelable(true)
+
+        dialog.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val cardView = bindingApproveDialogBinding.root.findViewById<CardView>(R.id.DeleteCard)
+        val layoutParams = cardView.layoutParams as ViewGroup.MarginLayoutParams
+        val margin = (40 * resources.displayMetrics.density).toInt()
+        layoutParams.setMargins(margin, 0, margin, 0)
+        cardView.layoutParams = layoutParams
+
+        bindingApproveDialogBinding.btYesApprove.setOnClickListener {
+            dialog.dismiss()
+            val id = timelineId ?: return@setOnClickListener
+            timelineViewModel.updateTimelineClientApprove(id, 1)
+            updateTimelineClientApproveObserver(id)
+        }
+
+        bindingApproveDialogBinding.btCancelApprove.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun setupAddTimelineDialog() {
@@ -173,7 +280,7 @@ class TimelineActivity : AppCompatActivity() {
             isFocusable = false
             isClickable = true
             setOnClickListener {
-                showDatePicker(this@TimelineActivity, this as TextInputEditText)
+                showDatePicker(this@TimelineActivity, this as TextInputEditText, R.id.startDateTag)
             }
         }
 
@@ -181,15 +288,15 @@ class TimelineActivity : AppCompatActivity() {
             isFocusable = false
             isClickable = true
             setOnClickListener {
-                showDatePicker(this@TimelineActivity, this as TextInputEditText)
+                showDatePicker(this@TimelineActivity, this as TextInputEditText, R.id.endDateTag)
             }
         }
 
         bindingDialog.btYes.setOnClickListener {
             dialog.dismiss()
             val projectPhase = bindingDialog.tilProjectPhase.editText?.text.toString()
-            val startDateStored = (bindingDialog.tilStartDate.editText?.getTag(R.id.dateTag)).toString()
-            val endDateStored = (bindingDialog.tilEndDate.editText?.getTag(R.id.dateTag)).toString()
+            val startDateStored = (bindingDialog.tilStartDate.editText?.getTag(R.id.startDateTag)).toString()
+            val endDateStored = (bindingDialog.tilEndDate.editText?.getTag(R.id.endDateTag)).toString()
             if (projectPhase.isNotEmpty() && startDateStored.isNotEmpty() && endDateStored.isNotEmpty()) {
                 val projectId = intent.getIntExtra(PROJECT_ID, 0)
                 timelineViewModel.addTimeline(projectId, projectPhase, startDateStored, endDateStored)
@@ -205,7 +312,7 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     @SuppressLint("DefaultLocale")
-    private fun showDatePicker(context: Context, targetEditText: TextInputEditText) {
+    private fun showDatePicker(context: Context, targetEditText: TextInputEditText, @IdRes tagId: Int ) {
         val calendar = Calendar.getInstance()
 
         val datePicker = DatePickerDialog(
@@ -214,7 +321,7 @@ class TimelineActivity : AppCompatActivity() {
                 val dateStored = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth) // for db
                 val dateDisplayed = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year) // for user
 
-                targetEditText.setTag(R.id.dateTag, dateStored)
+                targetEditText.setTag(tagId, dateStored)
                 targetEditText.setText(dateDisplayed)
             },
             calendar.get(Calendar.YEAR),
@@ -236,8 +343,33 @@ class TimelineActivity : AppCompatActivity() {
                     showLoading(false)
                     val timeline = result.data.timelineDetail?.firstOrNull()
                     bindingUpdateDialog.tilProjectPhase.editText?.setText(timeline?.projectPhase)
-                    bindingUpdateDialog.tilStartDate.editText?.setText(timeline?.startDate)
-                    bindingUpdateDialog.tilEndDate.editText?.setText(timeline?.endDate)
+
+                    timeline?.startDate?.let { start ->
+                        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+                        val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+                        val parsedDate = inputFormat.parse(start)
+                        val displayedDate = parsedDate?.let { outputFormat.format(it) } ?: ""
+                        val rawDate = parsedDate?.let { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(it) } ?: ""
+
+                        bindingUpdateDialog.tilStartDate.editText?.setText(displayedDate)
+                        bindingUpdateDialog.tilStartDate.editText?.setTag(R.id.startDateTag, rawDate)
+                    }
+
+                    timeline?.endDate?.let { end ->
+                        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+                        val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+                        val parsedDate = inputFormat.parse(end)
+                        val displayedDate = parsedDate?.let { outputFormat.format(it) } ?: ""
+                        val rawDate = parsedDate?.let { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(it) } ?: ""
+
+                        bindingUpdateDialog.tilEndDate.editText?.setText(displayedDate)
+                        bindingUpdateDialog.tilEndDate.editText?.setTag(R.id.endDateTag, rawDate)
+                        Log.d("TimelineActivity", "End Date: $end")
+                    }
                 }
 
                 is Results.Error -> {
@@ -275,7 +407,7 @@ class TimelineActivity : AppCompatActivity() {
             isFocusable = false
             isClickable = true
             setOnClickListener {
-                showDatePicker(this@TimelineActivity, this as TextInputEditText)
+                showDatePicker(this@TimelineActivity, this as TextInputEditText, R.id.startDateTag)
             }
         }
 
@@ -283,15 +415,15 @@ class TimelineActivity : AppCompatActivity() {
             isFocusable = false
             isClickable = true
             setOnClickListener {
-                showDatePicker(this@TimelineActivity, this as TextInputEditText)
+                showDatePicker(this@TimelineActivity, this as TextInputEditText, R.id.endDateTag)
             }
         }
 
         bindingUpdateDialog.btYes.setOnClickListener {
             dialog.dismiss()
             val projectPhase = bindingUpdateDialog.tilProjectPhase.editText?.text.toString()
-            val startDateStored = (bindingDialog.tilStartDate.editText?.getTag(R.id.dateTag)).toString()
-            val endDateStored = (bindingDialog.tilEndDate.editText?.getTag(R.id.dateTag)).toString()
+            val startDateStored = (bindingUpdateDialog.tilStartDate.editText?.getTag(R.id.startDateTag)).toString()
+            val endDateStored = (bindingUpdateDialog.tilEndDate.editText?.getTag(R.id.endDateTag)).toString()
             val evidence = bindingUpdateDialog.tilProjectEvidence.editText?.text.toString()
             if (projectPhase.isNotEmpty() && startDateStored.isNotEmpty() && endDateStored.isNotEmpty()) {
                 timelineViewModel.updateTimeline(
@@ -399,27 +531,6 @@ class TimelineActivity : AppCompatActivity() {
         setupRecyclerView()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun setupRecyclerView() {
-        Log.d("TimelineActivity", "Setup RecyclerView")
-        timelineAdapter = TimelineAdapter(emptyList())
-        binding.rvTimeline.apply {
-            adapter = timelineAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
-
-        timelineAdapter.setOnManagerApproveClick { item ->
-            val id = item.timelineId ?: return@setOnManagerApproveClick
-            timelineViewModel.updateTimelineLeaderApprove(id, (if (item.leaderApproved == 1) 0 else 1))
-            updateTimelineLeaderApproveObserver(item.timelineId)
-        }
-        timelineAdapter.setOnClientApproveClick { item ->
-            val id = item.timelineId ?: return@setOnClientApproveClick
-            timelineViewModel.updateTimelineClientApprove(id, (if (item.clientApproved == 1) 0 else 1))
-            updateTimelineClientApproveObserver(item.timelineId)
-        }
-    }
-
     private fun updateTimelineLeaderApproveObserver(timelineId: Int) {
         timelineViewModel.updateTimelineLeaderApprove.observe(this) { result ->
             when (result) {
@@ -481,6 +592,7 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     private fun getTimelineApprove(timelineId: Int) {
+        Log.d("TimelineActivity", "Get Timeline Approve")
         timelineViewModel.getTimelineApprove(timelineId)
         timelineViewModel.getTimelineApprove.observe(this) { result ->
             when (result) {
@@ -490,7 +602,7 @@ class TimelineActivity : AppCompatActivity() {
 
                 is Results.Success -> {
                     showLoading(false)
-                    timelineViewModel.getProjectTimeline(intent.getIntExtra(PROJECT_ID, 0))
+                    setupProjectTimelineList()
                     val approvement = result.data.approvement
                     if (approvement?.firstOrNull()?.leaderApproved == 1 && approvement.firstOrNull()?.clientApproved == 1) {
                         val completedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -514,6 +626,7 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     private fun updateTimelineCompletedDateObserver() {
+        Log.d("TimelineActivity", "Update Timeline Completed Date")
         timelineViewModel.updateTimelineCompletedDate.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {
@@ -537,6 +650,7 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     private fun checkProjectCompleted() {
+        Log.d("TimelineActivity", "Check Project Completed")
         timelineViewModel.getProjectTimeline.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {
@@ -559,10 +673,12 @@ class TimelineActivity : AppCompatActivity() {
                             updateProjectCompletedObserver()
 
                             if (projectAccess == "Client") {
+                                Log.d("TimelineActivity", "Update User Is On Project")
                                 newProjectViewModel.updateUserIsOnProject(false)
                                 updateUserProjectDoneObserver()
                             } else {
                                 for (id in talentId) {
+                                    Log.d("TimelineActivity", "Update Talent Project Done")
                                     timelineViewModel.updateTalentProjectDone(1, id)
                                     updateTalentProjectDoneObserver(id)
                                 }
@@ -582,6 +698,7 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     private fun updateUserProjectDoneObserver() {
+        Log.d("TimelineActivity", "Update User Project Done")
         newProjectViewModel.updateUserIsOnProject.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {
@@ -610,6 +727,7 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     private fun updateTalentProjectDoneObserver(id: Int) {
+        Log.d("TimelineActivity", "Update Talent Project Done")
         timelineViewModel.updateTalentProjectDone.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {
@@ -619,6 +737,7 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     Toast.makeText(this, "Talent project done updated", Toast.LENGTH_SHORT).show()
+                    Log.d("TimelineActivity", "Add Notification Project Done")
                     notificationViewModel.addNotificationTalent(
                         talentId    = id,
                         title       = "Project Completed",
@@ -662,6 +781,7 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     private fun getProjectDetail(id: Int) {
+        Log.d("TimelineActivity", "Get Project Detail")
         val projectId = intent.getIntExtra(ProjectDetailActivity.PROJECT_ID, 0)
         projectDetailViewModel.getProjectDetail(projectId)
         projectDetailViewModel.getProjectDetail.observe(this) { result ->
@@ -731,6 +851,7 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     private fun addPortfolio(project: ProjectDetailItem, id: Int) {
+        Log.d("TimelineActivity", "Add Portfolio")
         val rawFeatures = project.features ?: ""
         val featuresList = rawFeatures
             .split("|")
@@ -784,6 +905,7 @@ class TimelineActivity : AppCompatActivity() {
     }
 
     private fun addPortfolioViewModelObserver(id: Int) {
+        Log.d("TimelineActivity", "Add Portfolio View Model Observer")
         newPortfolioViewModel.addPortfolioTalent.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {
@@ -793,6 +915,7 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     Toast.makeText(this, "Portfolio Successfully Added", Toast.LENGTH_SHORT).show()
+                    Log.d("TimelineActivity", "Add Notification Portfolio")
                     notificationViewModel.addNotificationTalent(
                         talentId    = id,
                         title       = "New Portfolio Created",

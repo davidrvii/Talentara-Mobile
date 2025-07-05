@@ -24,6 +24,7 @@ class TimelineAdapter(
     private var accessLevel: String = "NoAccess"
     private var onClientApproveClick: ((TimelineProjectItem) -> Unit)? = null
     private var onManagerApproveClick: ((TimelineProjectItem) -> Unit)? = null
+    private var onEditClick: ((TimelineProjectItem) -> Unit)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setAccessLevel(access: String) {
@@ -36,15 +37,12 @@ class TimelineAdapter(
     fun setOnManagerApproveClick(cb: (TimelineProjectItem) -> Unit) {
         this.onManagerApproveClick = cb
     }
+    fun setOnEditClick(callback: (TimelineProjectItem) -> Unit) {
+        this.onEditClick = callback
+    }
 
     fun getItemAt(position: Int): TimelineProjectItem =
         listTimeline[position]
-
-    private var onItemClick: ((TimelineProjectItem) -> Unit)? = null
-
-    fun setOnItemClickListener(callback: (TimelineProjectItem) -> Unit) {
-        this.onItemClick = callback
-    }
 
     inner class ViewHolder(private val binding: TimelineItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
@@ -108,7 +106,8 @@ class TimelineAdapter(
                     if (item.completedDate != null) {
                         binding.tvRemaining.visibility = ViewGroup.GONE
                         binding.tvComplete.visibility = ViewGroup.VISIBLE
-                        tvCompleted.text = itemView.context.getString(R.string.completed_in_d_days, completedDays)
+                        binding.tvApprove.visibility = ViewGroup.GONE
+                        tvComplete.text = itemView.context.getString(R.string.completed_in_d_days, completedDays)
                     } else {
                         binding.tvRemaining.visibility = ViewGroup.VISIBLE
                         binding.tvComplete.visibility = ViewGroup.GONE
@@ -134,6 +133,9 @@ class TimelineAdapter(
                         1 -> {
                             binding.cvClientApproved.setCardBackgroundColor(itemView.context.getColor(R.color.blue))
                             binding.cvClientApproved.isEnabled = true
+                            setOnClickListener {
+                                if (isManager) onManagerApproveClick?.invoke(item)
+                            }
                         }
                         0 -> {
                             binding.cvClientApproved.setCardBackgroundColor(itemView.context.getColor(R.color.dark_gray))
@@ -151,6 +153,9 @@ class TimelineAdapter(
                         1 -> {
                             binding.cvManagerApproved.setCardBackgroundColor(itemView.context.getColor(R.color.blue))
                             binding.cvClientApproved.isEnabled = true
+                            setOnClickListener {
+                                if (isClient) onClientApproveClick?.invoke(item)
+                            }
                         }
                         0 -> {
                             binding.cvManagerApproved.setCardBackgroundColor(itemView.context.getColor(R.color.dark_gray))
@@ -161,6 +166,16 @@ class TimelineAdapter(
                             }
                         }
                         else -> {}
+                    }
+                }
+                binding.btnEditTimeline.apply {
+                    if (item.clientApproved == 1 && item.leaderApproved == 1) {
+                        binding.btnEditTimeline.visibility = ViewGroup.GONE
+                    } else {
+                        binding.btnEditTimeline.visibility = ViewGroup.VISIBLE
+                        setOnClickListener {
+                            onEditClick?.invoke(item)
+                        }
                     }
                 }
             }
@@ -203,9 +218,6 @@ class TimelineAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = listTimeline[position]
         holder.bind(data)
-        holder.itemView.setOnClickListener {
-            onItemClick?.invoke(data)
-        }
     }
 
     override fun getItemCount(): Int = listTimeline.size

@@ -45,14 +45,38 @@ class SignUpFragment : Fragment() {
         textFieldWatcher()
 
         binding.btnSignUp.setOnClickListener {
-            val username = binding.tilUsername.editText.toString().trim()
-            val email = binding.tilEmail.editText.toString().trim()
-            val pass = binding.tilPassword.editText.toString().trim()
+            val username = binding.tilUsername.editText?.text.toString().trim()
+            val email = binding.tilEmail.editText?.text.toString().trim()
+            val pass = binding.tilPassword.editText?.text.toString().trim()
 
             lifecycleScope.launch {
                 try {
                     authViewModel.register(username, email, pass)
-                    registerObserver()
+                    authViewModel.register.observe(viewLifecycleOwner) { registerResponseResult ->
+                        when (registerResponseResult) {
+                            is Results.Loading -> {
+                                showLoading(true)
+                            }
+
+                            is Results.Success -> {
+                                showLoading(false)
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.register_success), Toast.LENGTH_SHORT
+                                ).show()
+                                (requireActivity() as AuthenticationActivity).switchPage(1)
+                            }
+
+                            is Results.Error -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.register_failed), Toast.LENGTH_SHORT
+                                ).show()
+                                showLoading(false)
+                                registerFailed()
+                            }
+                        }
+                    }
                 } catch (e: Exception) {
                     Toast.makeText(
                         requireContext(),
@@ -63,36 +87,6 @@ class SignUpFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun registerObserver() {
-        authViewModel.register.observe(viewLifecycleOwner) { registerResponseResult ->
-            when (registerResponseResult) {
-                is Results.Loading -> {
-                    showLoading(true)
-                }
-
-                is Results.Success -> {
-                    showLoading(false)
-                    registerSuccess()
-                }
-
-                is Results.Error -> {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.register_failed), Toast.LENGTH_SHORT
-                    ).show()
-                    showLoading(false)
-                    registerFailed()
-                }
-            }
-        }
-    }
-
-    private fun registerSuccess() {
-        Toast.makeText(requireContext(), getString(R.string.register_success), Toast.LENGTH_SHORT)
-            .show()
-        (requireActivity() as AuthenticationActivity).switchPage(0)
     }
 
     private fun registerFailed() {

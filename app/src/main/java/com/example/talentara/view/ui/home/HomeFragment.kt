@@ -139,9 +139,20 @@ class HomeFragment : Fragment() {
                                 end?.let { LegacyChronosUnit.DAYS.between(today, it).toInt() } ?: 0
                             }
 
+                        val projectName = currentProject.projectName?.let {
+                            val words = it.split(" ")
+                            if (words.size <= 2) {
+                                it
+                            } else {
+                                val firstLine = words.take(2).joinToString(" ")
+                                val secondLine = words.drop(2).joinToString(" ")
+                                "$firstLine\n$secondLine"
+                            }
+                        } ?: "-"
+
                         binding.apply {
                             binding.tvStatus.text = currentProject.statusName?.replace(" ", "\n")
-                            tvProject.text = currentProject.projectName
+                            tvProject.text = projectName
                             tvClient.text = currentProject.clientName
                             tvProduct.text =
                                 getString(R.string.project_product, firstProduct, firstPlatform)

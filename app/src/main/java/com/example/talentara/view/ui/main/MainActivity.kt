@@ -59,23 +59,10 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         profileViewModel.getUserDetail()
-        getUserDetailObserver()
+        getUserDetailObserver(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.navigation_home) {
-                binding.btnNewProject.visibility = View.VISIBLE
-                if (userIsOnProject == 0) {
-                    binding.btnNewProject.setOnClickListener {
-                        val intent = Intent(this, NewProjectActivity::class.java)
-                        startActivity(intent)
-                    }
-                } else {
-                    binding.btnNewProject.apply {
-                        isEnabled = false
-                        alpha = 0.5f
-                    }
-                }
-            } else if (destination.id == R.id.navigation_profile && userIsTalentAccess == 1) {
+            if (destination.id == R.id.navigation_profile && userIsTalentAccess == 1) {
                 binding.btnNewProject.visibility = View.VISIBLE
                 binding.btnNewProject.setOnClickListener {
                     val intent = Intent(this, NewPortfolioActivity::class.java).apply {
@@ -89,21 +76,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getUserDetailObserver() {
+    private fun getUserDetailObserver(navController: androidx.navigation.NavController) {
         profileViewModel.getUserDetail.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {}
                 is Results.Success -> {
-                    val isOnProject = result.data.userDetail?.firstOrNull()?.isOnProject
-                    isOnProject?.let { isOnProject ->
-                        userIsOnProject = isOnProject
-                    }
                     val isTalentAccess = result.data.userDetail?.firstOrNull()?.talentAccess
                     isTalentAccess?.let { isTalentAccess ->
                         userIsTalentAccess = isTalentAccess
                     }
-                }
 
+                    val isOnProject = result.data.userDetail?.firstOrNull()?.isOnProject
+                    navController.addOnDestinationChangedListener { _, destination, _ ->
+                        if (destination.id == R.id.navigation_home) {
+                            binding.btnNewProject.visibility = View.VISIBLE
+                            Log.d("MainActivity", "userIsOnProject: $userIsOnProject")
+                            if (isOnProject == 0) {
+                                binding.btnNewProject.setOnClickListener {
+                                    val intent = Intent(this, NewProjectActivity::class.java)
+                                    startActivity(intent)
+                                }
+                            } else {
+                                binding.btnNewProject.apply {
+                                    isEnabled = false
+                                    alpha = 0.5f
+                                }
+                            }
+                        } else {
+                            binding.btnNewProject.visibility = View.GONE
+                        }
+                    }
+                }
                 is Results.Error -> {}
             }
         }

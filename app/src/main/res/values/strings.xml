@@ -177,5 +177,8 @@
     <string name="there_is_no_portfolio">There is no portfolio</string>
     <string name="end_date">End Date</string>
     <string name="add_portfolio">Add Portfolio +</string>
+    <string name="approve">Approve</string>
+    <string name="approve_this_timeline">Approve this timeline?</string>
+    <string name="you_will_approve_this_timeline_permanently">You will approve this timeline permanently</string>
 
 </resources>

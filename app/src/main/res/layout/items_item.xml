@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:text="@string/item_name"
             android:textColor="@color/blue"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

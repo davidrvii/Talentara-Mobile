@@ -10,9 +10,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import coil.load
 import com.example.talentara.R
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.ActivityEditProfileBinding
@@ -46,8 +45,7 @@ class EditProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(0, 0, 0, 0)
             insets
         }
 
@@ -59,7 +57,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun setupButtonAction() {
         with(binding) {
-            btnBack.setOnClickListener {
+            cvBack.setOnClickListener {
                 finish()
             }
 
@@ -105,7 +103,7 @@ class EditProfileActivity : AppCompatActivity() {
                 is Results.Loading -> showLoading(true)
                 is Results.Success -> {
                     showLoading(false)
-                    editProfileViewModel.setDataDetailUpdate(true)
+                    setResult(RESULT_OK)
                     Toast.makeText(
                         this,
                         getString(R.string.update_user_success),
@@ -137,11 +135,10 @@ class EditProfileActivity : AppCompatActivity() {
                         tilEmail.editText?.setText(user?.userEmail)
                         tilGithub.editText?.setText(user?.github)
                         tilLinkedIn.editText?.setText(user?.linkedin)
-                        binding.ivUserImage.setImageURI(
-                            user?.userImage
-                                ?.takeIf { it.isNotBlank() }
-                                ?.toUri()
-                        )
+                        ivUserImage.load(user?.userImage) {
+                            placeholder(R.drawable.blank_avatar)
+                            error(R.drawable.blank_avatar)
+                        }
                     }
                 }
 

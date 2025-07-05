@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".view.ui.project.add.NewProjectActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,8 +23,10 @@
             android:id="@+id/cvBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
             app:cardBackgroundColor="@color/blue"
+            android:layout_marginTop="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -47,7 +50,8 @@
             android:layout_margin="24dp"
             android:text="@string/new_project"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:layout_marginTop="56dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/cvBack"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="88dp"
-            android:paddingTop="76dp">
+            android:paddingTop="112dp">
 
             <TextView
                 android:id="@+id/tvClientName"
@@ -441,7 +445,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingVertical="12dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

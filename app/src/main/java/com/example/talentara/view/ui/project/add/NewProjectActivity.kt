@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.talentara.R
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.ActivityNewProjectBinding
@@ -40,8 +39,7 @@ class NewProjectActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(0, 0, 0, 0)
             insets
         }
 

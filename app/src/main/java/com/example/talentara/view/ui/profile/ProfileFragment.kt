@@ -1,12 +1,17 @@
 package com.example.talentara.view.ui.profile
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -22,6 +27,7 @@ import com.example.talentara.view.ui.profile.talent.TalentProfileFragment
 import com.example.talentara.view.ui.profile.user.UserProfileFragment
 import com.example.talentara.view.ui.talent.apply.TalentApplyActivity
 import com.example.talentara.view.utils.FactoryViewModel
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class ProfileFragment : Fragment() {
@@ -32,6 +38,7 @@ class ProfileFragment : Fragment() {
     private val editProfileViewModel: EditProfileViewModel by viewModels {
         FactoryViewModel.getInstance(requireActivity())
     }
+    private lateinit var editProfileLauncher: ActivityResultLauncher<Intent>
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private var hasTalentAccess = false
@@ -49,9 +56,17 @@ class ProfileFragment : Fragment() {
 
         getUserDetail()
         updateProfile()
+
+        editProfileLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                getUserDetail()
+            }
+        }
         binding.ivEditProfile.setOnClickListener {
             val intent = Intent(requireContext(), EditProfileActivity::class.java)
-            startActivity(intent)
+            editProfileLauncher.launch(intent)
         }
 
     }
@@ -144,6 +159,28 @@ class ProfileFragment : Fragment() {
             else
                 getString(R.string.talent_profile)
         }.attach()
+
+        // Custom bold for selected tab, normal for others
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                val tabView = (tab.view as ViewGroup).getChildAt(1) as? TextView
+                tabView?.setTypeface(null, Typeface.BOLD)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                val tabView = (tab.view as ViewGroup).getChildAt(1) as? TextView
+                tabView?.setTypeface(null, Typeface.NORMAL)
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
+
+        // Apply bold to first tab on start
+        binding.tabLayout.post {
+            val firstTab = binding.tabLayout.getTabAt(0)
+            val firstTabView = (firstTab?.view as ViewGroup).getChildAt(1) as? TextView
+            firstTabView?.setTypeface(null, Typeface.BOLD)
+        }
 
         // Disable and grey-out Talent tab if no access
         val tabStrip = binding.tabLayout.getChildAt(0) as ViewGroup

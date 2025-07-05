@@ -61,7 +61,8 @@ class HomeFragment : Fragment() {
                 is Results.Success -> {
                     showLoading(false)
                     val user = result.data.usersBasic?.firstOrNull()
-                    binding.tvHeading.text = getString(R.string.home_heading, user?.userName)
+                    val userName = user?.userName?.substringBefore(" ")
+                    binding.tvHeading.text = getString(R.string.home_heading, userName)
                     Log.d("IMAGE URL", "URL: ${user?.userImage}")
                     binding.ivUserImage.load(user?.userImage) {
                         placeholder(R.drawable.blank_avatar)

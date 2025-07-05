@@ -477,12 +477,11 @@ class Repository private constructor(
 
     fun addPortfolio(
         token: String,
-        talentId: Int,
         request: ApiService.AddPortfolioRequest,
     ): LiveData<Results<NewPortfolioResponse>> = liveData {
         emit(Results.Loading)
         try {
-            val response = apiService.addPortfolio("Bearer $token", talentId, request)
+            val response = apiService.addPortfolio("Bearer $token", request)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))

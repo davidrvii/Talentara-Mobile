@@ -220,7 +220,6 @@ interface ApiService {
     ): DeleteTimelineResponse
 
     //TALENT
-    @FormUrlEncoded
     @POST("talent/add")
     suspend fun addTalent(
         @Header("Authorization") token: String,
@@ -271,7 +270,6 @@ interface ApiService {
         @Path("talent_id") talentId: Int,
     ): TalentDetailResponse
 
-    @FormUrlEncoded
     @PATCH("talent/update/{talent_id}")
     suspend fun updateTalent(
         @Header("Authorization") token: String,
@@ -321,15 +319,15 @@ interface ApiService {
     ): UpdateTalentResponse
 
     //PORTFOLIO
-    @FormUrlEncoded
     @POST("portfolio/add")
     suspend fun addPortfolio(
         @Header("Authorization") token: String,
-        @Field("talent_id") talentId: Int,
         @Body request: AddPortfolioRequest,
     ): NewPortfolioResponse
 
     data class AddPortfolioRequest(
+        @SerializedName("talent_id")
+        val talentId: Int,
         @SerializedName("client_name")
         val clientName: String,
         @SerializedName("portfolio_name")
@@ -367,7 +365,6 @@ interface ApiService {
         @Path("portfolio_id") portfolioId: Int,
     ): PortfolioDetailResponse
 
-    @FormUrlEncoded
     @PATCH("portfolio/update/{portfolio_id}")
     suspend fun updatePortfolio(
         @Header("Authorization") token: String,
@@ -445,7 +442,6 @@ interface ApiService {
         @Path("project_id") projectId: Int,
     ): ProjectAccessResponse
 
-    @FormUrlEncoded
     @PATCH("project/update/{project_id}")
     suspend fun updateProject(
         @Header("Authorization") token: String,

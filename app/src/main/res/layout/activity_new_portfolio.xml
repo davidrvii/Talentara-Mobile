@@ -69,7 +69,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="80dp"
+            android:paddingBottom="100dp"
             android:paddingTop="112dp">
 
             <TextView
@@ -109,6 +109,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/client_name_portfolio_hint"
                     android:inputType="text"
+                    android:imeOptions="actionDone"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -150,6 +151,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/project_name_hint"
                     android:inputType="text"
+                    android:imeOptions="actionDone"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -184,8 +186,7 @@
                 app:hintEnabled="false"
                 app:hintTextColor="@color/dark_gray"
                 app:layout_constraintStart_toStartOf="@id/tvProjectDescription"
-                app:layout_constraintTop_toBottomOf="@id/tvProjectDescription"
-                app:prefixText="@string/project_desc_prefix">
+                app:layout_constraintTop_toBottomOf="@id/tvProjectDescription">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -195,6 +196,7 @@
                     android:maxLines="10"
                     android:minLines="1"
                     android:overScrollMode="never"
+                    android:imeOptions="actionDone"
                     android:scrollbars="none"
                     android:scrollHorizontally="false"
                     android:textColor="@color/black"
@@ -324,6 +326,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/project_github"
                     android:inputType="text"
+                    android:imeOptions="actionDone"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -366,6 +369,7 @@
                     android:hint="@string/project_linkedin"
                     android:inputType="text"
                     android:textColor="@color/black"
+                    android:imeOptions="actionDone"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -422,6 +426,7 @@
                     android:hint="@string/feature"
                     android:inputType="text"
                     android:paddingHorizontal="18dp"
+                    android:imeOptions="actionDone"
                     android:paddingVertical="18dp"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
@@ -481,6 +486,7 @@
                     android:inputType="text"
                     android:paddingHorizontal="18dp"
                     android:paddingVertical="18dp"
+                    android:imeOptions="actionDone"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -539,6 +545,7 @@
                     android:inputType="text"
                     android:paddingHorizontal="18dp"
                     android:paddingVertical="18dp"
+                    android:imeOptions="actionDone"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -595,6 +602,7 @@
                     android:completionThreshold="1"
                     android:hint="@string/language"
                     android:inputType="text"
+                    android:imeOptions="actionDone"
                     android:paddingHorizontal="18dp"
                     android:paddingVertical="18dp"
                     android:textColor="@color/black"
@@ -653,6 +661,7 @@
                     android:completionThreshold="1"
                     android:hint="@string/tools"
                     android:inputType="text"
+                    android:imeOptions="actionDone"
                     android:paddingHorizontal="18dp"
                     android:paddingVertical="18dp"
                     android:textColor="@color/black"
@@ -711,7 +720,9 @@
                     android:completionThreshold="1"
                     android:hint="@string/role"
                     android:inputType="text"
+                    android:dropDownAnchor="@id/tilRole"
                     android:paddingHorizontal="18dp"
+                    android:imeOptions="actionDone"
                     android:paddingVertical="18dp"
                     android:textColor="@color/black"
                     android:textSize="14sp" />

@@ -71,6 +71,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="100dp"
             android:paddingTop="120dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -139,6 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/username"
+                    android:imeOptions="actionDone"
                     android:inputType="textPersonName"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
@@ -181,6 +183,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/email"
                     android:inputType="textEmailAddress"
+                    android:imeOptions="actionDone"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -221,6 +224,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/linkedin"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
@@ -262,6 +266,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/github"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
                     android:textColor="@color/black"
                     android:textSize="14sp" />

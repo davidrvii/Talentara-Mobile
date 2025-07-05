@@ -128,6 +128,7 @@ class TalentApplyActivity : AppCompatActivity() {
             removeBtn.setOnClickListener {
                 binding.portfolioContainer.removeView(itemView)
                 portfolioItems.remove(item)
+                buttonSet()
             }
             binding.portfolioContainer.addView(itemView)
         }
@@ -265,6 +266,7 @@ class TalentApplyActivity : AppCompatActivity() {
                 setOnCloseIconClickListener {
                     chipGroup.removeView(this)
                     selectedSet.remove(value)
+                    buttonSet()
                 }
             }
             chipGroup.addView(chip)
@@ -370,6 +372,12 @@ class TalentApplyActivity : AppCompatActivity() {
         with(binding) {
             tilLinkedInProfile.editText?.addTextChangedListener(watcher)
             tilGithubProfile.editText?.addTextChangedListener(watcher)
+            tilRole.editText?.addTextChangedListener(watcher)
+            tilPlatform.editText?.addTextChangedListener(watcher)
+            tilProductType.editText?.addTextChangedListener(watcher)
+            tilLanguage.editText?.addTextChangedListener(watcher)
+            tilTools.editText?.addTextChangedListener(watcher)
+
         }
     }
 
@@ -381,7 +389,8 @@ class TalentApplyActivity : AppCompatActivity() {
                     selectedProductTypes.isNotEmpty() &&
                     selectedLanguages.isNotEmpty() &&
                     selectedTools.isNotEmpty() &&
-                    selectedRoles.isNotEmpty()
+                    selectedRoles.isNotEmpty() &&
+                    portfolioItems.isNotEmpty()
 
         binding.btnTalentApply.isEnabled = filled
     }

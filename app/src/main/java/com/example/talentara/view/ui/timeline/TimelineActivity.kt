@@ -762,6 +762,7 @@ class TimelineActivity : AppCompatActivity() {
             .filter { it.isNotEmpty() }
 
         val request = ApiService.AddPortfolioRequest(
+            talentId = id,
             clientName = project.clientName!!,
             portfolioName = project.projectName!!,
             portfolioLinkedin = "Empty",
@@ -778,12 +779,12 @@ class TimelineActivity : AppCompatActivity() {
             feature = featuresList.toList()
         )
 
-        newPortfolioViewModel.addPortfolioTalent(id, request)
+        newPortfolioViewModel.addPortfolioTalent(request)
         addPortfolioViewModelObserver(id)
     }
 
     private fun addPortfolioViewModelObserver(id: Int) {
-        newPortfolioViewModel.addPortfolio.observe(this) { result ->
+        newPortfolioViewModel.addPortfolioTalent.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {
                     showLoading(true)

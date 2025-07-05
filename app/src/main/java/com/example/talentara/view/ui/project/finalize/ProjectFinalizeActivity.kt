@@ -261,6 +261,7 @@ class ProjectFinalizeActivity : AppCompatActivity() {
                 setOnCloseIconClickListener {
                     chipGroup.removeView(this)
                     selectedSet.remove(value)
+                    buttonSet()
                 }
             }
             chipGroup.addView(chip)
@@ -373,6 +374,12 @@ class ProjectFinalizeActivity : AppCompatActivity() {
             tilProjectGithub.editText?.addTextChangedListener(watcher)
             tilMetingLink.editText?.addTextChangedListener(watcher)
             tilClientName.editText?.addTextChangedListener(watcher)
+            tilFeature.editText?.addTextChangedListener(watcher)
+            tilPlatform.editText?.addTextChangedListener(watcher)
+            tilProductType.editText?.addTextChangedListener(watcher)
+            tilLanguage.editText?.addTextChangedListener(watcher)
+            tilTools.editText?.addTextChangedListener(watcher)
+            tilRole.editText?.addTextChangedListener(watcher)
         }
     }
 

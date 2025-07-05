@@ -78,10 +78,11 @@ class MainActivity : AppCompatActivity() {
             } else if (destination.id == R.id.navigation_profile && userIsTalentAccess == 1) {
                 binding.btnNewProject.visibility = View.VISIBLE
                 binding.btnNewProject.setOnClickListener {
-                    val intent = Intent(this, NewPortfolioActivity::class.java)
+                    val intent = Intent(this, NewPortfolioActivity::class.java).apply {
+                        putExtra(NewPortfolioActivity.STATE, "NewPortfolio")
+                    }
                     startActivity(intent)
                 }
-
             } else {
                 binding.btnNewProject.visibility = View.GONE
             }

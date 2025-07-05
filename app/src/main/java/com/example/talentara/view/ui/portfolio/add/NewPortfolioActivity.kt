@@ -20,6 +20,8 @@ import androidx.core.graphics.toColorInt
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.talentara.R
+import com.example.talentara.data.local.preference.UserPreference
+import com.example.talentara.data.local.preference.dataStore
 import com.example.talentara.data.model.response.categories.GetAllCategoriesResponse
 import com.example.talentara.data.model.response.talent.TalentDetailItem
 import com.example.talentara.data.model.result.Results
@@ -32,6 +34,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -46,6 +49,7 @@ class NewPortfolioActivity : AppCompatActivity() {
     private val profileViewModel: ProfileViewModel by viewModels {
         FactoryViewModel.getInstance(this)
     }
+    private lateinit var userPreference: UserPreference
     private lateinit var binding: ActivityNewPortfolioBinding
 
     private val selectedRoles = mutableSetOf<String>()
@@ -65,6 +69,7 @@ class NewPortfolioActivity : AppCompatActivity() {
             insets
         }
 
+        userPreference = UserPreference.getInstance(dataStore)
         textFieldWatcher()
         getAllCategories()
         setupButtonAction()
@@ -196,6 +201,7 @@ class NewPortfolioActivity : AppCompatActivity() {
                 setOnCloseIconClickListener {
                     chipGroup.removeView(this)
                     selectedSet.remove(value)
+                    buttonSet()
                 }
             }
             chipGroup.addView(chip)
@@ -226,6 +232,7 @@ class NewPortfolioActivity : AppCompatActivity() {
 
             btnUploadPortfolio.setOnClickListener {
                 val state = intent.getStringExtra(STATE)
+                Log.d("NewPortfolioActivity", "State: $state")
                 when (state) {
                     "NewPortfolio" -> {
                         profileViewModel.getTalentDetail()
@@ -236,6 +243,7 @@ class NewPortfolioActivity : AppCompatActivity() {
                                 }
 
                                 is Results.Success -> {
+                                    Log.d("NewPortfolioActivity", "Success: ${result.data}")
                                     result.data.talentDetail?.firstOrNull()?.let { talent -> mergeAndUpdateTalent(talent) }
                                     showLoading(false)
                                 }
@@ -288,6 +296,8 @@ class NewPortfolioActivity : AppCompatActivity() {
     }
 
     private fun mergeAndUpdateTalent(talent: TalentDetailItem) {
+        showLoading(true)
+        Log.d("NewPortfolioActivity", "Talent: $talent")
         // Get old list (NULL-safe)
         val oldRoles = talent.roles?.split("|")?.map { it.trim() }.orEmpty()
         val oldLanguages = talent.languages?.split("|")?.map { it.trim() }.orEmpty()
@@ -310,11 +320,13 @@ class NewPortfolioActivity : AppCompatActivity() {
             platforms = mergedPlatforms
         )
 
-        updateTalent(request)
+        Log.d("NewPortfolioActivity", "Request Update Talent: $request")
+
+        editProfileViewModel.updateTalent(request)
+        updateTalentObserver()
     }
 
-    private fun updateTalent(request: ApiService.UpdateTalentRequest) {
-        editProfileViewModel.updateTalent(request)
+    private fun updateTalentObserver() {
         editProfileViewModel.updateTalent.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {
@@ -322,6 +334,7 @@ class NewPortfolioActivity : AppCompatActivity() {
                 }
 
                 is Results.Success -> {
+                    Log.d("NewPortfolioActivity", "Success: ${result.data}")
                     uploadPortfolio()
                     showLoading(false)
                 }
@@ -334,6 +347,8 @@ class NewPortfolioActivity : AppCompatActivity() {
     }
 
     private fun uploadPortfolio() {
+        showLoading(true)
+        Log.d("NewPortfolioActivity", "Upload Portfolio")
         setupDateField(binding.tilStartDate) { selected ->
             binding.tilStartDate.editText?.setText(selected)
         }
@@ -341,32 +356,38 @@ class NewPortfolioActivity : AppCompatActivity() {
         setupDateField(binding.tilEndDate) { selected ->
             binding.tilEndDate.editText?.setText(selected)
         }
-        val clientName = binding.tilClientName.editText!!.text.toString().trim()
-        val portfolioName = binding.tilProjectName.editText!!.text.toString().trim()
-        val portfolioDesc = binding.tilProjectDescription.editText!!.text.toString().trim()
-        val github = binding.tilProjectGithub.editText!!.text.toString().trim()
-        val linkedIn = binding.tilProjectLinkedIn.editText!!.text.toString().trim()
-        val startDateStored = binding.tilStartDate.editText?.getTag(R.id.dateTag)?.toString()
-        val endDateStored = binding.tilEndDate.editText?.getTag(R.id.dateTag)?.toString()
 
-
-        val request = ApiService.AddPortfolioRequest(
-            clientName = clientName,
-            portfolioName = portfolioName,
-            portfolioLinkedin = linkedIn,
-            portfolioGithub = github,
-            portfolioDesc = portfolioDesc,
-            portfolioLabel = "Portfolio",
-            startDate = startDateStored.toString(),
-            endDate = endDateStored.toString(),
-            platforms = selectedPlatforms.toList(),
-            tools = selectedTools.toList(),
-            languages = selectedLanguages.toList(),
-            roles = selectedRoles.toList(),
-            productTypes = selectedProductTypes.toList(),
-            feature = selectedFeatures.toList()
-        )
         lifecycleScope.launch {
+            val userId = userPreference.getSession().first().userId
+            val clientName = binding.tilClientName.editText!!.text.toString().trim()
+            val portfolioName = binding.tilProjectName.editText!!.text.toString().trim()
+            val portfolioDesc = binding.tilProjectDescription.editText!!.text.toString().trim()
+            val github = binding.tilProjectGithub.editText!!.text.toString().trim()
+            val linkedIn = binding.tilProjectLinkedIn.editText!!.text.toString().trim()
+            val startDateStored = binding.tilStartDate.editText?.getTag(R.id.dateTag)?.toString()
+            val endDateStored = binding.tilEndDate.editText?.getTag(R.id.dateTag)?.toString()
+
+
+            val request = ApiService.AddPortfolioRequest(
+                talentId = userId,
+                clientName = clientName,
+                portfolioName = portfolioName,
+                portfolioLinkedin = linkedIn,
+                portfolioGithub = github,
+                portfolioDesc = portfolioDesc,
+                portfolioLabel = "Portfolio",
+                startDate = startDateStored.toString(),
+                endDate = endDateStored.toString(),
+                platforms = selectedPlatforms.toList(),
+                tools = selectedTools.toList(),
+                languages = selectedLanguages.toList(),
+                roles = selectedRoles.toList(),
+                productTypes = selectedProductTypes.toList(),
+                feature = selectedFeatures.toList()
+            )
+
+            Log.d("NewPortfolioActivity", "Request Add Portfolio: $request")
+
             newPortfolioViewModel.addPortfolio(request)
             addPortfolioViewModelObserver()
         }
@@ -457,6 +478,12 @@ class NewPortfolioActivity : AppCompatActivity() {
             tilEndDate.editText?.addTextChangedListener(watcher)
             tilProjectGithub.editText?.addTextChangedListener(watcher)
             tilProjectLinkedIn.editText?.addTextChangedListener(watcher)
+            tilFeature.editText?.addTextChangedListener(watcher)
+            tilPlatform.editText?.addTextChangedListener(watcher)
+            tilProductType.editText?.addTextChangedListener(watcher)
+            tilLanguage.editText?.addTextChangedListener(watcher)
+            tilTools.editText?.addTextChangedListener(watcher)
+            tilRole.editText?.addTextChangedListener(watcher)
         }
     }
 

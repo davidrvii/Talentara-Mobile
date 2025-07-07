@@ -100,7 +100,7 @@ interface ApiService {
     suspend fun updateUserIsOnProject(
         @Header("Authorization") token: String,
         @Path("user_id") id: Int,
-        @Field("is_on_project") isOnProject: Boolean,
+        @Field("is_on_project") isOnProject: Int,
     ): UpdateUserResponse
 
     @FormUrlEncoded
@@ -108,7 +108,7 @@ interface ApiService {
     suspend fun updateUserTalentAccess(
         @Header("Authorization") token: String,
         @Path("user_id") id: Int,
-        @Field("talent_access") talentAccess: Boolean,
+        @Field("talent_access") talentAccess: Int,
     ): UpdateUserResponse
 
     //NOTIFICATION
@@ -288,18 +288,10 @@ interface ApiService {
 
     @FormUrlEncoded
     @PATCH("talent/update/{talent_id}")
-    suspend fun updateTalentIsOnProject(
-        @Header("Authorization") token: String,
-        @Path("talent_id") talentId: Int,
-        @Field("is_on_project") isOnProject: Boolean,
-    ): UpdateTalentResponse
-
-    @FormUrlEncoded
-    @PATCH("talent/update/{talent_id}")
     suspend fun updateTalentIsProjectManager(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
-        @Field("is_project_manager") isProjectManager: Boolean,
+        @Field("is_project_manager") isProjectManager: Int,
     ): UpdateTalentResponse
 
     @FormUrlEncoded
@@ -478,7 +470,7 @@ interface ApiService {
     )
 
     @FormUrlEncoded
-    @PATCH("project/update/{project_id}")
+    @PATCH("project/completed/{project_id}")
     suspend fun updateProjectCompleted(
         @Header("Authorization") token: String,
         @Path("project_id") projectId: Int,
@@ -493,7 +485,7 @@ interface ApiService {
         @Field("project_id") projectId: Int,
         @Field("talent_id") talentId: Int,
         @Field("role_name") roleName: String,
-        @Field("accept") accept: Boolean,
+        @Field("accept") accept: Int,
     ): ProjectOfferResponse
 
     //PROJECT ORDER

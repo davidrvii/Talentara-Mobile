@@ -73,36 +73,18 @@ class NotificationsViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    private val _addNotificationTalent = MediatorLiveData<Results<NewNotificationResponse>>()
-    val addNotificationTalent: LiveData<Results<NewNotificationResponse>> = _addNotificationTalent
-
-    fun addNotificationTalent(
-        talentId: Int,
+    suspend fun addNotificationTalent(
+        userId: Int,
         title: String,
         desc: String,
         type: String,
         clickAction: String
-    ) {
-        viewModelScope.launch {
-            _addNotification.value = Results.Loading
-            try {
-                val token = repository.getSession().first().token
-
-                _addNotification.addSource(
-                    repository.addNotification(
-                        token,
-                        talentId,
-                        title,
-                        desc,
-                        type,
-                        clickAction
-                    )
-                ) { result ->
-                    _addNotification.value = result
-                }
-            } catch (e: Exception) {
-                _addNotification.value = Results.Error(e.message.toString())
-            }
+    ): Results<NewNotificationResponse> {
+        return try {
+            val token = repository.getSession().first().token
+            repository.addNotificationTalent(token, userId, title, desc, type, clickAction)
+        } catch (e: Exception) {
+            Results.Error(e.message ?: "Unknown error")
         }
     }
 

@@ -8,6 +8,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.talentara.data.model.response.notification.NotificationHistoryItem
 import com.example.talentara.databinding.NotificationItemBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class NotificationAdapter(
     private var listNotification: List<NotificationHistoryItem>
@@ -22,7 +26,7 @@ class NotificationAdapter(
         this.onItemClick = callback
     }
 
-    class ViewHolder(private val binding: NotificationItemBinding)
+    inner class ViewHolder(private val binding: NotificationItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
             fun bind(item: NotificationHistoryItem) {
@@ -37,9 +41,29 @@ class NotificationAdapter(
                 binding.apply {
                     tvNotificationTitle.text = item.notificationTitle
                     tvNotificationDesc.text = item.notificationDesc
-                    tvTime.text = item.createdAt
+                    tvTime.text = formatedDate(item.createdAt ?: "")
+                }
+
+                binding.cvNotification.apply {
+                 setOnClickListener {
+                     onItemClick?.invoke(item)
+                 }
                 }
             }
+
+        fun formatedDate(isoDate: String): String {
+            return try {
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+                val date = inputFormat.parse(isoDate)
+
+                val outputFormat = SimpleDateFormat("d MMMM yy", Locale("id", "ID"))
+                outputFormat.format(date ?: Date())
+            } catch (e: Exception) {
+                isoDate
+            }
+        }
     }
 
     override fun onCreateViewHolder(
@@ -53,9 +77,6 @@ class NotificationAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = listNotification[position]
         holder.bind(data)
-        holder.itemView.setOnClickListener {
-            onItemClick?.invoke(data)
-        }
     }
 
     override fun getItemCount(): Int = listNotification.size

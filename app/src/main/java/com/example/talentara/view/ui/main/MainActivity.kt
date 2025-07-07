@@ -60,20 +60,6 @@ class MainActivity : AppCompatActivity() {
 
         profileViewModel.getUserDetail()
         getUserDetailObserver(navController)
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.navigation_profile && userIsTalentAccess == 1) {
-                binding.btnNewProject.visibility = View.VISIBLE
-                binding.btnNewProject.setOnClickListener {
-                    val intent = Intent(this, NewPortfolioActivity::class.java).apply {
-                        putExtra(NewPortfolioActivity.STATE, "NewPortfolio")
-                    }
-                    startActivity(intent)
-                }
-            } else {
-                binding.btnNewProject.visibility = View.GONE
-            }
-        }
     }
 
     private fun getUserDetailObserver(navController: androidx.navigation.NavController) {
@@ -81,34 +67,62 @@ class MainActivity : AppCompatActivity() {
             when (result) {
                 is Results.Loading -> {}
                 is Results.Success -> {
-                    val isTalentAccess = result.data.userDetail?.firstOrNull()?.talentAccess
-                    isTalentAccess?.let { isTalentAccess ->
-                        userIsTalentAccess = isTalentAccess
-                    }
+                    val user = result.data.userDetail?.firstOrNull()
+                    userIsOnProject = user?.isOnProject ?: 0
+                    userIsTalentAccess = user?.talentAccess ?: 0
 
-                    val isOnProject = result.data.userDetail?.firstOrNull()?.isOnProject
                     navController.addOnDestinationChangedListener { _, destination, _ ->
-                        if (destination.id == R.id.navigation_home) {
-                            binding.btnNewProject.visibility = View.VISIBLE
-                            Log.d("MainActivity", "userIsOnProject: $userIsOnProject")
-                            if (isOnProject == 0) {
-                                binding.btnNewProject.setOnClickListener {
-                                    val intent = Intent(this, NewProjectActivity::class.java)
-                                    startActivity(intent)
-                                }
-                            } else {
-                                binding.btnNewProject.apply {
-                                    isEnabled = false
-                                    alpha = 0.5f
+                        when (destination.id) {
+                            R.id.navigation_home -> {
+                                showBtnForProject(userIsOnProject)
+                            }
+                            R.id.navigation_profile -> {
+                                if (userIsTalentAccess == 1) {
+                                    showBtnForPortfolio()
+                                } else {
+                                    hideBtn()
                                 }
                             }
-                        } else {
-                            binding.btnNewProject.visibility = View.GONE
+                            else -> hideBtn()
                         }
                     }
                 }
+
                 is Results.Error -> {}
             }
         }
     }
+
+    private fun showBtnForPortfolio() {
+        binding.btnNewProject.visibility = View.VISIBLE
+        binding.btnNewProject.apply {
+            isEnabled = true
+            alpha = 1f
+        }
+        binding.btnNewProject.setOnClickListener {
+            val intent = Intent(this, NewPortfolioActivity::class.java)
+            intent.putExtra(NewPortfolioActivity.STATE, "NewPortfolio")
+            startActivity(intent)
+        }
+    }
+
+    private fun showBtnForProject(isOnProject: Int) {
+        binding.btnNewProject.visibility = View.VISIBLE
+        if (isOnProject == 0) {
+            binding.btnNewProject.setOnClickListener {
+                val intent = Intent(this, NewProjectActivity::class.java)
+                startActivity(intent)
+            }
+        } else {
+            binding.btnNewProject.apply {
+                isEnabled = false
+                alpha = 0.5f
+            }
+        }
+    }
+
+    private fun hideBtn() {
+        binding.btnNewProject.visibility = View.GONE
+    }
+
 }

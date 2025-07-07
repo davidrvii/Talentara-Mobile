@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.talentara.data.model.response.categories.GetAllCategoriesResponse
 import com.example.talentara.data.model.response.portfolio.NewPortfolioResponse
 import com.example.talentara.data.model.result.Results
-import com.example.talentara.data.remote.ApiService
+import com.example.talentara.data.remote.ApiService.AddPortfolioRequest
 import com.example.talentara.data.repository.Repository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ class NewPortfolioViewModel(private val repository: Repository) : ViewModel() {
     val addPortfolio: LiveData<Results<NewPortfolioResponse>> = _addPortfolio
 
     fun addPortfolio(
-        request: ApiService.AddPortfolioRequest,
+        request: AddPortfolioRequest,
     ) {
         viewModelScope.launch {
             _addPortfolio.value = Results.Loading
@@ -36,27 +36,17 @@ class NewPortfolioViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    private val _addPortfolioTalent = MediatorLiveData<Results<NewPortfolioResponse>>()
-    val addPortfolioTalent: LiveData<Results<NewPortfolioResponse>> = _addPortfolioTalent
-
-    fun addPortfolioTalent(
-        request: ApiService.AddPortfolioRequest,
-    ) {
-        viewModelScope.launch {
-            _addPortfolio.value = Results.Loading
-            try {
-                repository.getSession().collect { user ->
-                    user.token.let { token ->
-                        _addPortfolio.addSource(repository.addPortfolio(token, request)) { result ->
-                            _addPortfolio.value = result
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                _addPortfolio.value = Results.Error(e.message.toString())
-            }
+    suspend fun addPortfolioTalent(
+        request: AddPortfolioRequest
+    ): Results<NewPortfolioResponse> {
+        return try {
+            val token = repository.getSession().first().token
+            repository.addPortfolioTalent(token, request)
+        } catch (e: Exception) {
+            Results.Error(e.message ?: "Unknown error")
         }
     }
+
 
     private val _getAllCategories = MediatorLiveData<Results<GetAllCategoriesResponse>>()
     val getAllCategories: LiveData<Results<GetAllCategoriesResponse>> = _getAllCategories

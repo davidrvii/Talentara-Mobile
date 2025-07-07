@@ -45,18 +45,10 @@ class NotificationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupNotificationList()
-        updateNotification()
         deleteNotification()
     }
 
     private fun updateNotification() {
-        notificationAdapter.setOnItemClickListener { item ->
-            notificationViewModel.updateNotification(
-                status = "read",
-                notificationId = item.notificationId ?: 0
-            )
-        }
-
         notificationViewModel.updateNotification.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Results.Loading -> {
@@ -85,6 +77,8 @@ class NotificationFragment : Fragment() {
     }
 
     private fun setupNotificationList() {
+        setupRecyclerView()
+
         notificationViewModel.getNotificationHistory()
         notificationViewModel.notificationHistory.observe(viewLifecycleOwner) { result ->
             when (result) {
@@ -99,6 +93,7 @@ class NotificationFragment : Fragment() {
                     notificationAdapter.updateData(
                         result.data.notificationHistory?.filterNotNull() ?: emptyList()
                     )
+                    Log.d("NotificationFragment", "Loaded notifications: ${result.data.notificationHistory?.size}")
                 }
 
                 is Results.Error -> {
@@ -125,7 +120,6 @@ class NotificationFragment : Fragment() {
                 }
             }
         }
-        setupRecyclerView()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -135,6 +129,14 @@ class NotificationFragment : Fragment() {
         binding.rvNotification.apply {
             adapter = notificationAdapter
             layoutManager = LinearLayoutManager(context)
+        }
+
+        notificationAdapter.setOnItemClickListener { item ->
+            notificationViewModel.updateNotification(
+                status = "read",
+                notificationId = item.notificationId ?: 0
+            )
+            updateNotification()
         }
     }
 

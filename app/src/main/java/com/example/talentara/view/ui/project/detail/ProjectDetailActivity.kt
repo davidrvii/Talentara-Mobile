@@ -39,6 +39,8 @@ class ProjectDetailActivity : AppCompatActivity() {
     private val productTypeAdapter = ItemsAdapter(emptyList())
     private val languageAdapter = ItemsAdapter(emptyList())
 
+    private var clientId: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProjectDetailBinding.inflate(layoutInflater)
@@ -49,9 +51,9 @@ class ProjectDetailActivity : AppCompatActivity() {
             insets
         }
 
-        setupButtonAction()
         initRecyclerViews()
         getProjectDetail()
+        setupButtonAction()
     }
 
     private fun setupButtonAction() {
@@ -62,6 +64,7 @@ class ProjectDetailActivity : AppCompatActivity() {
             cvProjectTimeline.setOnClickListener {
                 val intent = Intent(this@ProjectDetailActivity, TimelineActivity::class.java).apply {
                     putExtra(TimelineActivity.PROJECT_ID, intent.getIntExtra(PROJECT_ID, 0))
+                    putExtra(TimelineActivity.USER_ID, clientId)
                 }
                 startActivity(intent)
             }
@@ -116,6 +119,7 @@ class ProjectDetailActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     val project = result.data.projectDetail?.firstOrNull()
+                    clientId = project?.userId ?: 0
                     bindProject(project!!)
                 }
 

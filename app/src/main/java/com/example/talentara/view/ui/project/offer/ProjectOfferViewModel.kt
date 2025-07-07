@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.talentara.data.model.response.project.ProjectOfferResponse
 import com.example.talentara.data.model.response.project.ProjectOrderResponse
-import com.example.talentara.data.model.response.talent.UpdateTalentResponse
+import com.example.talentara.data.model.response.user.UpdateUserResponse
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.data.repository.Repository
 import kotlinx.coroutines.flow.first
@@ -20,7 +20,7 @@ class ProjectOfferViewModel(private val repository: Repository) : ViewModel() {
     fun getProjectOffer(
         projectId: Int,
         roleName: String,
-        accept: Boolean,
+        accept: Int,
     ) {
         viewModelScope.launch {
             _projectOffer.value = Results.Loading
@@ -28,7 +28,15 @@ class ProjectOfferViewModel(private val repository: Repository) : ViewModel() {
                 val token = repository.getSession().first().token
                 val talentId = repository.getSession().first().userId
 
-                _projectOffer.addSource(repository.projectOffer(token, projectId, talentId, roleName, accept)) { result ->
+                _projectOffer.addSource(
+                    repository.projectOffer(
+                        token,
+                        projectId,
+                        talentId,
+                        roleName,
+                        accept
+                    )
+                ) { result ->
                     _projectOffer.value = result
                 }
             } catch (e: Exception) {
@@ -37,23 +45,58 @@ class ProjectOfferViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    private val _updateTalentIsOnProject = MediatorLiveData<Results<UpdateTalentResponse>>()
-    val updateTalentIsOnProject: LiveData<Results<UpdateTalentResponse>> = _updateTalentIsOnProject
+    private val _updateUserIsOnProjectDone = MediatorLiveData<Results<UpdateUserResponse>>()
+    val updateUserIsOnProjectDone: LiveData<Results<UpdateUserResponse>> =
+        _updateUserIsOnProjectDone
 
-    fun updateTalentIsOnProject(
-        isOnProject: Boolean,
+    fun updateUserIsOnProjectDone(
+        talendId: Int,
+        isOnProject: Int,
     ) {
         viewModelScope.launch {
-            _updateTalentIsOnProject.value = Results.Loading
+            _updateUserIsOnProjectDone.value = Results.Loading
             try {
                 val token = repository.getSession().first().token
-                val talentId = repository.getSession().first().userId
 
-                _updateTalentIsOnProject.addSource(repository.updateTalentIsOnProject(token, talentId, isOnProject)) { result ->
-                    _updateTalentIsOnProject.value = result
+                _updateUserIsOnProjectDone.addSource(
+                    repository.updateUserIsOnProject(
+                        token,
+                        talendId,
+                        isOnProject
+                    )
+                ) { result ->
+                    _updateUserIsOnProjectDone.value = result
                 }
             } catch (e: Exception) {
-                _updateTalentIsOnProject.value = Results.Error(e.message.toString())
+                _updateUserIsOnProjectDone.value = Results.Error(e.message.toString())
+            }
+        }
+    }
+
+    private val _updateTalentIsOnProjectDone = MediatorLiveData<Results<UpdateUserResponse>>()
+    val updateTalentIsOnProjectDone: LiveData<Results<UpdateUserResponse>> =
+        _updateTalentIsOnProjectDone
+
+    fun updateTalentIsOnProjectDone(
+        talendId: Int,
+        isOnProject: Int,
+    ) {
+        viewModelScope.launch {
+            _updateTalentIsOnProjectDone.value = Results.Loading
+            try {
+                val token = repository.getSession().first().token
+
+                _updateTalentIsOnProjectDone.addSource(
+                    repository.updateUserIsOnProject(
+                        token,
+                        talendId,
+                        isOnProject
+                    )
+                ) { result ->
+                    _updateTalentIsOnProjectDone.value = result
+                }
+            } catch (e: Exception) {
+                _updateTalentIsOnProjectDone.value = Results.Error(e.message.toString())
             }
         }
     }

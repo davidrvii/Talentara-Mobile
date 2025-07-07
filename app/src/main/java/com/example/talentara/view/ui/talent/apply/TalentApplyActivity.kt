@@ -339,7 +339,7 @@ class TalentApplyActivity : AppCompatActivity() {
     }
 
     private fun updateTalentAccess() {
-        talentApplyViewModel.updateUserTalentAccess(true)
+        talentApplyViewModel.updateUserTalentAccess(1)
         talentApplyViewModel.updateUserTalentAccess.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {

@@ -52,7 +52,7 @@ class NewProjectViewModel(private val repository: Repository) : ViewModel() {
     val updateUserIsOnProject: LiveData<Results<UpdateUserResponse>> = _updateUserIsOnProject
 
     fun updateUserIsOnProject(
-        isOnProject: Boolean,
+        isOnProject: Int,
     ) {
         viewModelScope.launch {
             _updateUserIsOnProject.value = Results.Loading

@@ -169,7 +169,7 @@ class NewProjectActivity : AppCompatActivity() {
                         this,
                         "Successfully create project", Toast.LENGTH_SHORT
                     ).show()
-                    newProjectViewModel.updateUserIsOnProject(true)
+                    newProjectViewModel.updateUserIsOnProject(1)
                     notificationViewModel.addNotification(
                         title       = "Create New Project",
                         desc        = "Waiting for project manager to join",

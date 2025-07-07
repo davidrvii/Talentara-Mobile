@@ -335,13 +335,22 @@ class ProjectFinalizeActivity : AppCompatActivity() {
                         type        = "PROJECT_FINALIZED",
                         clickAction = "NONE"
                     )
-                    notificationViewModel.addNotificationTalent(
-                        talentId    = clientId,
-                        title       = "Project Finalized",
-                        desc        = "Waiting for team to join the project",
-                        type        = "PROJECT_FINALIZED",
-                        clickAction = "NONE"
-                    )
+
+                    lifecycleScope.launch {
+                        val notifResult = notificationViewModel.addNotificationTalent(
+                            userId    = clientId,
+                            title       = "Project Finalized",
+                            desc        = "Waiting for team to join the project",
+                            type        = "PROJECT_FINALIZED",
+                            clickAction = "NONE"
+                        )
+
+                        when (notifResult) {
+                            is Results.Success -> Log.d("Notification", "Success for user $clientId")
+                            is Results.Error -> Log.e("Notification", "Failed for user $clientId: ${notifResult.error}")
+                            else -> {}
+                        }
+                    }
                 }
                 is Results.Error -> {
                     showLoading(false)

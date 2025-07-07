@@ -35,7 +35,7 @@ class TalentApplyViewModel(private val repository: Repository) : ViewModel() {
     val updateUserTalentAccess: LiveData<Results<UpdateUserResponse>> = _updateUserTalentAccess
 
     fun updateUserTalentAccess(
-        talentAccess: Boolean,
+        talentAccess: Int,
     ) {
         viewModelScope.launch {
             _updateUserTalentAccess.value = Results.Loading

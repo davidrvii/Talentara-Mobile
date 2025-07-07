@@ -7,7 +7,7 @@ data class NotificationHistoryResponse(
 	@field:SerializedName("success")
 	val success: Boolean? = null,
 
-	@field:SerializedName("notificationDetail")
+	@field:SerializedName("notificationHistory")
 	val notificationHistory: List<NotificationHistoryItem?>? = null,
 
 	@field:SerializedName("message")

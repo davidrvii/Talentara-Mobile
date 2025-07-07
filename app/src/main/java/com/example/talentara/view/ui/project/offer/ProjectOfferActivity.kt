@@ -15,6 +15,7 @@ import com.example.talentara.data.model.response.project.ProjectOrderItem
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.ActivityProjectOfferBinding
 import com.example.talentara.view.ui.portfolio.detail.ItemsAdapter
+import com.example.talentara.view.ui.project.add.NewProjectViewModel
 import com.example.talentara.view.ui.talent.detail.TalentDetailViewModel
 import com.example.talentara.view.utils.FactoryViewModel
 import kotlinx.coroutines.flow.map
@@ -26,6 +27,9 @@ class ProjectOfferActivity : AppCompatActivity() {
         FactoryViewModel.getInstance(this)
     }
     private val talentDetailViewModel: TalentDetailViewModel by viewModels {
+        FactoryViewModel.getInstance(this)
+    }
+    private val newProjectViewmodel: NewProjectViewModel by viewModels {
         FactoryViewModel.getInstance(this)
     }
     private val userPref by lazy {
@@ -95,12 +99,12 @@ class ProjectOfferActivity : AppCompatActivity() {
     private fun setupButtonAction() {
         with(binding) {
             btYes.setOnClickListener {
-                projectOfferViewModel.getProjectOffer(projectId, roleName, true)
+                projectOfferViewModel.getProjectOffer(projectId, roleName, 1)
                 acceptProjectObserver()
             }
             if (talentProjectDeclined < 3) {
                 btCancel.setOnClickListener {
-                    projectOfferViewModel.getProjectOffer(projectId, roleName, false)
+                    projectOfferViewModel.getProjectOffer(projectId, roleName, 0)
                     declineProjectObserver()
                 }
             } else {
@@ -119,7 +123,7 @@ class ProjectOfferActivity : AppCompatActivity() {
 
                 is Results.Success -> {
                     showLoading(false)
-                    projectOfferViewModel.updateTalentIsOnProject(true)
+                    newProjectViewmodel.updateUserIsOnProject(1)
                     talentIsOnProjectObserver()
                 }
 
@@ -150,7 +154,7 @@ class ProjectOfferActivity : AppCompatActivity() {
     }
 
     private fun talentIsOnProjectObserver() {
-        projectOfferViewModel.updateTalentIsOnProject.observe(this) { result ->
+        newProjectViewmodel.updateUserIsOnProject.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {
                     showLoading(true)

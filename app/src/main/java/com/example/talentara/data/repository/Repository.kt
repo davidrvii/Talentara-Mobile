@@ -39,6 +39,7 @@ import com.example.talentara.data.model.response.user.UserDetailResponse
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.data.model.user.UserModel
 import com.example.talentara.data.remote.ApiService
+import com.example.talentara.data.remote.ApiService.AddPortfolioRequest
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -142,7 +143,7 @@ class Repository private constructor(
     fun updateUserIsOnProject(
         token: String,
         userId: Int,
-        isOnProject: Boolean,
+        isOnProject: Int,
     ): LiveData<Results<UpdateUserResponse>> = liveData {
         emit(Results.Loading)
         try {
@@ -156,7 +157,7 @@ class Repository private constructor(
     fun updateUserTalentAccess(
         token: String,
         userId: Int,
-        talentAccess: Boolean,
+        talentAccess: Int,
     ): LiveData<Results<UpdateUserResponse>> = liveData {
         emit(Results.Loading)
         try {
@@ -183,6 +184,30 @@ class Repository private constructor(
             emit(Results.Error(e.message.toString()))
         }
     }
+
+    suspend fun addNotificationTalent(
+        token: String,
+        userId: Int,
+        title: String,
+        desc: String,
+        type: String,
+        clickAction: String
+    ): Results<NewNotificationResponse> {
+        return try {
+            val response = apiService.addNotification(
+                "Bearer $token",
+                userId,
+                title,
+                desc,
+                type,
+                clickAction
+            )
+            Results.Success(response)
+        } catch (e: Exception) {
+            Results.Error(e.message ?: "Unknown error")
+        }
+    }
+
 
     fun getNotificationHistory(
         token: String,
@@ -415,25 +440,10 @@ class Repository private constructor(
         }
     }
 
-    fun updateTalentIsOnProject(
-        token: String,
-        talentId: Int,
-        isOnProject: Boolean,
-    ): LiveData<Results<UpdateTalentResponse>> = liveData {
-        emit(Results.Loading)
-        try {
-            val response =
-                apiService.updateTalentIsOnProject("Bearer $token", talentId, isOnProject)
-            emit(Results.Success(response))
-        } catch (e: Exception) {
-            emit(Results.Error(e.message.toString()))
-        }
-    }
-
     fun updateTalentIsProjectManager(
         token: String,
         talentId: Int,
-        isProjectManager: Boolean,
+        isProjectManager: Int,
     ): LiveData<Results<UpdateTalentResponse>> = liveData {
         emit(Results.Loading)
         try {
@@ -477,7 +487,7 @@ class Repository private constructor(
 
     fun addPortfolio(
         token: String,
-        request: ApiService.AddPortfolioRequest,
+        request: AddPortfolioRequest,
     ): LiveData<Results<NewPortfolioResponse>> = liveData {
         emit(Results.Loading)
         try {
@@ -485,6 +495,18 @@ class Repository private constructor(
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
+        }
+    }
+
+    suspend fun addPortfolioTalent(
+        token: String,
+        request: AddPortfolioRequest
+    ): Results<NewPortfolioResponse> {
+        return try {
+            val response = apiService.addPortfolio("Bearer $token", request)
+            Results.Success(response)
+        } catch (e: Exception) {
+            Results.Error(e.message ?: "Unknown error")
         }
     }
 
@@ -671,7 +693,7 @@ class Repository private constructor(
         projectId: Int,
         talentId: Int,
         roleName: String,
-        accept: Boolean,
+        accept: Int,
     ): LiveData<Results<ProjectOfferResponse>> = liveData {
         emit(Results.Loading)
         try {

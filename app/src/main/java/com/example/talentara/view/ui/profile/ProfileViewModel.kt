@@ -80,10 +80,11 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private val _updateTalentAvailability = MediatorLiveData<Results<UpdateTalentResponse>>()
-    val updateTalentAvailability: LiveData<Results<UpdateTalentResponse>> = _updateTalentAvailability
+    val updateTalentAvailability: LiveData<Results<UpdateTalentResponse>> =
+        _updateTalentAvailability
 
     fun updateTalentAvailability(
-        availability: Int
+        availability: Int,
     ) {
         viewModelScope.launch {
             _updateTalentAvailability.value = Results.Loading
@@ -96,12 +97,41 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
                         token,
                         talentId,
                         availability
-                        )
+                    )
                 ) { result ->
                     _updateTalentAvailability.value = result
                 }
             } catch (e: Exception) {
                 _updateTalentAvailability.value = Results.Error(e.message.toString())
+            }
+        }
+    }
+
+    private val _updateTalentIsProjectManager = MediatorLiveData<Results<UpdateTalentResponse>>()
+    val updateTalentIsProjectManager: LiveData<Results<UpdateTalentResponse>> =
+        _updateTalentIsProjectManager
+
+    fun updateTalentIsProjectManager(
+        isProjectManager: Int,
+    ) {
+        viewModelScope.launch {
+            _updateTalentIsProjectManager.value = Results.Loading
+
+            try {
+                val token = repository.getSession().first().token
+                val talentId = repository.getSession().first().userId
+
+                _updateTalentIsProjectManager.addSource(
+                    repository.updateTalentIsProjectManager(
+                        token,
+                        talentId,
+                        isProjectManager
+                    )
+                ) { result ->
+                    _updateTalentIsProjectManager.value = result
+                }
+            } catch (e: Exception) {
+                _updateTalentIsProjectManager.value = Results.Error(e.message.toString())
             }
         }
     }

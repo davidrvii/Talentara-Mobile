@@ -180,5 +180,7 @@
     <string name="approve">Approve</string>
     <string name="approve_this_timeline">Approve this timeline?</string>
     <string name="you_will_approve_this_timeline_permanently">You will approve this timeline permanently</string>
+    <string name="apply_project_manager">Apply Project Manager</string>
+    <string name="are_you_sure_want_to_be_project_manager">Are you sure want to be Project Manager</string>
 
 </resources>

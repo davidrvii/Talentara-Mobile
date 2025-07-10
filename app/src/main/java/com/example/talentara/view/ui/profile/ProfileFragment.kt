@@ -1,6 +1,7 @@
 package com.example.talentara.view.ui.profile
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -8,10 +9,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -19,6 +23,7 @@ import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.example.talentara.R
 import com.example.talentara.data.model.result.Results
+import com.example.talentara.databinding.CustomProjectManagerDialogBinding
 import com.example.talentara.databinding.FragmentProfileBinding
 import com.example.talentara.view.ui.portfolio.add.NewPortfolioActivity
 import com.example.talentara.view.ui.profile.edit.EditProfileActivity
@@ -38,10 +43,13 @@ class ProfileFragment : Fragment() {
     private val editProfileViewModel: EditProfileViewModel by viewModels {
         FactoryViewModel.getInstance(requireActivity())
     }
+    private lateinit var bindingProjectManagerDialog: CustomProjectManagerDialogBinding
     private lateinit var editProfileLauncher: ActivityResultLauncher<Intent>
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private var hasTalentAccess = false
+    private var isTabInitialized = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,6 +81,7 @@ class ProfileFragment : Fragment() {
 
     private fun getUserDetail() {
         viewModel.getUserDetail()
+        viewModel.getUserDetail.removeObservers(viewLifecycleOwner)
         viewModel.getUserDetail.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Results.Loading -> {
@@ -111,9 +120,13 @@ class ProfileFragment : Fragment() {
                                     showLoading(false)
                                     val talent = result.data.talentDetail?.firstOrNull()
                                     if (talent?.isProjectManager == 0) {
+                                        binding.btnTalentApply.visibility = View.VISIBLE
                                         binding.btnTalentApply.load(R.drawable.ic_project_manager_apply) {
                                             placeholder(R.drawable.blank_avatar)
                                             error(R.drawable.blank_avatar)
+                                        }
+                                        binding.btnTalentApply.setOnClickListener {
+                                            showCustomProjectManagerDialog()
                                         }
                                     } else {
                                         binding.btnTalentApply.visibility = View.GONE
@@ -126,7 +139,10 @@ class ProfileFragment : Fragment() {
                         binding.btnTalentApply.visibility = View.GONE
                     }
                     hasTalentAccess = user?.talentAccess == 1
-                    setupViewPagerWithTabs(hasTalentAccess)
+                    if (!isTabInitialized) {
+                        setupViewPagerWithTabs(hasTalentAccess)
+                        isTabInitialized = true
+                    }
                 }
 
                 is Results.Error -> {
@@ -139,6 +155,47 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showCustomProjectManagerDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        bindingProjectManagerDialog = CustomProjectManagerDialogBinding.inflate(layoutInflater)
+
+        dialog.setContentView(bindingProjectManagerDialog.root)
+        dialog.setCancelable(true)
+
+        dialog.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val cardView = bindingProjectManagerDialog.root.findViewById<CardView>(R.id.ApplyProjectManager)
+        val layoutParams = cardView.layoutParams as ViewGroup.MarginLayoutParams
+        val margin = (40 * resources.displayMetrics.density).toInt()
+        layoutParams.setMargins(margin, 0, margin, 0)
+        cardView.layoutParams = layoutParams
+
+        bindingProjectManagerDialog.btYes.setOnClickListener {
+            dialog.dismiss()
+            viewModel.updateTalentIsProjectManager(1)
+            viewModel.updateTalentIsProjectManager.observe(viewLifecycleOwner) { result ->
+                when (result) {
+                    is Results.Loading -> showLoading(true)
+                    is Results.Success -> {
+                        getUserDetail()
+                        showLoading(false)
+                    }
+                    is Results.Error -> showLoading(false)
+                }
+            }
+        }
+        bindingProjectManagerDialog.btCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun setupViewPagerWithTabs(hasTalentAccess: Boolean) {
@@ -220,5 +277,10 @@ class ProfileFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getUserDetail()
     }
 }

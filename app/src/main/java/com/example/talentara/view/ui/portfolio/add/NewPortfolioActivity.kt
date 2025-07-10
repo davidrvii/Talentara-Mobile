@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColorInt
 import androidx.core.view.ViewCompat
@@ -33,7 +34,6 @@ import com.example.talentara.view.utils.FactoryViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -70,9 +70,9 @@ class NewPortfolioActivity : AppCompatActivity() {
         }
 
         userPreference = UserPreference.getInstance(dataStore)
-        textFieldWatcher()
         getAllCategories()
         setupButtonAction()
+        textFieldWatcher()
     }
 
     private fun getAllCategories() {
@@ -214,19 +214,19 @@ class NewPortfolioActivity : AppCompatActivity() {
                 finish()
             }
 
-            tilStartDate.editText?.apply {
+            binding.tilStartDate.editText?.apply {
                 isFocusable = false
                 isClickable = true
                 setOnClickListener {
-                    showDatePicker(this@NewPortfolioActivity, this as TextInputEditText)
+                    showDatePicker(this@NewPortfolioActivity, this as TextInputEditText, R.id.startDateTag)
                 }
             }
 
-            tilEndDate.editText?.apply {
+            binding.tilEndDate.editText?.apply {
                 isFocusable = false
                 isClickable = true
                 setOnClickListener {
-                    showDatePicker(this@NewPortfolioActivity, this as TextInputEditText)
+                    showDatePicker(this@NewPortfolioActivity, this as TextInputEditText, R.id.endDateTag)
                 }
             }
 
@@ -256,21 +256,17 @@ class NewPortfolioActivity : AppCompatActivity() {
                         }
                     }
                     "TalentApply" -> {
-                        setupDateField(binding.tilStartDate) { selected ->
-                            binding.tilStartDate.editText?.setText(selected)
-                        }
-
-                        setupDateField(binding.tilEndDate) { selected ->
-                            binding.tilEndDate.editText?.setText(selected)
-                        }
                         val clientName = binding.tilClientName.editText!!.text.toString().trim()
                         val portfolioName = binding.tilProjectName.editText!!.text.toString().trim()
                         val portfolioDesc = binding.tilProjectDescription.editText!!.text.toString().trim()
                         val portfolioLabel = "Portfolio"
                         val github = binding.tilProjectGithub.editText!!.text.toString().trim()
                         val linkedIn = binding.tilProjectLinkedIn.editText!!.text.toString().trim()
-                        val startDate = binding.tilStartDate.editText!!.text.toString().trim()
-                        val endDate = binding.tilEndDate.editText!!.text.toString().trim()
+                        val startDateStored = binding.tilStartDate.editText?.getTag(R.id.startDateTag)?.toString()
+                        val endDateStored = binding.tilEndDate.editText?.getTag(R.id.endDateTag)?.toString()
+                        Log.d("NewPortfolioActivity", "Start Date Stored: $startDateStored")
+                        Log.d("NewPortfolioActivity", "End Date Stored: $endDateStored")
+
                         val resultIntent = Intent().apply {
                             putExtra("client_name", clientName)
                             putExtra("portfolio_name", portfolioName)
@@ -278,8 +274,8 @@ class NewPortfolioActivity : AppCompatActivity() {
                             putExtra("portfolio_github", github)
                             putExtra("portfolio_desc", portfolioDesc)
                             putExtra("portfolio_label", portfolioLabel)
-                            putExtra("start_date", startDate)
-                            putExtra("end_date", endDate)
+                            putExtra("start_date", startDateStored)
+                            putExtra("end_date", endDateStored)
                             putStringArrayListExtra("platforms", ArrayList(selectedPlatforms))
                             putStringArrayListExtra("tools", ArrayList(selectedTools))
                             putStringArrayListExtra("languages", ArrayList(selectedLanguages))
@@ -349,14 +345,6 @@ class NewPortfolioActivity : AppCompatActivity() {
     private fun uploadPortfolio() {
         showLoading(true)
         Log.d("NewPortfolioActivity", "Upload Portfolio")
-        setupDateField(binding.tilStartDate) { selected ->
-            binding.tilStartDate.editText?.setText(selected)
-        }
-
-        setupDateField(binding.tilEndDate) { selected ->
-            binding.tilEndDate.editText?.setText(selected)
-        }
-
         lifecycleScope.launch {
             val userId = userPreference.getSession().first().userId
             val clientName = binding.tilClientName.editText!!.text.toString().trim()
@@ -364,9 +352,8 @@ class NewPortfolioActivity : AppCompatActivity() {
             val portfolioDesc = binding.tilProjectDescription.editText!!.text.toString().trim()
             val github = binding.tilProjectGithub.editText!!.text.toString().trim()
             val linkedIn = binding.tilProjectLinkedIn.editText!!.text.toString().trim()
-            val startDateStored = binding.tilStartDate.editText?.getTag(R.id.dateTag)?.toString()
-            val endDateStored = binding.tilEndDate.editText?.getTag(R.id.dateTag)?.toString()
-
+            val startDateStored = binding.tilStartDate.editText?.getTag(R.id.startDateTag)?.toString()
+            val endDateStored = binding.tilEndDate.editText?.getTag(R.id.endDateTag)?.toString()
 
             val request = ApiService.AddPortfolioRequest(
                 talentId = userId,
@@ -393,26 +380,6 @@ class NewPortfolioActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("DefaultLocale")
-    private fun showDatePicker(context: Context, targetEditText: TextInputEditText) {
-        val calendar = Calendar.getInstance()
-
-        val datePicker = DatePickerDialog(
-            context,
-            { _, year, month, dayOfMonth ->
-                val dateStored = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth) // for db
-                val dateDisplayed = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year) // for user
-
-                targetEditText.setTag(R.id.dateTag, dateStored)
-                targetEditText.setText(dateDisplayed)
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePicker.show()
-    }
-
     private fun addPortfolioViewModelObserver() {
         newPortfolioViewModel.addPortfolio.observe(this) { result ->
             when (result) {
@@ -435,30 +402,30 @@ class NewPortfolioActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupDateField(
-        textInputLayout: TextInputLayout,
-        onDateChanged: (selected: String) -> Unit,
+    @SuppressLint("DefaultLocale")
+    private fun showDatePicker(
+        context: Context,
+        targetEditText: TextInputEditText,
+        @IdRes tagId: Int,
     ) {
-        // get EditText
-        val editText = textInputLayout.editText ?: return
+        val calendar = Calendar.getInstance()
 
-        // non-focus to remove keyboard
-        editText.isFocusable = false
-        editText.isClickable = true
+        val datePicker = DatePickerDialog(
+            context,
+            { _, year, month, dayOfMonth ->
+                val dateStored =
+                    String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth) // for db
+                val dateDisplayed =
+                    String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year) // for user
 
-        editText.setOnClickListener {
-            val now = Calendar.getInstance()
-            DatePickerDialog(
-                this,
-                { _, year, month, dayOfMonth ->
-                    val formatted = "%02d/%02d/%04d".format(dayOfMonth, month + 1, year)
-                    onDateChanged(formatted)
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            ).show()
-        }
+                targetEditText.setTag(tagId, dateStored)
+                targetEditText.setText(dateDisplayed)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePicker.show()
     }
 
     private fun textFieldWatcher() {

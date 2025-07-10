@@ -131,6 +131,7 @@ class TalentApplyActivity : AppCompatActivity() {
                 buttonSet()
             }
             binding.portfolioContainer.addView(itemView)
+            buttonSet()
         }
     }
 
@@ -147,6 +148,7 @@ class TalentApplyActivity : AppCompatActivity() {
 
         getAllCategories()
         setupButtonAction()
+        textFieldWatcher()
     }
 
     private fun getAllCategories() {
@@ -292,7 +294,6 @@ class TalentApplyActivity : AppCompatActivity() {
     }
 
     private fun talentApply() {
-        textFieldWatcher()
         val github = binding.tilGithubProfile.editText?.text.toString()
         val linkedIn = binding.tilLinkedInProfile.editText?.text.toString()
         val platform = selectedPlatforms
@@ -377,7 +378,6 @@ class TalentApplyActivity : AppCompatActivity() {
             tilProductType.editText?.addTextChangedListener(watcher)
             tilLanguage.editText?.addTextChangedListener(watcher)
             tilTools.editText?.addTextChangedListener(watcher)
-
         }
     }
 
@@ -393,6 +393,7 @@ class TalentApplyActivity : AppCompatActivity() {
                     portfolioItems.isNotEmpty()
 
         binding.btnTalentApply.isEnabled = filled
+        Log.d("TalentApplyActivity", "Button State: $filled")
     }
 
     private fun showLoading(isLoading: Boolean) {

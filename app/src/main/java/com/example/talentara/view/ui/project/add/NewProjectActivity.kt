@@ -126,14 +126,35 @@ class NewProjectActivity : AppCompatActivity() {
         val endDateStored = binding.tilEndDate.editText?.getTag(R.id.dateTag)?.toString()
 
 
-        newProjectViewModel.addProject(
-            clientName,
-            projectName,
-            projectDesc,
-            startDateStored.toString(),
-            endDateStored.toString()
-        )
-        addProjectObserver()
+        newProjectViewModel.updateUserIsOnProject(1)
+        newProjectViewModel.updateUserIsOnProject.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+
+                is Results.Success -> {
+                    showLoading(false)
+                    newProjectViewModel.addProject(
+                        clientName,
+                        projectName,
+                        projectDesc,
+                        startDateStored.toString(),
+                        endDateStored.toString()
+                    )
+                    addProjectObserver()
+                }
+
+                is Results.Error -> {
+                    Toast.makeText(
+                        this,
+                        "Failed update user is on project", Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("NewProjectActivity", "Error: ${result.error}")
+                    showLoading(false)
+                }
+            }
+        }
     }
 
     @SuppressLint("DefaultLocale")
@@ -169,14 +190,22 @@ class NewProjectActivity : AppCompatActivity() {
                         this,
                         "Successfully create project", Toast.LENGTH_SHORT
                     ).show()
-                    newProjectViewModel.updateUserIsOnProject(1)
+
                     notificationViewModel.addNotification(
                         title       = "Create New Project",
                         desc        = "Waiting for project manager to join",
                         type        = "PROJECT_DONE",
                         clickAction = "NONE"
                     )
-                    updateUserIsOnProjectObserver()
+
+                    val intent = Intent(this, WaitingPageActivity::class.java).apply {
+                        putExtra(
+                            WaitingPageActivity.MESSAGE,
+                            getString(R.string.finding_project_manager)
+                        )
+                    }
+                    startActivity(intent)
+                    finish()
                 }
 
                 is Results.Error -> {
@@ -234,6 +263,8 @@ class NewProjectActivity : AppCompatActivity() {
             tilProductType.editText?.addTextChangedListener(watcher)
             tilPlatformTarget.editText?.addTextChangedListener(watcher)
             tilTargetUser.editText?.addTextChangedListener(watcher)
+            tilKeyFeatures.editText?.addTextChangedListener(watcher)
+            tilAdditional.editText?.addTextChangedListener(watcher)
             tilStartDate.editText?.addTextChangedListener(watcher)
             tilEndDate.editText?.addTextChangedListener(watcher)
         }
@@ -247,6 +278,7 @@ class NewProjectActivity : AppCompatActivity() {
         val platformTarget = binding.tilPlatformTarget.editText!!.text.toString()
         val targetUser = binding.tilTargetUser.editText!!.text.toString()
         val keyFeatures = binding.tilKeyFeatures.editText!!.text.toString()
+        val additional = binding.tilAdditional.editText!!.text.toString()
         val startDate = binding.tilStartDate.editText!!.text.toString()
         val endDate = binding.tilEndDate.editText!!.text.toString()
 
@@ -258,40 +290,12 @@ class NewProjectActivity : AppCompatActivity() {
                     platformTarget.isNotEmpty() &&
                     targetUser.isNotEmpty() &&
                     keyFeatures.isNotEmpty() &&
+                    additional.isNotEmpty() &&
                     startDate.isNotEmpty() &&
                     endDate.isNotEmpty()
 
         binding.btnFindProjectManager.isEnabled = isFieldFilled
-    }
-
-    private fun updateUserIsOnProjectObserver() {
-        newProjectViewModel.updateUserIsOnProject.observe(this) { result ->
-            when (result) {
-                is Results.Loading -> {
-                    showLoading(true)
-                }
-
-                is Results.Success -> {
-                    showLoading(false)
-                    val intent = Intent(this, WaitingPageActivity::class.java).apply {
-                        putExtra(
-                            WaitingPageActivity.MESSAGE,
-                            getString(R.string.finding_project_manager)
-                        )
-                    }
-                    startActivity(intent)
-                }
-
-                is Results.Error -> {
-                    Toast.makeText(
-                        this,
-                        "Failed update user is on project", Toast.LENGTH_SHORT
-                    ).show()
-                    Log.e("NewProjectActivity", "Error: ${result.error}")
-                    showLoading(false)
-                }
-            }
-        }
+        Log.d("buttonSet", "isEnabled: $isFieldFilled")
     }
 
     private fun showLoading(isLoading: Boolean) {

@@ -1,11 +1,13 @@
 package com.example.talentara.view.ui.waiting
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.talentara.R
 import com.example.talentara.databinding.ActivityWaitingPageBinding
+import com.example.talentara.view.ui.main.MainActivity
 
 class WaitingPageActivity : AppCompatActivity() {
 
@@ -30,7 +32,9 @@ class WaitingPageActivity : AppCompatActivity() {
     private fun setupActionButton() {
         with(binding) {
             btnHome.setOnClickListener {
-                finish()
+                val intent = Intent(this@WaitingPageActivity, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
             }
         }
     }

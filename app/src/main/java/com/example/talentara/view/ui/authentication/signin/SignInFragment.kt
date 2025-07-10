@@ -21,7 +21,7 @@ import com.example.talentara.view.ui.authentication.AuthenticationActivity
 import com.example.talentara.view.ui.authentication.AuthenticationViewModel
 import com.example.talentara.view.ui.main.MainActivity
 import com.example.talentara.view.utils.FactoryViewModel
-import kotlinx.coroutines.flow.first
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 
 class SignInFragment : Fragment() {
@@ -100,20 +100,27 @@ class SignInFragment : Fragment() {
     }
 
     private fun loginSuccess() {
-        lifecycleScope.launch {
-            val fcmToken = preference.getSession().first().fcmToken
-            authViewModel.saveFcmToken(fcmToken)
+        FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+            if (!token.isNullOrBlank()) {
+                authViewModel.saveFcmToken(token)
+
+                lifecycleScope.launch {
+                    preference.saveFcmToken(token)
+                }
+            }
         }
+
         authViewModel.saveFcmTokenResponse.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Results.Loading -> {}
-                is Results.Success -> {}
+                is Results.Success -> {
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
                 is Results.Error -> Log.e("MainActivity", "Error saving FCM token: ${result.error}")
             }
         }
-        val intent = Intent(requireContext(), MainActivity::class.java)
-        startActivity(intent)
-        requireActivity().finish()
     }
 
     private fun loginFailed() {

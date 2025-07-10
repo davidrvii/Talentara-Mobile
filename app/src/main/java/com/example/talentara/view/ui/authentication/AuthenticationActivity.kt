@@ -51,8 +51,9 @@ class AuthenticationActivity : AppCompatActivity() {
 
                 authViewModel.saveFcmTokenResponse.observe(this) { result ->
                     when (result) {
-                        is Results.Loading -> {}
+                        is Results.Loading -> Log.d("MainActivity", "Saving FCM token...")
                         is Results.Success -> {
+                            Log.d("MainActivity", "FCM token saved successfully")
                             startActivity(Intent(this, MainActivity::class.java))
                             finish()
                         }

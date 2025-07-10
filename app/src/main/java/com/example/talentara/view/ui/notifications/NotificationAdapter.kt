@@ -14,11 +14,21 @@ import java.util.Locale
 import java.util.TimeZone
 
 class NotificationAdapter(
-    private var listNotification: List<NotificationHistoryItem>
+    private var listNotification: MutableList<NotificationHistoryItem>
 ): RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
 
     fun getItemAt(position: Int): NotificationHistoryItem =
         listNotification[position]
+
+    fun removeAt(position: Int) {
+        listNotification.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun restoreItem(item: NotificationHistoryItem, position: Int) {
+        listNotification.add(position, item)
+        notifyItemInserted(position)
+    }
 
     private var onItemClick: ((NotificationHistoryItem) -> Unit)? = null
 
@@ -60,7 +70,7 @@ class NotificationAdapter(
 
                 val outputFormat = SimpleDateFormat("d MMMM yy", Locale("id", "ID"))
                 outputFormat.format(date ?: Date())
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 isoDate
             }
         }
@@ -82,7 +92,7 @@ class NotificationAdapter(
     override fun getItemCount(): Int = listNotification.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newList: List<NotificationHistoryItem>) {
+    fun updateData(newList: MutableList<NotificationHistoryItem>) {
         listNotification = newList
         notifyDataSetChanged()
     }

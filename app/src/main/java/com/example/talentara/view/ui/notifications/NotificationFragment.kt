@@ -1,7 +1,6 @@
 package com.example.talentara.view.ui.notifications
 
 import android.annotation.SuppressLint
-import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,6 +18,7 @@ import com.example.talentara.R
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.FragmentNotificationBinding
 import com.example.talentara.view.utils.FactoryViewModel
+import com.google.android.material.snackbar.Snackbar
 
 
 class NotificationFragment : Fragment() {
@@ -91,7 +89,7 @@ class NotificationFragment : Fragment() {
                     showLoading(false)
                     binding.cvNoNotification.visibility = View.GONE
                     notificationAdapter.updateData(
-                        result.data.notificationHistory?.filterNotNull() ?: emptyList()
+                        result.data.notificationHistory?.filterNotNull()?.toMutableList() ?: mutableListOf()
                     )
                     Log.d("NotificationFragment", "Loaded notifications: ${result.data.notificationHistory?.size}")
                 }
@@ -125,7 +123,7 @@ class NotificationFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun setupRecyclerView() {
         Log.d("HistoryFragment", "Setup RecyclerView")
-        notificationAdapter = NotificationAdapter(emptyList())
+        notificationAdapter = NotificationAdapter(mutableListOf())
         binding.rvNotification.apply {
             adapter = notificationAdapter
             layoutManager = LinearLayoutManager(context)
@@ -143,6 +141,7 @@ class NotificationFragment : Fragment() {
     private fun deleteNotification() {
         val callback = object :
             ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -153,78 +152,29 @@ class NotificationFragment : Fragment() {
                 val pos = viewHolder.bindingAdapterPosition
                 val item = notificationAdapter.getItemAt(pos)
 
-                val builder = AlertDialog.Builder(requireContext())
-                    .setTitle(getString(R.string.remove_notification))
-                    .setMessage(getString(R.string.are_you_sure_you_want_to_remove_this_notification))
-                    .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
-                        notificationViewModel.deleteNotification(
-                            item.notificationId ?: return@setPositiveButton
-                        )
-                        notificationObserver()
-                        dialog.dismiss()
+                notificationAdapter.removeAt(pos)
+
+                Snackbar.make(requireView(), "Notification removed", Snackbar.LENGTH_LONG)
+                    .setAction("UNDO") {
+                        notificationAdapter.restoreItem(item, pos)
                     }
-                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                        notificationAdapter.notifyItemChanged(pos)
-                        dialog.dismiss()
-                    }
-                    .setOnCancelListener {
-                        notificationAdapter.notifyItemChanged(pos)
-                    }
-
-                val dialog = builder.create()
-
-                dialog.setOnShowListener {
-                    dialog.window
-                        ?.setBackgroundDrawable(Color.WHITE.toDrawable())
-
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).apply {
-                        setBackgroundColor(ContextCompat.getColor(context, R.color.blue))
-                        setTextColor(ContextCompat.getColor(context, R.color.white))
-                    }
-
-                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).apply {
-                        setBackgroundColor(Color.WHITE)
-                        setTextColor(ContextCompat.getColor(context, R.color.blue))
-                    }
-                }
-
-                dialog.show()
-            }
-
-            override fun onChildDraw(
-                c: Canvas, recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float,
-                actionState: Int, isCurrentlyActive: Boolean,
-            ) {
-                val itemView = viewHolder.itemView
-                val background = Color.RED.toDrawable()
-                if (dX < 0) {
-                    background.setBounds(
-                        itemView.right + dX.toInt(),
-                        itemView.top,
-                        itemView.right,
-                        itemView.bottom
-                    )
-                } else {
-                    background.setBounds(
-                        itemView.left,
-                        itemView.top,
-                        itemView.left + dX.toInt(),
-                        itemView.bottom
-                    )
-                }
-                background.draw(c)
-                super.onChildDraw(
-                    c,
-                    recyclerView,
-                    viewHolder,
-                    dX,
-                    dY,
-                    actionState,
-                    isCurrentlyActive
-                )
+                    .addCallback(object : Snackbar.Callback() {
+                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                            if (event != DISMISS_EVENT_ACTION) {
+                                notificationViewModel.deleteNotification(
+                                    item.notificationId ?: return
+                                )
+                                notificationObserver()
+                            }
+                        }
+                    })
+                    .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.blue))
+                    .setTextColor(Color.WHITE)
+                    .setActionTextColor(Color.YELLOW)
+                    .show()
             }
         }
+
         ItemTouchHelper(callback).attachToRecyclerView(binding.rvNotification)
     }
 

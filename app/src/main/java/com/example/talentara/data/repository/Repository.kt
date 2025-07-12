@@ -21,6 +21,7 @@ import com.example.talentara.data.model.response.project.ProjectHistoryResponse
 import com.example.talentara.data.model.response.project.ProjectOfferResponse
 import com.example.talentara.data.model.response.project.ProjectOrderResponse
 import com.example.talentara.data.model.response.project.UpdateProjectResponse
+import com.example.talentara.data.model.response.project.UpdateProjectStatusResponse
 import com.example.talentara.data.model.response.talent.NewTalentResponse
 import com.example.talentara.data.model.response.talent.TalentDetailResponse
 import com.example.talentara.data.model.response.talent.UpdateTalentResponse
@@ -178,7 +179,8 @@ class Repository private constructor(
     ): LiveData<Results<NewNotificationResponse>> = liveData {
         emit(Results.Loading)
         try {
-            val response = apiService.addNotification("Bearer $token", userId, title, desc, type, clickAction)
+            val response =
+                apiService.addNotification("Bearer $token", userId, title, desc, type, clickAction)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))
@@ -191,7 +193,7 @@ class Repository private constructor(
         title: String,
         desc: String,
         type: String,
-        clickAction: String
+        clickAction: String,
     ): Results<NewNotificationResponse> {
         return try {
             val response = apiService.addNotification(
@@ -500,7 +502,7 @@ class Repository private constructor(
 
     suspend fun addPortfolioTalent(
         token: String,
-        request: AddPortfolioRequest
+        request: AddPortfolioRequest,
     ): Results<NewPortfolioResponse> {
         return try {
             val response = apiService.addPortfolio("Bearer $token", request)
@@ -682,6 +684,20 @@ class Repository private constructor(
                 statusId,
                 completedDate
             )
+            emit(Results.Success(response))
+        } catch (e: Exception) {
+            emit(Results.Error(e.message.toString()))
+        }
+    }
+
+    fun updateProjectStatus(
+        token: String,
+        projectId: Int,
+        statusId: Int,
+    ): LiveData<Results<UpdateProjectStatusResponse>> = liveData {
+        emit(Results.Loading)
+        try {
+            val response = apiService.updateProjectStatus("Bearer $token", projectId, statusId)
             emit(Results.Success(response))
         } catch (e: Exception) {
             emit(Results.Error(e.message.toString()))

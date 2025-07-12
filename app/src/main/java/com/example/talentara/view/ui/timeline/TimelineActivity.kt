@@ -722,6 +722,7 @@ class TimelineActivity : AppCompatActivity() {
 
                             lifecycleScope.launch {
                                 timelineViewModel.updateProjectCompleted(projectId, completedDate)
+                                timelineViewModel.updateProjectStatus(projectId, 4)
                                 updateProjectCompletedObserver()
 
                                 //Update Client is_on_project
@@ -783,6 +784,23 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Error -> {
                     showLoading(false)
                     Toast.makeText(this, "Failed to update project completed", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.e("TimelineActivity", "Error: ${result.error}")
+                }
+            }
+        }
+
+        timelineViewModel.updateProjectStatus.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+                is Results.Success -> {
+                    showLoading(false)
+                }
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Failed to update project status", Toast.LENGTH_SHORT)
                         .show()
                     Log.e("TimelineActivity", "Error: ${result.error}")
                 }

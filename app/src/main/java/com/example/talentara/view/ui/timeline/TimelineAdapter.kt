@@ -163,13 +163,17 @@ class TimelineAdapter(
             }
 
             binding.btnEditTimeline.apply {
-                if (item.clientApproved == 1 && item.leaderApproved == 1) {
-                    binding.btnEditTimeline.visibility = ViewGroup.GONE
-                } else {
-                    binding.btnEditTimeline.visibility = ViewGroup.VISIBLE
-                    setOnClickListener {
-                        onEditClick?.invoke(item)
+                if (accessLevel == "Project Manager"){
+                    if (item.clientApproved == 1 && item.leaderApproved == 1) {
+                        binding.btnEditTimeline.visibility = ViewGroup.GONE
+                    } else {
+                        binding.btnEditTimeline.visibility = ViewGroup.VISIBLE
+                        setOnClickListener {
+                            onEditClick?.invoke(item)
+                        }
                     }
+                } else {
+                    binding.btnEditTimeline.visibility = ViewGroup.GONE
                 }
             }
         }

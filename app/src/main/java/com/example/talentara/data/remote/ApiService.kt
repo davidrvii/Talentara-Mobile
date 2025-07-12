@@ -18,6 +18,7 @@ import com.example.talentara.data.model.response.project.ProjectHistoryResponse
 import com.example.talentara.data.model.response.project.ProjectOfferResponse
 import com.example.talentara.data.model.response.project.ProjectOrderResponse
 import com.example.talentara.data.model.response.project.UpdateProjectResponse
+import com.example.talentara.data.model.response.project.UpdateProjectStatusResponse
 import com.example.talentara.data.model.response.talent.NewTalentResponse
 import com.example.talentara.data.model.response.talent.TalentDetailResponse
 import com.example.talentara.data.model.response.talent.UpdateTalentResponse
@@ -299,7 +300,7 @@ interface ApiService {
     suspend fun updateTalentProjectDone(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,
-        @Field("project_done") isProjectManager: Int,
+        @Field("project_done") projectDone: Int,
     ): UpdateTalentResponse
 
     @FormUrlEncoded
@@ -468,6 +469,15 @@ interface ApiService {
         val roleName: String,
         val amount: Int,
     )
+
+    @FormUrlEncoded
+    @PATCH("project/status/{project_id}")
+    suspend fun updateProjectStatus(
+        @Header("Authorization") token: String,
+        @Path("project_id") projectId: Int,
+        @Field("status_id") statusId: Int,
+    ): UpdateProjectStatusResponse
+
 
     @FormUrlEncoded
     @PATCH("project/completed/{project_id}")

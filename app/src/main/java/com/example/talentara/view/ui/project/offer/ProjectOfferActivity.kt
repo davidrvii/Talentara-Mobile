@@ -1,7 +1,9 @@
 package com.example.talentara.view.ui.project.offer
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,9 +19,12 @@ import com.example.talentara.databinding.ActivityProjectOfferBinding
 import com.example.talentara.view.ui.portfolio.detail.ItemsAdapter
 import com.example.talentara.view.ui.project.add.NewProjectViewModel
 import com.example.talentara.view.ui.talent.detail.TalentDetailViewModel
+import com.example.talentara.view.ui.timeline.TimelineViewModel
 import com.example.talentara.view.utils.FactoryViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ProjectOfferActivity : AppCompatActivity() {
 
@@ -30,6 +35,9 @@ class ProjectOfferActivity : AppCompatActivity() {
         FactoryViewModel.getInstance(this)
     }
     private val newProjectViewmodel: NewProjectViewModel by viewModels {
+        FactoryViewModel.getInstance(this)
+    }
+    private val timelineViewModel: TimelineViewModel by viewModels {
         FactoryViewModel.getInstance(this)
     }
     private val userPref by lazy {
@@ -86,6 +94,7 @@ class ProjectOfferActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     val projectDeclined = result.data.talentDetail?.firstOrNull()?.projectDeclined!!
+                    binding.btCancel.text = getString(R.string.decline_d, projectDeclined)
                     talentProjectDeclined = projectDeclined
                 }
 
@@ -101,6 +110,10 @@ class ProjectOfferActivity : AppCompatActivity() {
             btYes.setOnClickListener {
                 projectOfferViewModel.getProjectOffer(projectId, roleName, 1)
                 acceptProjectObserver()
+                if (roleName == "Project Manager") {
+                    timelineViewModel.updateProjectStatus(projectId, 2)
+                    updateProjectStatusObserver()
+                }
             }
             if (talentProjectDeclined < 3) {
                 btCancel.setOnClickListener {
@@ -129,6 +142,25 @@ class ProjectOfferActivity : AppCompatActivity() {
 
                 is Results.Error -> {
                     showLoading(false)
+                }
+            }
+        }
+    }
+
+    private fun updateProjectStatusObserver() {
+        timelineViewModel.updateProjectStatus.observe(this) { result ->
+            when (result) {
+                is Results.Loading -> {
+                    showLoading(true)
+                }
+                is Results.Success -> {
+                    showLoading(false)
+                }
+                is Results.Error -> {
+                    showLoading(false)
+                    Toast.makeText(this, "Failed to update project status", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.e("TimelineActivity", "Error: ${result.error}")
                 }
             }
         }
@@ -183,7 +215,14 @@ class ProjectOfferActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     val projectOrder = result.data.projectOrder?.firstOrNull()
-                    bindProject(projectOrder!!)
+                    projectOrder?.statusId?.let {
+                        if (it < 3) {
+                            bindProject(projectOrder)
+                        } else {
+                            Toast.makeText(this@ProjectOfferActivity, "Project has started", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                    }
                 }
 
                 is Results.Error -> {
@@ -195,16 +234,17 @@ class ProjectOfferActivity : AppCompatActivity() {
 
     private fun bindProject(projectOrder: ProjectOrderItem) {
         binding.apply {
+            val formattedDeadline = formatDeadline(projectOrder.startDate.toString(),
+                projectOrder.endDate.toString()
+            )
+            val deadline = formattedDeadline
+            tvGotOffer.text = getString(R.string.project_offer, roleName)
             tvProjectClient.text = projectOrder.clientName
             tvProjectName.text = projectOrder.projectName
             tvProjectDescription.text = projectOrder.projectDesc
             tvProjectGithub.text = projectOrder.projectGithub ?: "-"
             tvProjectMeetLink.text = projectOrder.meetLink ?: "-"
-            tvProjectPeriode.text = getString(
-                R.string.periode,
-                projectOrder.startDate,
-                projectOrder.endDate
-            )
+            tvProjectPeriode.text = deadline
         }
         binding.apply {
             val rawFeatures = projectOrder.features ?: ""
@@ -253,6 +293,32 @@ class ProjectOfferActivity : AppCompatActivity() {
                 false
             )
             adapter = roleAdapter
+        }
+    }
+
+    private fun formatDeadline(start: String, end: String): String {
+        // Input and output patterns
+        val inputPattern = "yyyy-MM-dd"
+        val outputPattern = "dd MMM yyyy"
+        val locale = Locale.getDefault()
+
+        return try {
+            val sdfIn = SimpleDateFormat(inputPattern, Locale.US)
+            val sdfOut = SimpleDateFormat(outputPattern, locale)
+
+            val sDate = sdfIn.parse(start)
+            val eDate = sdfIn.parse(end)
+
+            if (sDate != null && eDate != null) {
+                "${sdfOut.format(sDate)} - ${sdfOut.format(eDate)}"
+            } else {
+                // fallback to raw strings
+                "$start - $end"
+            }
+        } catch (e: Exception) {
+            // If parsing fails, show raw
+            e.printStackTrace()
+            "$start - $end"
         }
     }
 

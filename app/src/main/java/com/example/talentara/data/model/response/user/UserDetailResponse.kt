@@ -47,7 +47,7 @@ data class UserDetailItem(
 	val isOnProject: Int? = null,
 
 	@field:SerializedName("fcm_token")
-	val fcmToken: Any? = null,
+	val fcmToken: String? = null,
 
 	@field:SerializedName("created_at")
 	val createdAt: String? = null,

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.talentara.data.model.response.project.ProjectOfferResponse
 import com.example.talentara.data.model.response.project.ProjectOrderResponse
+import com.example.talentara.data.model.response.talent.UpdateTalentResponse
 import com.example.talentara.data.model.response.user.UpdateUserResponse
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.data.repository.Repository
@@ -41,6 +42,34 @@ class ProjectOfferViewModel(private val repository: Repository) : ViewModel() {
                 }
             } catch (e: Exception) {
                 _projectOffer.value = Results.Error(e.message.toString())
+            }
+        }
+    }
+
+    private val _updateTalentProjectDeclined = MediatorLiveData<Results<UpdateTalentResponse>>()
+    val updateTalentProjectDeclined: LiveData<Results<UpdateTalentResponse>> =
+        _updateTalentProjectDeclined
+
+    fun updateTalentProjectDeclined(
+        projectDeclined: Int,
+    ) {
+        viewModelScope.launch {
+            _updateTalentProjectDeclined.value = Results.Loading
+            try {
+                val token = repository.getSession().first().token
+                val talentId = repository.getSession().first().userId
+
+                _updateTalentProjectDeclined.addSource(
+                    repository.updateTalentProjectDeclined(
+                        token,
+                        talentId,
+                        projectDeclined,
+                    )
+                ) { result ->
+                    _updateTalentProjectDeclined.value = result
+                }
+            } catch (e: Exception) {
+                _updateTalentProjectDeclined.value = Results.Error(e.message.toString())
             }
         }
     }

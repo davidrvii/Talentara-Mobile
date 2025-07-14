@@ -442,6 +442,21 @@ class Repository private constructor(
         }
     }
 
+    fun updateTalentProjectDeclined(
+        token: String,
+        talentId: Int,
+        projectDeclined: Int,
+    ): LiveData<Results<UpdateTalentResponse>> = liveData {
+        emit(Results.Loading)
+        try {
+            val response =
+                apiService.updateTalentProjectDeclined("Bearer $token", talentId, projectDeclined)
+            emit(Results.Success(response))
+            } catch (e: Exception) {
+            emit(Results.Error(e.message.toString()))
+        }
+    }
+
     fun updateTalentIsProjectManager(
         token: String,
         talentId: Int,

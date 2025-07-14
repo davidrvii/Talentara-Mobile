@@ -138,6 +138,10 @@ class ProjectOfferActivity : AppCompatActivity() {
                     showLoading(false)
                     newProjectViewmodel.updateUserIsOnProject(1)
                     talentIsOnProjectObserver()
+
+                    if (talentProjectDeclined > 0) {
+                        projectOfferViewModel.updateTalentProjectDeclined(0)
+                    }
                 }
 
                 is Results.Error -> {
@@ -175,6 +179,7 @@ class ProjectOfferActivity : AppCompatActivity() {
 
                 is Results.Success -> {
                     showLoading(false)
+                    projectOfferViewModel.updateTalentProjectDeclined(talentProjectDeclined + 1)
                     finish()
                 }
 

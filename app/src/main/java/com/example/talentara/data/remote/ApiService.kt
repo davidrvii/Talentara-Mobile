@@ -289,6 +289,14 @@ interface ApiService {
 
     @FormUrlEncoded
     @PATCH("talent/update/{talent_id}")
+    suspend fun updateTalentProjectDeclined(
+        @Header("Authorization") token: String,
+        @Path("talent_id") talentId: Int,
+        @Field("project_declined") projectDeclined: Int,
+    ): UpdateTalentResponse
+
+    @FormUrlEncoded
+    @PATCH("talent/update/{talent_id}")
     suspend fun updateTalentIsProjectManager(
         @Header("Authorization") token: String,
         @Path("talent_id") talentId: Int,

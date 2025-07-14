@@ -560,7 +560,7 @@
                     app:boxStrokeColor="@color/dark_gray"
                     app:hintEnabled="false"
                     app:hintTextColor="@color/dark_gray"
-                    app:layout_constraintStart_toStartOf="@id/roleContainer"
+                    app:layout_constraintStart_toStartOf="@id/chipGroupRole"
                     app:layout_constraintTop_toBottomOf="@id/chipGroupRole">
 
                     <AutoCompleteTextView

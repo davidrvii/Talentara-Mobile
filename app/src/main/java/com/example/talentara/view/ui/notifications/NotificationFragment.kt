@@ -62,7 +62,7 @@ class NotificationFragment : Fragment() {
                     showLoading(false)
                     Toast.makeText(
                         requireContext(),
-                        "Failed to read notification",
+                        "Failed to mark as read notification",
                         Toast.LENGTH_SHORT
                     ).show()
                     Log.e(
@@ -97,19 +97,9 @@ class NotificationFragment : Fragment() {
                 is Results.Error -> {
                     showLoading(false)
                     if (result.error.contains("HTTP 404")) {
-                        Toast.makeText(
-                            requireContext(),
-                            "There is no notification yet",
-                            Toast.LENGTH_SHORT
-                        ).show()
                         binding.cvNoNotification.visibility = View.VISIBLE
                     } else {
                         binding.cvNoNotification.visibility = View.VISIBLE
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.failed_to_get_notification),
-                            Toast.LENGTH_SHORT
-                        ).show()
                         Log.e(
                             "NotificationFragment",
                             "Error getting notification history: ${result.error}"

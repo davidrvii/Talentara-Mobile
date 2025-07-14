@@ -172,11 +172,6 @@ class HomeFragment : Fragment() {
                     showLoading(false)
                     binding.cvCurrentProject.visibility = View.GONE
                     binding.cvNoCurrentProject.visibility = View.VISIBLE
-                    Toast.makeText(
-                        requireContext(),
-                        "Failed to get Current Project",
-                        Toast.LENGTH_SHORT
-                    ).show()
                     Log.e("HomeFragment", "Error getting current project: ${result.error}")
                 }
             }
@@ -281,17 +276,7 @@ class HomeFragment : Fragment() {
                             binding.Timeline.visibility = View.GONE
                             binding.cvNoCurrentTimelineYesProject.visibility = View.VISIBLE
                             binding.cvNoCurrentTimelineNoProject.visibility = View.GONE
-                            Toast.makeText(
-                                requireContext(),
-                                "No timeline yet for this project",
-                                Toast.LENGTH_SHORT
-                            ).show()
                         } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "Failed to get Current Timeline",
-                                Toast.LENGTH_SHORT
-                            ).show()
                             Log.e("HomeFragment", "Error getting current timeline: ${result.error}")
                         }
                     }

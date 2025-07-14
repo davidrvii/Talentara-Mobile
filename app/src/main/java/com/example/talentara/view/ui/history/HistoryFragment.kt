@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -138,11 +137,6 @@ class HistoryFragment : Fragment() {
                 is Results.Error -> {
                     showLoading(false)
                     binding.cvNoProject.visibility = View.GONE
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.failed_to_get_current_project),
-                        Toast.LENGTH_SHORT
-                    ).show()
                     Log.e("HistoryFragment", "Error getting current project: ${result.error}")
                 }
             }
@@ -170,18 +164,8 @@ class HistoryFragment : Fragment() {
                     showLoading(false)
                     if (result.error.contains("HTTP 404")) {
                         binding.cvNoProject.visibility = View.VISIBLE
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.there_is_no_project),
-                            Toast.LENGTH_SHORT
-                        ).show()
                     } else {
                         binding.cvNoProject.visibility = View.VISIBLE
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.failed_to_get_project_history),
-                            Toast.LENGTH_SHORT
-                        ).show()
                         Log.e("HistoryFragment", "Error getting project history: ${result.error}")
                     }
 

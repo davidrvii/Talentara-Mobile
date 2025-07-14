@@ -263,11 +263,6 @@ class TimelineActivity : AppCompatActivity() {
                     showLoading(false)
                     if (result.error.contains("HTTP 404")) {
                         binding.cvNoTimeline.visibility = View.VISIBLE
-                        Toast.makeText(
-                            this,
-                            "No timeline yet for this project",
-                            Toast.LENGTH_SHORT
-                        ).show()
                         return@observe
                     } else {
                         binding.cvNoTimeline.visibility = View.VISIBLE
@@ -815,7 +810,7 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Loading -> showLoading(true)
                 is Results.Success -> {
                     showLoading(false)
-                    Toast.makeText(this, "User is not in project", Toast.LENGTH_SHORT).show()
+                    Log.d("TimelineActivity", "Update User Project Done")
 
                     Log.d("TimelineActivity", "Add Notification User Project Completed")
                     lifecycleScope.launch {
@@ -854,8 +849,7 @@ class TimelineActivity : AppCompatActivity() {
 
                 is Results.Success -> {
                     showLoading(false)
-                    Toast.makeText(this, "Talent project done updated", Toast.LENGTH_SHORT).show()
-                    Log.d("TimelineActivity", "Add Notification Project Done")
+                    Log.d("TimelineActivity", "Talent project done updated")
                 }
 
                 is Results.Error -> {
@@ -871,7 +865,7 @@ class TimelineActivity : AppCompatActivity() {
                 is Results.Loading -> showLoading(true)
                 is Results.Success -> {
                     showLoading(false)
-                    Toast.makeText(this, "Talent is not in project", Toast.LENGTH_SHORT).show()
+                    Log.d("TimelineActivity", "Talent is not in project updated")
                 }
 
                 is Results.Error -> {

@@ -26,6 +26,7 @@ import com.example.talentara.data.remote.ApiService
 import com.example.talentara.databinding.ActivityTalentApplyBinding
 import com.example.talentara.view.ui.portfolio.add.NewPortfolioActivity
 import com.example.talentara.view.ui.portfolio.add.NewPortfolioViewModel
+import com.example.talentara.view.ui.profile.ProfileViewModel
 import com.example.talentara.view.utils.FactoryViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -39,6 +40,9 @@ import org.threeten.bp.temporal.ChronoUnit as LegacyChronosUnit
 
 class TalentApplyActivity : AppCompatActivity() {
 
+    private val profileViewModel: ProfileViewModel by viewModels {
+        FactoryViewModel.getInstance(this)
+    }
     private val talentApplyViewModel: TalentApplyViewModel by viewModels {
         FactoryViewModel.getInstance(this)
     }
@@ -328,6 +332,7 @@ class TalentApplyActivity : AppCompatActivity() {
 
                 is Results.Success -> {
                     showLoading(false)
+                    profileViewModel.setDataDetailUpdate(true)
                     updateTalentAccess()
                 }
 

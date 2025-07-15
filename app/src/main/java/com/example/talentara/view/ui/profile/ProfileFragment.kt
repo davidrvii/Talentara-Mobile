@@ -281,6 +281,11 @@ class ProfileFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        getUserDetail()
+        viewModel.isDataDetailUpdate.observe(viewLifecycleOwner) {
+            if (it == true) {
+                viewModel.setDataDetailUpdate(false)
+                getUserDetail()
+            }
+        }
     }
 }

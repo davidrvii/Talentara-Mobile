@@ -33,6 +33,18 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 class EditProfileActivity : AppCompatActivity() {
 
+    private var initialUsername = ""
+    private var initialEmail = ""
+    private var initialGithub = ""
+    private var initialLinkedin = ""
+
+    private var initialPlatforms = setOf<String>()
+    private var initialProductTypes = setOf<String>()
+    private var initialRoles = setOf<String>()
+    private var initialLanguages = setOf<String>()
+    private var initialTools = setOf<String>()
+
+
     private val selectedPlatforms = mutableSetOf<String>()
     private val selectedProductTypes = mutableSetOf<String>()
     private val selectedRoles = mutableSetOf<String>()
@@ -147,6 +159,7 @@ class EditProfileActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     finish()
+                    profileViewModel.setDataDetailUpdate(true)
                 }
 
                 is Results.Error -> {
@@ -170,6 +183,7 @@ class EditProfileActivity : AppCompatActivity() {
                 is Results.Success -> {
                     Log.d("NewPortfolioActivity", "Success: ${result.data}")
                     showLoading(false)
+                    profileViewModel.setDataDetailUpdate(true)
                 }
 
                 is Results.Error -> {
@@ -196,6 +210,12 @@ class EditProfileActivity : AppCompatActivity() {
                             error(R.drawable.blank_avatar)
                         }
                         talentAccess = user?.talentAccess ?: 0
+
+                        initialUsername = user?.userName.orEmpty()
+                        initialEmail = user?.userEmail.orEmpty()
+                        initialGithub = user?.github.orEmpty()
+                        initialLinkedin = user?.linkedin.orEmpty()
+
                         if (user?.talentAccess == 1) {
                             editTalent.visibility = View.VISIBLE
                             getTalentCategories()
@@ -254,17 +274,32 @@ class EditProfileActivity : AppCompatActivity() {
         selectedSet.clear()
         chipGroup.removeAllViews()
 
-        raw?.split("|")?.map { it.trim() }?.filter { it.isNotEmpty() }?.forEach { value ->
-            selectedSet.add(value)
+        val values = raw?.split("|")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?.toSet()
+            ?: emptySet()
+
+        selectedSet.addAll(values)
+        values.forEach { value ->
             val chip = Chip(this).apply {
                 text = value
                 isCloseIconVisible = true
                 setOnCloseIconClickListener {
                     chipGroup.removeView(this)
                     selectedSet.remove(value)
+                    buttonSet()
                 }
             }
             chipGroup.addView(chip)
+        }
+
+        when (chipGroup.id) {
+            binding.chipGroupPlatform.id -> initialPlatforms = values
+            binding.chipGroupProductType.id -> initialProductTypes = values
+            binding.chipGroupRole.id -> initialRoles = values
+            binding.chipGroupLanguage.id -> initialLanguages = values
+            binding.chipGroupTools.id -> initialTools = values
         }
     }
 
@@ -424,20 +459,41 @@ class EditProfileActivity : AppCompatActivity() {
         val github = binding.tilGithub.editText!!.text
         val linkedIn = binding.tilLinkedIn.editText!!.text
 
-        val isFieldFilled = email.isNotEmpty() &&
-                            username.isNotEmpty() &&
-                            github.isNotEmpty() &&
-                            linkedIn.isNotEmpty()
+        val hasTextChanged =
+                    username.toString() != initialUsername ||
+                    email.toString() != initialEmail ||
+                    github.toString() != initialGithub ||
+                    linkedIn.toString() != initialLinkedin
 
-                if (talentAccess == 1) {
-                            selectedPlatforms.isNotEmpty() &&
-                            selectedProductTypes.isNotEmpty() &&
-                            selectedLanguages.isNotEmpty() &&
-                            selectedTools.isNotEmpty() &&
-                            selectedRoles.isNotEmpty()
-                }
+        if (talentAccess == 1) {
+            val hasChipChanged =
+                        selectedPlatforms.toSet() != initialPlatforms ||
+                        selectedProductTypes.toSet() != initialProductTypes ||
+                        selectedRoles.toSet() != initialRoles ||
+                        selectedLanguages.toSet() != initialLanguages ||
+                        selectedTools.toSet() != initialTools
 
-        binding.btnSaveChange.isEnabled = isFieldFilled
+            val isFieldFilled =
+                    email.isNotEmpty() &&
+                    username.isNotEmpty() &&
+                    github.isNotEmpty() &&
+                    linkedIn.isNotEmpty() &&
+                    selectedPlatforms.isNotEmpty() &&
+                    selectedProductTypes.isNotEmpty() &&
+                    selectedLanguages.isNotEmpty() &&
+                    selectedTools.isNotEmpty() &&
+                    selectedRoles.isNotEmpty()
+
+            binding.btnSaveChange.isEnabled = isFieldFilled && (hasTextChanged || hasChipChanged)
+        } else {
+            val isFieldFilled =
+                    email.isNotEmpty() &&
+                    username.isNotEmpty() &&
+                    github.isNotEmpty() &&
+                    linkedIn.isNotEmpty()
+
+            binding.btnSaveChange.isEnabled = isFieldFilled && hasTextChanged
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {

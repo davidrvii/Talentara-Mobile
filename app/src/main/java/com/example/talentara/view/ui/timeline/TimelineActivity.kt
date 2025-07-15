@@ -377,6 +377,28 @@ class TimelineActivity : AppCompatActivity() {
         }
     }
 
+    private fun formateDate(
+        rawUtcDate: String?,
+        targetField: TextInputEditText,
+        tagId: Int
+    ) {
+        if (rawUtcDate.isNullOrBlank()) return
+
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
+        val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val tagFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        val parsedDate = inputFormat.parse(rawUtcDate)
+
+        val displayedDate = parsedDate?.let { outputFormat.format(it) } ?: ""
+        val rawDate = parsedDate?.let { tagFormat.format(it) } ?: ""
+
+        targetField.setText(displayedDate)
+        targetField.setTag(tagId, rawDate)
+    }
+
     private fun setupUpdateTimelineDialog(timelineId: Int) {
         Log.d("TimelineActivity", "Setup Update Timeline Dialog")
         timelineViewModel.getTimelineDetail(timelineId)
@@ -390,48 +412,17 @@ class TimelineActivity : AppCompatActivity() {
                     showLoading(false)
                     val timeline = result.data.timelineDetail?.firstOrNull()
                     bindingUpdateDialog.tilProjectPhase.editText?.setText(timeline?.projectPhase)
-
-                    timeline?.startDate?.let { start ->
-                        val inputFormat =
-                            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-                        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-                        val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-
-                        val parsedDate = inputFormat.parse(start)
-                        val displayedDate = parsedDate?.let { outputFormat.format(it) } ?: ""
-                        val rawDate = parsedDate?.let {
-                            SimpleDateFormat(
-                                "yyyy-MM-dd",
-                                Locale.getDefault()
-                            ).format(it)
-                        } ?: ""
-
-                        bindingUpdateDialog.tilStartDate.editText?.setText(displayedDate)
-                        bindingUpdateDialog.tilStartDate.editText?.setTag(
-                            R.id.startDateTag,
-                            rawDate
-                        )
-                    }
-
-                    timeline?.endDate?.let { end ->
-                        val inputFormat =
-                            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-                        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-                        val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-
-                        val parsedDate = inputFormat.parse(end)
-                        val displayedDate = parsedDate?.let { outputFormat.format(it) } ?: ""
-                        val rawDate = parsedDate?.let {
-                            SimpleDateFormat(
-                                "yyyy-MM-dd",
-                                Locale.getDefault()
-                            ).format(it)
-                        } ?: ""
-
-                        bindingUpdateDialog.tilEndDate.editText?.setText(displayedDate)
-                        bindingUpdateDialog.tilEndDate.editText?.setTag(R.id.endDateTag, rawDate)
-                        Log.d("TimelineActivity", "End Date: $end")
-                    }
+                    bindingUpdateDialog.tilProjectEvidence.editText?.setText(timeline?.evidence)
+                    formateDate(
+                        timeline?.startDate,
+                        bindingUpdateDialog.tilStartDate.editText as TextInputEditText,
+                        R.id.startDateTag
+                    )
+                    formateDate(
+                        timeline?.endDate,
+                        bindingUpdateDialog.tilEndDate.editText as TextInputEditText,
+                        R.id.endDateTag
+                    )
                 }
 
                 is Results.Error -> {

@@ -451,8 +451,6 @@ interface ApiService {
     ): UpdateProjectResponse
 
     data class UpdateProjectRequest(
-        @SerializedName("status_id")
-        val statusId: Int,
         @SerializedName("client_name")
         val clientName: String,
         @SerializedName("project_name")
@@ -470,6 +468,10 @@ interface ApiService {
         val language: List<String>,
         val tools: List<String>,
         val feature: List<String>,
+        @SerializedName("project_github")
+        val projectGithub: String,
+        @SerializedName("meet_link")
+        val meetLink: String,
     )
 
     data class ProjectRole(

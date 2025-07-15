@@ -37,7 +37,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class ProfileFragment : Fragment() {
 
-    private val viewModel: ProfileViewModel by viewModels {
+    private val viewModel: ProfileViewModel by viewModels  {
         FactoryViewModel.getInstance(requireActivity())
     }
     private val editProfileViewModel: EditProfileViewModel by viewModels {
@@ -277,15 +277,5 @@ class ProfileFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.isDataDetailUpdate.observe(viewLifecycleOwner) {
-            if (it == true) {
-                viewModel.setDataDetailUpdate(false)
-                getUserDetail()
-            }
-        }
     }
 }

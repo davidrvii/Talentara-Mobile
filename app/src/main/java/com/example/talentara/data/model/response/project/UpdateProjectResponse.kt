@@ -20,49 +20,49 @@ data class UpdateProjectResponse(
 	val updatedProject: UpdatedProject? = null
 )
 
+data class FixRoleItem(
+
+	@field:SerializedName("role_name")
+	val roleName: String? = null,
+
+	@field:SerializedName("amount")
+	val amount: Int? = null
+)
+
 data class UpdatedProject(
 
 	@field:SerializedName("end_date")
 	val endDate: String? = null,
 
-	@field:SerializedName("languages")
-	val languages: String? = null,
+	@field:SerializedName("product_type")
+	val productType: List<String?>? = null,
 
-	@field:SerializedName("product_types")
-	val productTypes: String? = null,
-
-	@field:SerializedName("project_github")
-	val projectGithub: String? = null,
-
-	@field:SerializedName("project_name")
-	val projectName: String? = null,
-
-	@field:SerializedName("tools")
-	val tools: String? = null,
-
-	@field:SerializedName("project_desc")
-	val projectDesc: String? = null,
-
-	@field:SerializedName("platforms")
-	val platforms: String? = null,
-
-	@field:SerializedName("features")
-	val features: String? = null,
-
-	@field:SerializedName("user_target")
-	val userTarget: String? = null,
+	@field:SerializedName("role")
+	val role: List<FixRoleItem?>? = null,
 
 	@field:SerializedName("status_id")
 	val statusId: Int? = null,
 
-	@field:SerializedName("meet_link")
-	val meetLink: String? = null,
+	@field:SerializedName("feature")
+	val feature: List<String?>? = null,
+
+	@field:SerializedName("language")
+	val language: List<String?>? = null,
+
+	@field:SerializedName("project_name")
+	val projectName: String? = null,
 
 	@field:SerializedName("client_name")
 	val clientName: String? = null,
 
-	@field:SerializedName("talents")
-	val talents: String? = null,
+	@field:SerializedName("tools")
+	val tools: List<String?>? = null,
+
+	@field:SerializedName("platform")
+	val platform: List<String?>? = null,
+
+	@field:SerializedName("project_desc")
+	val projectDesc: String? = null,
 
 	@field:SerializedName("start_date")
 	val startDate: String? = null

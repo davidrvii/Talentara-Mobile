@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import com.example.talentara.R
@@ -68,7 +69,7 @@ class NewProjectActivity : AppCompatActivity() {
                 isFocusable = false
                 isClickable = true
                 setOnClickListener {
-                    showDatePicker(this@NewProjectActivity, this as TextInputEditText)
+                    showDatePicker(this@NewProjectActivity, this as TextInputEditText, R.id.startDateTag)
                 }
             }
 
@@ -76,7 +77,7 @@ class NewProjectActivity : AppCompatActivity() {
                 isFocusable = false
                 isClickable = true
                 setOnClickListener {
-                    showDatePicker(this@NewProjectActivity, this as TextInputEditText)
+                    showDatePicker(this@NewProjectActivity, this as TextInputEditText, R.id.endDateTag)
                 }
             }
 
@@ -122,9 +123,10 @@ class NewProjectActivity : AppCompatActivity() {
 
         val clientName = binding.tilClientName.editText!!.text.toString()
         val projectName = binding.tilProjectName.editText!!.text.toString()
-        val startDateStored = binding.tilStartDate.editText?.getTag(R.id.dateTag)?.toString()
-        val endDateStored = binding.tilEndDate.editText?.getTag(R.id.dateTag)?.toString()
-
+        val startDateStored =
+            (binding.tilStartDate.editText?.getTag(R.id.startDateTag)).toString()
+        val endDateStored =
+            (binding.tilEndDate.editText?.getTag(R.id.endDateTag)).toString()
 
         newProjectViewModel.updateUserIsOnProject(1)
         newProjectViewModel.updateUserIsOnProject.observe(this) { result ->
@@ -139,8 +141,8 @@ class NewProjectActivity : AppCompatActivity() {
                         clientName,
                         projectName,
                         projectDesc,
-                        startDateStored.toString(),
-                        endDateStored.toString()
+                        startDateStored,
+                        endDateStored
                     )
                     addProjectObserver()
                 }
@@ -158,16 +160,22 @@ class NewProjectActivity : AppCompatActivity() {
     }
 
     @SuppressLint("DefaultLocale")
-    private fun showDatePicker(context: Context, targetEditText: TextInputEditText) {
+    private fun showDatePicker(
+        context: Context,
+        targetEditText: TextInputEditText,
+        @IdRes tagId: Int,
+    ) {
         val calendar = Calendar.getInstance()
 
         val datePicker = DatePickerDialog(
             context,
             { _, year, month, dayOfMonth ->
-                val dateStored = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth) // for db
-                val dateDisplayed = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year) // for user
+                val dateStored =
+                    String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth) // for db
+                val dateDisplayed =
+                    String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year) // for user
 
-                targetEditText.setTag(R.id.dateTag, dateStored)
+                targetEditText.setTag(tagId, dateStored)
                 targetEditText.setText(dateDisplayed)
             },
             calendar.get(Calendar.YEAR),

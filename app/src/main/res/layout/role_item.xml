@@ -22,7 +22,7 @@
             style="@style/TextAppearance.Material3.BodyMedium"
             android:textStyle="bold"
             android:layout_gravity="center_vertical"
-            android:textSize="20sp"/>
+            android:textSize="14sp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilProjectFeature"
@@ -47,9 +47,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/amount"
+                android:textAlignment="center"
                 android:inputType="text"
+                android:paddingVertical="12dp"
+                android:paddingHorizontal="8dp"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton

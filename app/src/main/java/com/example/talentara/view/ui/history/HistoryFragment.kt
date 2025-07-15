@@ -16,6 +16,7 @@ import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.FragmentHistoryBinding
 import com.example.talentara.view.ui.home.HomeViewModel
 import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
+import com.example.talentara.view.ui.project.finalize.ProjectFinalizeActivity
 import com.example.talentara.view.utils.FactoryViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -126,10 +127,17 @@ class HistoryFragment : Fragment() {
                         }
 
                         binding.cvOngoingProject.setOnClickListener {
-                            val intent = Intent(context, ProjectDetailActivity::class.java).apply {
-                                putExtra(ProjectDetailActivity.PROJECT_ID, currentProject.projectId)
+                            if (currentProject.statusName == "Project Finalize") {
+                                val intent = Intent(context, ProjectFinalizeActivity::class.java).apply {
+                                    putExtra(ProjectDetailActivity.PROJECT_ID, currentProject.projectId)
+                                }
+                                startActivity(intent)
+                            } else {
+                                val intent = Intent(context, ProjectDetailActivity::class.java).apply {
+                                    putExtra(ProjectDetailActivity.PROJECT_ID, currentProject.projectId)
+                                }
+                                startActivity(intent)
                             }
-                            startActivity(intent)
                         }
                     }
                 }

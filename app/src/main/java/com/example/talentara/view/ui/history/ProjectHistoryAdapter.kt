@@ -10,6 +10,7 @@ import com.example.talentara.R
 import com.example.talentara.data.model.response.project.HistoryProjectItem
 import com.example.talentara.databinding.ProjectItemBinding
 import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
+import com.example.talentara.view.ui.project.finalize.ProjectFinalizeActivity
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -70,10 +71,17 @@ class ProjectHistoryAdapter(
             }
 
             binding.root.setOnClickListener {
-                val intent = Intent(itemView.context, ProjectDetailActivity::class.java).apply {
-                    putExtra(ProjectDetailActivity.PROJECT_ID, item.projectId)
+                if (item.statusName == "Project Finalize") {
+                    val intent = Intent(itemView.context, ProjectFinalizeActivity::class.java).apply {
+                        putExtra(ProjectDetailActivity.PROJECT_ID, item.projectId)
+                    }
+                    itemView.context.startActivity(intent)
+                } else {
+                    val intent = Intent(itemView.context, ProjectDetailActivity::class.java).apply {
+                        putExtra(ProjectDetailActivity.PROJECT_ID, item.projectId)
+                    }
+                    itemView.context.startActivity(intent)
                 }
-                itemView.context.startActivity(intent)
             }
         }
     }

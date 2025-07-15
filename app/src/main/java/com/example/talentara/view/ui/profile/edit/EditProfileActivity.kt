@@ -159,7 +159,6 @@ class EditProfileActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     finish()
-                    profileViewModel.setDataDetailUpdate(true)
                 }
 
                 is Results.Error -> {
@@ -183,7 +182,6 @@ class EditProfileActivity : AppCompatActivity() {
                 is Results.Success -> {
                     Log.d("NewPortfolioActivity", "Success: ${result.data}")
                     showLoading(false)
-                    profileViewModel.setDataDetailUpdate(true)
                 }
 
                 is Results.Error -> {
@@ -248,11 +246,7 @@ class EditProfileActivity : AppCompatActivity() {
                     val talent = result.data.talentDetail?.firstOrNull() ?: return@observe
 
                     bindChipGroup(talent.platforms, selectedPlatforms, binding.chipGroupPlatform)
-                    bindChipGroup(
-                        talent.productTypes,
-                        selectedProductTypes,
-                        binding.chipGroupProductType
-                    )
+                    bindChipGroup(talent.productTypes, selectedProductTypes, binding.chipGroupProductType)
                     bindChipGroup(talent.roles, selectedRoles, binding.chipGroupRole)
                     bindChipGroup(talent.languages, selectedLanguages, binding.chipGroupLanguage)
                     bindChipGroup(talent.tools, selectedTools, binding.chipGroupTools)
@@ -433,7 +427,6 @@ class EditProfileActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 buttonSet()
             }
-
             override fun afterTextChanged(s: Editable?) {}
         }
 

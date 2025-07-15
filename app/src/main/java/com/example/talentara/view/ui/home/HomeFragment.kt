@@ -15,6 +15,7 @@ import com.example.talentara.R
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.FragmentHomeBinding
 import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
+import com.example.talentara.view.ui.project.finalize.ProjectFinalizeActivity
 import com.example.talentara.view.ui.timeline.TimelineActivity
 import com.example.talentara.view.utils.FactoryViewModel
 import java.text.SimpleDateFormat
@@ -160,10 +161,17 @@ class HomeFragment : Fragment() {
                         }
 
                         binding.cvCurrentProject.setOnClickListener {
-                            val intent = Intent(context, ProjectDetailActivity::class.java).apply {
-                                putExtra(ProjectDetailActivity.PROJECT_ID, currentProject.projectId)
+                            if (currentProject.statusName == "Project Finalize") {
+                                val intent = Intent(context, ProjectFinalizeActivity::class.java).apply {
+                                    putExtra(ProjectDetailActivity.PROJECT_ID, currentProject.projectId)
+                                }
+                                startActivity(intent)
+                            } else {
+                                val intent = Intent(context, ProjectDetailActivity::class.java).apply {
+                                    putExtra(ProjectDetailActivity.PROJECT_ID, currentProject.projectId)
+                                }
+                                startActivity(intent)
                             }
-                            startActivity(intent)
                         }
                     }
                 }

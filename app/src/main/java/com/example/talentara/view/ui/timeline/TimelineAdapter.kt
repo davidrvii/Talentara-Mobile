@@ -103,7 +103,6 @@ class TimelineAdapter(
                     } else 0
                 }
 
-
             binding.apply {
                 tvPhase.text = item.projectPhase
                 tvDeadline.text = itemView.context.getString(R.string.phase_deadline, deadline)

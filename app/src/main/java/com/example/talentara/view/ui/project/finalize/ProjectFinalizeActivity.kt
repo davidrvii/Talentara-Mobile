@@ -3,6 +3,7 @@ package com.example.talentara.view.ui.project.finalize
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColorInt
 import androidx.core.view.ViewCompat
@@ -26,6 +28,7 @@ import com.example.talentara.data.remote.ApiService
 import com.example.talentara.data.remote.ApiService.ProjectRole
 import com.example.talentara.databinding.ActivityProjectFinalizeBinding
 import com.example.talentara.databinding.RoleItemBinding
+import com.example.talentara.view.ui.main.MainActivity
 import com.example.talentara.view.ui.notifications.NotificationsViewModel
 import com.example.talentara.view.ui.portfolio.add.NewPortfolioViewModel
 import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
@@ -36,7 +39,10 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 
 class ProjectFinalizeActivity : AppCompatActivity() {
 
@@ -76,13 +82,14 @@ class ProjectFinalizeActivity : AppCompatActivity() {
         }
 
         textFieldWatcher()
-        setupObservers()
+        getAllCategories()
+        getProjectDetail()
 
         binding.tilStartDate.editText?.apply {
             isFocusable = false
             isClickable = true
             setOnClickListener {
-                showDatePicker(this@ProjectFinalizeActivity, this as TextInputEditText)
+                showDatePicker(this@ProjectFinalizeActivity, this as TextInputEditText, R.id.startDateTag)
             }
         }
 
@@ -90,7 +97,7 @@ class ProjectFinalizeActivity : AppCompatActivity() {
             isFocusable = false
             isClickable = true
             setOnClickListener {
-                showDatePicker(this@ProjectFinalizeActivity, this as TextInputEditText)
+                showDatePicker(this@ProjectFinalizeActivity, this as TextInputEditText, R.id.endDateTag)
             }
         }
 
@@ -98,7 +105,7 @@ class ProjectFinalizeActivity : AppCompatActivity() {
         binding.cvBack.setOnClickListener { finish() }
     }
 
-    private fun setupObservers() {
+    private fun getAllCategories() {
         // Load categories for auto-complete
         newPortfolioViewModel.getAllCategories()
         newPortfolioViewModel.getAllCategories.observe(this) { result ->
@@ -118,7 +125,31 @@ class ProjectFinalizeActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    private fun formateDate(
+        rawUtcDate: String?,
+        targetField: TextInputEditText,
+        tagId: Int
+    ) {
+        if (rawUtcDate.isNullOrBlank()) return
+
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
+        val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val tagFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        val parsedDate = inputFormat.parse(rawUtcDate)
+
+        val displayedDate = parsedDate?.let { outputFormat.format(it) } ?: ""
+        val rawDate = parsedDate?.let { tagFormat.format(it) } ?: ""
+
+        targetField.setText(displayedDate)
+        targetField.setTag(tagId, rawDate)
+    }
+
+    private fun getProjectDetail() {
         // Load project detail
         val projectId = intent.getIntExtra(ProjectDetailActivity.PROJECT_ID, 0)
         projectDetailViewModel.getProjectDetail(projectId)
@@ -130,9 +161,24 @@ class ProjectFinalizeActivity : AppCompatActivity() {
                     binding.tilClientName.editText!!.setText(project?.clientName)
                     binding.tilProjectName.editText!!.setText(project?.projectName)
                     binding.tilProjectDescription.editText!!.setText(project?.projectDesc)
-                    binding.tilStartDate.editText!!.setText(project?.startDate)
-                    binding.tilEndDate.editText!!.setText(project?.endDate)
+                    formateDate(
+                        project?.startDate,
+                        binding.tilStartDate.editText as TextInputEditText,
+                        R.id.startDateTag
+                    )
+                    formateDate(
+                        project?.endDate,
+                        binding.tilEndDate.editText as TextInputEditText,
+                        R.id.endDateTag
+                    )
                     clientId = project?.userId ?: 0
+
+                    bindChipGroup(project?.features, selectedFeatures, binding.chipGroupFeature)
+                    bindChipGroup(project?.platforms, selectedPlatforms, binding.chipGroupPlatform)
+                    bindChipGroup(project?.productTypes, selectedProductTypes, binding.chipGroupProductType)
+                    bindChipGroup(project?.languages, selectedLanguages, binding.chipGroupLanguage)
+                    bindChipGroup(project?.tools, selectedTools, binding.chipGroupTools)
+                    bindRoleItems(project?.rolesNeeded)
                 }
 
                 is Results.Error -> {
@@ -147,17 +193,71 @@ class ProjectFinalizeActivity : AppCompatActivity() {
         }
     }
 
+    private fun bindChipGroup(
+        raw: String?,
+        selectedSet: MutableSet<String>,
+        chipGroup: ChipGroup,
+    ) {
+        selectedSet.clear()
+        chipGroup.removeAllViews()
+
+        val values = raw?.split("|")
+            ?.map { it.trim() }
+            ?.filter { it.isNotEmpty() }
+            ?.toSet()
+            ?: emptySet()
+
+        selectedSet.addAll(values)
+        values.forEach { value ->
+            val chip = Chip(this).apply {
+                text = value
+                isCloseIconVisible = true
+                setOnCloseIconClickListener {
+                    chipGroup.removeView(this)
+                    selectedSet.remove(value)
+                    buttonSet()
+                }
+            }
+            chipGroup.addView(chip)
+        }
+    }
+
+    private fun bindRoleItems(rolesNeeded: String?) {
+        if (rolesNeeded.isNullOrBlank()) return
+
+        rolesNeeded.split("|").forEach { entry ->
+            val regex = Regex("^(.*?)\\s*\\((\\d+)\\)$")
+            val match = regex.find(entry.trim())
+
+            val role = match?.groups?.get(1)?.value?.trim()
+            val amount = match?.groups?.get(2)?.value?.toIntOrNull()
+
+            if (role != null && amount != null && amount > 0 && selectedRoles.add(role)) {
+                val itemBinding = RoleItemBinding.inflate(LayoutInflater.from(this), binding.roleContainer, false)
+                itemBinding.tvRoleItem.text = role
+                itemBinding.etProjectFeature.setText(amount.toString())
+                itemBinding.root.tag = role
+
+                itemBinding.btnRemove.setOnClickListener {
+                    binding.roleContainer.removeView(itemBinding.root)
+                    selectedRoles.remove(role)
+                    buttonSet()
+                }
+
+                binding.roleContainer.addView(itemBinding.root)
+            }
+        }
+    }
+
     private fun setupAllAutoComplete(c: GetAllCategoriesResponse) {
         // Map every model to mutable list for custom runtime
         val featureNames = c.feature.orEmpty().mapNotNull { it?.featureName }.toMutableList()
         val languageNames = c.language.orEmpty().mapNotNull { it?.languageName }.toMutableList()
         val toolsNames = c.tools.orEmpty().mapNotNull { it?.toolsName }.toMutableList()
         val platformNames = c.platform.orEmpty().mapNotNull { it?.platformName }.toMutableList()
-        val productTypeNames =
-            c.productType.orEmpty().mapNotNull { it?.productTypeName }.toMutableList()
-
-        //Auto Complete For Role
+        val productTypeNames = c.productType.orEmpty().mapNotNull { it?.productTypeName }.toMutableList()
         val roles = c.role.orEmpty().mapNotNull { it?.roleName }.toMutableList()
+
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, roles)
         val actv = binding.tilRole.editText as AutoCompleteTextView
         actv.apply {
@@ -276,9 +376,9 @@ class ProjectFinalizeActivity : AppCompatActivity() {
         if (!selectedRoles.add(role)) return
         val itemBinding =
             RoleItemBinding.inflate(LayoutInflater.from(this), binding.roleContainer, false)
-        itemBinding.tvRoleItem.text = role
-        itemBinding.root.tag = role
-        itemBinding.btnRemove.setOnClickListener {
+            itemBinding.tvRoleItem.text = role
+            itemBinding.root.tag = role
+            itemBinding.btnRemove.setOnClickListener {
             binding.roleContainer.removeView(itemBinding.root)
             selectedRoles.remove(role)
         }
@@ -286,12 +386,13 @@ class ProjectFinalizeActivity : AppCompatActivity() {
     }
 
     private fun finalizeProject() {
-        val startDateStored = binding.tilStartDate.editText?.getTag(R.id.dateTag)?.toString()
-        val endDateStored = binding.tilEndDate.editText?.getTag(R.id.dateTag)?.toString()
-        // build request
+        val startDateStored =
+            (binding.tilStartDate.editText?.getTag(R.id.startDateTag)).toString()
+        val endDateStored =
+            (binding.tilEndDate.editText?.getTag(R.id.endDateTag)).toString()
         val projectId = intent.getIntExtra(PROJECT_ID, 0)
         val roleList = mutableListOf<ProjectRole>()
-        // validate and collect role amounts
+
         for (role in selectedRoles) {
             val view = binding.roleContainer.findViewWithTag<View>(role)
             val bind = RoleItemBinding.bind(view)
@@ -303,19 +404,21 @@ class ProjectFinalizeActivity : AppCompatActivity() {
             }
             roleList.add(ProjectRole(roleName = role, amount = amt))
         }
+
         val request = ApiService.UpdateProjectRequest(
-            statusId = 2,
             clientName = binding.tilClientName.editText!!.text.toString().trim(),
             projectName = binding.tilProjectName.editText!!.text.toString().trim(),
             projectDesc = binding.tilProjectDescription.editText!!.text.toString().trim(),
-            startDate = startDateStored.toString(),
-            endDate = endDateStored.toString(),
+            startDate = startDateStored,
+            endDate = endDateStored,
             platform = selectedPlatforms.toList(),
             productType = selectedProductTypes.toList(),
             role = roleList,
             language = selectedLanguages.toList(),
             tools = selectedTools.toList(),
-            feature = selectedFeatures.toList()
+            feature = selectedFeatures.toList(),
+            projectGithub = binding.tilProjectGithub.editText!!.text.toString().trim(),
+            meetLink = binding.tilMetingLink.editText!!.text.toString().trim()
         )
         lifecycleScope.launch {
             projectFinalizeViewModel.updateProject(projectId, request)
@@ -329,35 +432,55 @@ class ProjectFinalizeActivity : AppCompatActivity() {
                 is Results.Loading -> {
                     showLoading(true)
                 }
+
                 is Results.Success -> {
                     showLoading(false)
-                    finish()
 
-                    timelineViewModel.updateProjectStatus(projectId, 4)
+                    timelineViewModel.updateProjectStatus(projectId, 3)
+                    timelineViewModel.updateProjectStatus.observe(this) { result ->
+                        when (result) {
+                            is Results.Success -> Log.d("ProjectFinalizeActivity", "Update Project Status Success")
+                            is Results.Error -> Log.e("ProjectFinalizeActivity", "Update Project Status Failed: ${result.error}")
+                            else -> {}
+                        }
+                    }
 
                     notificationViewModel.addNotification(
-                        title       = "Project Finalized",
-                        desc        = "Waiting for team to join the project",
-                        type        = "PROJECT_FINALIZED",
+                        title = "Project Finalized",
+                        desc = "Waiting for team to join the project",
+                        type = "PROJECT_FINALIZED",
                         clickAction = "NONE"
                     )
+                    notificationViewModel.addNotification.observe(this) { result ->
+                        when (result) {
+                            is Results.Success -> Log.d("ProjectFinalizeActivity", "Create Manager Notification Success")
+                            is Results.Error -> Log.e("ProjectFinalizeActivity", "Create Manager Notification Failed: ${result.error}")
+                            else -> {}
+                        }
+                    }
 
                     lifecycleScope.launch {
                         val notifResult = notificationViewModel.addNotificationTalent(
-                            userId    = clientId,
-                            title       = "Project Finalized",
-                            desc        = "Waiting for team to join the project",
-                            type        = "PROJECT_FINALIZED",
+                            userId = clientId,
+                            title = "Project Finalized",
+                            desc = "Waiting for team to join the project",
+                            type = "PROJECT_FINALIZED",
                             clickAction = "NONE"
                         )
 
                         when (notifResult) {
-                            is Results.Success -> Log.d("Notification", "Success for user $clientId")
-                            is Results.Error -> Log.e("Notification", "Failed for user $clientId: ${notifResult.error}")
+                            is Results.Success -> Log.d("ProjectFinalizeActivity", "Create Notification Success for user $clientId")
+                            is Results.Error -> Log.e("ProjectFinalizeActivity", "Create Notification Failed for user $clientId: ${notifResult.error}")
                             else -> {}
                         }
+
+                        val intent = Intent(this@ProjectFinalizeActivity, MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        finish()
                     }
                 }
+
                 is Results.Error -> {
                     showLoading(false)
                     Toast.makeText(
@@ -417,16 +540,22 @@ class ProjectFinalizeActivity : AppCompatActivity() {
     }
 
     @SuppressLint("DefaultLocale")
-    private fun showDatePicker(context: Context, targetEditText: TextInputEditText) {
+    private fun showDatePicker(
+        context: Context,
+        targetEditText: TextInputEditText,
+        @IdRes tagId: Int,
+    ) {
         val calendar = Calendar.getInstance()
 
         val datePicker = DatePickerDialog(
             context,
             { _, year, month, dayOfMonth ->
-                val dateStored = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth) // for db
-                val dateDisplayed = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year) // for user
+                val dateStored =
+                    String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth) // for db
+                val dateDisplayed =
+                    String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year) // for user
 
-                targetEditText.setTag(R.id.dateTag, dateStored)
+                targetEditText.setTag(tagId, dateStored)
                 targetEditText.setText(dateDisplayed)
             },
             calendar.get(Calendar.YEAR),

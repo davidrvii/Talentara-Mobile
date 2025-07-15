@@ -2,7 +2,6 @@ package com.example.talentara.view.ui.profile
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.talentara.data.model.response.portfolio.PortfolioTalentResponse
@@ -15,13 +14,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val repository: Repository) : ViewModel() {
-
-    private val _isDataUpdate = MutableLiveData(false)
-    val isDataDetailUpdate: LiveData<Boolean> = _isDataUpdate
-
-    fun setDataDetailUpdate(value: Boolean) {
-        _isDataUpdate.value = value
-    }
 
     private val _getUserDetail = MediatorLiveData<Results<UserDetailResponse>>()
     val getUserDetail: LiveData<Results<UserDetailResponse>> = _getUserDetail

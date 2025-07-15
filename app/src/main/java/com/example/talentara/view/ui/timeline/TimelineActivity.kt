@@ -717,7 +717,7 @@ class TimelineActivity : AppCompatActivity() {
 
                             lifecycleScope.launch {
                                 timelineViewModel.updateProjectCompleted(projectId, completedDate)
-                                timelineViewModel.updateProjectStatus(projectId, 4)
+                                timelineViewModel.updateProjectStatus(projectId, 5)
                                 updateProjectCompletedObserver()
 
                                 //Update Client is_on_project

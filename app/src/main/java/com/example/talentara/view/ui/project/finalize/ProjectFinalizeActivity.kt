@@ -30,6 +30,7 @@ import com.example.talentara.view.ui.notifications.NotificationsViewModel
 import com.example.talentara.view.ui.portfolio.add.NewPortfolioViewModel
 import com.example.talentara.view.ui.project.detail.ProjectDetailActivity
 import com.example.talentara.view.ui.project.detail.ProjectDetailViewModel
+import com.example.talentara.view.ui.timeline.TimelineViewModel
 import com.example.talentara.view.utils.FactoryViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -39,6 +40,9 @@ import java.util.Calendar
 
 class ProjectFinalizeActivity : AppCompatActivity() {
 
+    private val timelineViewModel: TimelineViewModel by viewModels {
+        FactoryViewModel.getInstance(this)
+    }
     private val projectDetailViewModel: ProjectDetailViewModel by viewModels {
         FactoryViewModel.getInstance(this)
     }
@@ -316,10 +320,10 @@ class ProjectFinalizeActivity : AppCompatActivity() {
         lifecycleScope.launch {
             projectFinalizeViewModel.updateProject(projectId, request)
         }
-        updateProjectObserver()
+        updateProjectObserver(projectId)
     }
 
-    private fun updateProjectObserver() {
+    private fun updateProjectObserver(projectId: Int) {
         projectFinalizeViewModel.updateProject.observe(this) { result ->
             when (result) {
                 is Results.Loading -> {
@@ -328,6 +332,8 @@ class ProjectFinalizeActivity : AppCompatActivity() {
                 is Results.Success -> {
                     showLoading(false)
                     finish()
+
+                    timelineViewModel.updateProjectStatus(projectId, 4)
 
                     notificationViewModel.addNotification(
                         title       = "Project Finalized",

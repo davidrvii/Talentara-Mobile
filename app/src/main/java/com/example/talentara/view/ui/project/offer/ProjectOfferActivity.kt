@@ -1,5 +1,6 @@
 package com.example.talentara.view.ui.project.offer
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,17 +11,23 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.talentara.R
 import com.example.talentara.data.local.preference.UserPreference
 import com.example.talentara.data.local.preference.dataStore
 import com.example.talentara.data.model.response.project.ProjectOrderItem
 import com.example.talentara.data.model.result.Results
 import com.example.talentara.databinding.ActivityProjectOfferBinding
+import com.example.talentara.view.ui.main.MainActivity
 import com.example.talentara.view.ui.portfolio.detail.ItemsAdapter
 import com.example.talentara.view.ui.project.add.NewProjectViewModel
 import com.example.talentara.view.ui.talent.detail.TalentDetailViewModel
 import com.example.talentara.view.ui.timeline.TimelineViewModel
 import com.example.talentara.view.utils.FactoryViewModel
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -69,8 +76,26 @@ class ProjectOfferActivity : AppCompatActivity() {
         projectId = intent.getIntExtra(PROJECT_ID, 0)
         roleName = intent.getStringExtra(ROLE_NAME) ?: ""
         getProjectOrder()
+        initRecyclerViews()
         getTalentProjectDeclined()
         setupButtonAction()
+    }
+
+    private fun initRecyclerViews() {
+        fun RecyclerView.setupFlex(adapter: ItemsAdapter) {
+            layoutManager = FlexboxLayoutManager(this@ProjectOfferActivity).apply {
+                flexDirection = FlexDirection.ROW
+                flexWrap      = FlexWrap.WRAP
+                justifyContent = JustifyContent.FLEX_START
+            }
+            this.adapter = adapter
+        }
+
+        binding.rvPlatform.setupFlex(platformAdapter)
+        binding.rvTools.setupFlex(toolsAdapter)
+        binding.rvProductType.setupFlex(productTypeAdapter)
+        binding.rvLanguage.setupFlex(languageAdapter)
+        binding.rvFeature.setupFlex(featureAdapter)
     }
 
     private fun getTalentProjectDeclined() {
@@ -199,6 +224,10 @@ class ProjectOfferActivity : AppCompatActivity() {
 
                 is Results.Success -> {
                     showLoading(false)
+                    val intent = Intent(this@ProjectOfferActivity, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    }
+                    startActivity(intent)
                     finish()
                 }
 
@@ -221,7 +250,9 @@ class ProjectOfferActivity : AppCompatActivity() {
                     showLoading(false)
                     val projectOrder = result.data.projectOrder?.firstOrNull()
                     projectOrder?.statusId?.let {
-                        if (it < 3) {
+                        if (roleName == "Project Manager" && it < 2) {
+                            bindProject(projectOrder)
+                        } else if (roleName != "Project Manager" && it == 3) {
                             bindProject(projectOrder)
                         } else {
                             Toast.makeText(this@ProjectOfferActivity, "Project has started", Toast.LENGTH_SHORT).show()
@@ -291,6 +322,15 @@ class ProjectOfferActivity : AppCompatActivity() {
                 .filter { it.isNotEmpty() }
             languageAdapter.updateData(languagesList)
         }
+        binding.apply {
+            val rawRoles = projectOrder.roles ?: ""
+            val rolesList = rawRoles
+                .split("|")
+                .map { it.trim() }
+                .filter { it.isNotEmpty() }
+            roleAdapter.updateData(rolesList)
+        }
+
         binding.rvRole.apply {
             layoutManager = LinearLayoutManager(
                 this@ProjectOfferActivity,

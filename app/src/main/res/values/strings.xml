@@ -133,7 +133,7 @@
     <string name="failed_to_get_talent_information">Failed to get talent information</string>
     <string name="failed_create_project">Failed create project</string>
     <string name="project_purpose_prefix">Project Purpose:</string>
-    <string name="project_purpose_hint">To create an application for\nrecording, tracking, and managing warehouse\ninventory items</string>
+    <string name="project_purpose_hint">To build an app for recording, tracking, and managing warehouse inventory</string>
     <string name="product_type_prefix">Product Type:</string>
     <string name="product_type_hint">Mobile App and Web Dashboard</string>
     <string name="platform_target_prefix">Platform Target:</string>
@@ -141,7 +141,7 @@
     <string name="target_user_prefix">Target User:</string>
     <string name="user_target_hint">Warehouse staff</string>
     <string name="key_features_prefix">Key Features:</string>
-    <string name="key_feature_hint">Item data entry, stock level monitoring,\ninventory reporting</string>
+    <string name="key_feature_hint">Item data entry, inventory reporting</string>
     <string name="additional_hint">Tell us more! describe your project in more detail or share references to similar apps or systems</string>
     <string name="finding_project_manager">Finding the best project manager for your project</string>
     <string name="find_project_team">Find Project Team</string>

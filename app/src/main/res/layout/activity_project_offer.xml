@@ -218,7 +218,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvFeature" />
 
@@ -240,7 +239,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvPlatform" />
 
@@ -262,32 +260,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvProductType" />
-
-                <TextView
-                    android:id="@+id/tvRole"
-                    style="@style/TextAppearance.Material3.BodyLarge"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/role"
-                    android:textColor="@color/dark_gray"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@id/rvProductType"
-                    app:layout_constraintTop_toBottomOf="@id/rvProductType" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvRole"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvRole"
-                    tools:listitem="@layout/role_order_item"/>
 
                 <TextView
                     android:id="@+id/tvLanguage"
@@ -299,15 +273,14 @@
                     android:textColor="@color/dark_gray"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@id/rvRole"
-                    app:layout_constraintTop_toBottomOf="@id/rvRole" />
+                    app:layout_constraintStart_toStartOf="@id/rvProductType"
+                    app:layout_constraintTop_toBottomOf="@id/rvProductType" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvLanguage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvLanguage" />
 
@@ -329,11 +302,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTools" />
+
+                <TextView
+                    android:id="@+id/tvRole"
+                    style="@style/TextAppearance.Material3.BodyLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/role"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/rvTools"
+                    app:layout_constraintTop_toBottomOf="@id/rvTools" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvRole"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvTools" />
+                    app:layout_constraintTop_toBottomOf="@id/tvRole"
+                    tools:listitem="@layout/role_order_item"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -348,7 +343,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@id/tvOfferDesc"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cvProjectOffer">
@@ -384,6 +380,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--
     <TextView
         android:id="@+id/tvOfferDesc"
         style="@style/TextAppearance.Material3.BodySmall"
@@ -398,6 +395,7 @@
         app:layout_constraintEnd_toEndOf="@id/btChoose"
         app:layout_constraintStart_toStartOf="@id/btChoose"
         app:layout_constraintTop_toBottomOf="@id/btChoose" />
+    -->
 
     <ProgressBar
         android:id="@+id/progressBar"

@@ -120,11 +120,13 @@ class NotificationFragment : Fragment() {
         }
 
         notificationAdapter.setOnItemClickListener { item ->
-            notificationViewModel.updateNotification(
-                status = "read",
-                notificationId = item.notificationId ?: 0
-            )
-            updateNotification()
+            if (item.status == "unread") {
+                notificationViewModel.updateNotification(
+                    status = "read",
+                    notificationId = item.notificationId ?: 0
+                )
+                updateNotification()
+            }
         }
     }
 
